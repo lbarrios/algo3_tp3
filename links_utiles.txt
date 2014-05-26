@@ -1,0 +1,24 @@
+== Referencias de la STL ==
+* http://en.cppreference.com/w/ (versión en español http://es.cppreference.com/w/)
+* http://www.cplusplus.com/reference/stl/ (aunque en general cppreference suele tener más aceptación en el gremio :p)
+
+== Referencias para C++ ==
+* Página del comité de estandarización de C++: http://www.open-std.org/jtc1/sc22/wg21/ (buscando en la sección de "papers" se encuentran los drafts del estándar de C++, que son gratuitos para descargar)
+* Bjarne Stroustrup. 2000. The C++ Programming Language (3rd ed.). Addison-Wesley Longman Publishing Co., Inc., Boston, MA, USA. [Ver la 4ta edición para C++11].
+
+== Referencias de Latex ==
+* Repositorio de paquetes de Latex en general: http://www.ctan.org
+* Paquetes de Latex para escribir pseudocódigo:
+* http://www.ctan.org/pkg/algorithms (manual de uso)
+* http://www.ctan.org/pkg/algorithm2e (manual de uso)
+* http://www.cs.dartmouth.edu/~thc/clrscode/ (usado en el libro de Cormen, Introduction to Algorithms)
+* Paquete de Latex que permite insertar código en latex con resaltado de sintáxis y todo: http://www.ctan.org/pkg/listings (manual de uso)
+* Paquetede Latex para dibujar grafos (y gráficos en general): http://sourceforge.net/projects/pgf/ (ejemplos)
+* The Not So Short Introduction to LaTeX (manual de latex): http://tobi.oetiker.ch/lshort/lshort.pdf
+* Share Latex (editor de latex online, permite editar un archivo entre varios y más cosas): https://www.sharelatex.com/
+* Detexify (dibujás el simbolito que estás buscando y te tira el código latex): http://detexify.kirelabs.org/classify.html
+
+== Herramientas para los gráficos ==
+* Qtiplot (fácil de usar, posee interfaz gráfica): http://soft.proindependent.com/qtiplot.html
+* Gnuplot (disponible únicamente desde linea de comandos): http://www.gnuplot.info/
+* Octave (similar a Matlab pero open source): https://www.gnu.org/software/octave/
