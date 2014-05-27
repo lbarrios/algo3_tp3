@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
+#include "../common/Graph.h"
 using namespace std;
+
+#define INF 1<<30;
 
 struct Solucion {
     vector<int> camino;
@@ -9,47 +12,79 @@ struct Solucion {
     int cantAristas;
 };
 
-int u, v;
+int N, M, U, V, K;
+Graph *G;
 vector<bool> visitados;
 Solucion mejorSolucion;
 Solucion ramaActual;
 
-void backtrack(int nodoActual, Solucion &s);
+void backtrack(Edge *e);
+void tomarParametros();
+
 
 int main() {
-    for (int i = 0; i < n; i++)
-        visitados[i] = false;
-    // tambien inicializa mejorSolucion, y ramaActual
-    backtrack(u, 0);
-    cout << mejorSolucion; // definir el cout
+    tomarParametros();
+    backtrack(NULL);
+    cout << mejorSolucion.sumaOmega2 << endl; // definir el cout
+    delete G;
     return 0;
 }
 
-void backtrack(int nodoActual, int nodoPadre) {
-    // primero agrego el nodoActual
-    ramaActual.camino.push_back(nodoActual);
-    ramaActual.sumaOmega1 += arista[nodoPadre][nodoActual].omega1; // definir bien para el padre de u
-    ramaActual.sumaOmega2 += arista[nodoPadre][nodoActual].omega2; // definir bien para el padre de u
+
+void tomarParametros() {
+    cin >> N >> M >> U >> V >> K;
+    G = new Graph(N);
+    for(int i = 0; i < N; i++)
+        visitados[i] = false;
+    int v1, v2;
+    double w1, w2;
+    for(int i = 0; i < M; i++) {
+        cin >> v1 >> v2 >> w1 >> w2;
+        G->connect(v1, v2, w1, w2);
+    }
+    mejorSolucion.sumaOmega2 = INF;
+    ramaActual.sumaOmega1 = 0;
+    ramaActual.sumaOmega2 = 0;
+    ramaActual.cantAristas = 0;
+}
+
+
+void backtrack(Edge *e) {
+    int nodo;
+    if (e = NULL)
+        nodo = U;
+    else
+        nodo = e->toNode;
+    // primero agrego el nodo
+    ramaActual.camino.push_back(nodo);
+    if (e != NULL) {  // me cubro del nodo inicial
+        ramaActual.sumaOmega1 += e->omega1;
+        ramaActual.sumaOmega2 += e->omega2;
+    }
     ramaActual.cantAristas++;
-    visitados[nodoActual] = true;
+    visitados[nodo] = true;
     
     if (ramaActual.sumaOmega1 > K) {
         // no haces nada
-    } else if (nodoActual == v) { 
+    } else if (nodo == V) { 
         if (ramaActual.sumaOmega2 < mejorSolucion.sumaOmega2)
             mejorSolucion = ramaActual;
     } else { // llamas a la recursion
-        vector<int> adyacentes = adyacentes(nodoActual);
-        for (vector<int>::iterator it = adyacentes.begin(); it != adyacentes.end(); it++) {
-            if (! visitados[*it]) {
-                backtrack(*it, nodoActual);
+        vector<Edge*> *ejesSalida;
+        G->getEdgesFromNode(nodo, ejesSalida);
+        for (vector<Edge*>::iterator it = ejesSalida->begin(); it != ejesSalida->end(); it++) {
+            int nodoDeLlegada = (*it)->toNode;
+            if (! visitados[nodoDeLlegada]) {
+                backtrack(*it);
             }
         }
     }
     // dejas todo como estaba, antes de retornar
     ramaActual.camino.pop_back();
-    ramaActual.sumaOmega1 -= arista[nodoPadre][nodoActual].omega1; // definir bien para el padre de u
-    ramaActual.sumaOmega2 -= arista[nodoPadre][nodoActual].omega2; // definir bien para el padre de u
+    if (e != NULL) {
+        ramaActual.sumaOmega1 -= e->omega1;
+        ramaActual.sumaOmega2 -= e->omega2;
+    }
     ramaActual.cantAristas--;
-    visitados[nodoActual] = false;
+    visitados[nodo] = false;
 }
