@@ -3,31 +3,18 @@
 #include <iostream>
 
 using namespace std;
-Graph::Graph(int n)
-  : nodeCount( n )
+Graph::Graph(int n) : nodeCount( n )
 {
 }
 Graph::~Graph()
 {
-
 }
-Graph::addEdge(Node fromNode, Node toNode, double omega1, double omega2)
-{
-  this->adjacencyList[fromNode].push_back(toNode);
-  this->incidencyMatrix[fromNode][toNode] = new Edge( fromNode, toNode, omega1, omega2 );
-}
-Edge& Graph::getEdge(Node aNode, Node anotherNode)
-{
-  return this->incidencyMatrix[aNode][toNode];
-}
-/*
 void Graph::connect(int fromNode, int toNode, double weight) {
     if(fromNode < 0 || fromNode >= n || toNode < 0 || toNode >= n) {
         return;
     }
     edges.push_back(new Edge(fromNode, toNode, weight));
 }
-
 void Graph::getEdgesFromNode(int node, vector<Edge*> *output) {
     for (int i=0; i<edges.size(); i++) {
         if(edges[i]->fromNode == node || edges[i]->toNode == node) {
@@ -35,8 +22,6 @@ void Graph::getEdgesFromNode(int node, vector<Edge*> *output) {
         }
     }
 }
-
-
 void Graph::getAdjacentNodes(int node, vector<int> *output) {
     for (int i=0; i<edges.size(); i++) {
         if(edges[i]->fromNode == node) {
@@ -46,4 +31,3 @@ void Graph::getAdjacentNodes(int node, vector<int> *output) {
         }
     }
 }
-*/

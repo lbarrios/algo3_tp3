@@ -1,0 +1,23 @@
+Para carpeta src:
+
+	*) Hay un archivo Makefile.common que se usa como input para los makefile del resto de las carpetas.
+	La sintaxis para incluirlo es:
+			include ../Makefile.common
+	
+	*) Por defecto, compila el archivo que tenga el mismo nombre de la carpeta, y busca el .cpp y el .h.
+		-) Ejemplo, si estamos en la carpeta backtracking va a buscar backtracking.cpp y backtracking.h y lo compila en backtracking.
+		
+	*) Siempre va a crear una carpeta OBJS en donde guarda los archivos .o
+	
+	*) Cuando se desean incluir archivos que se encuentren en la carpeta common, se debe anteponer COMMON_OBJS al include:
+			COMMON_OBJS := ClassName1 ClassName2
+			include ../Makefile.common
+		en donde ClassName es el nombre de la clase. Ejemplo, COMMON_OBJS := Graph Edge
+
+	*) Pueden agregar targets específicos que deseen luego del include ../Makefile.common, tal y como harían en un Makefile normal
+	
+	*) Cualquier cosa, pueden mirar el Makefile.common, o preguntarme (lbarrios)
+	
+
+Para carpeta informe:
+	*) Completar...
