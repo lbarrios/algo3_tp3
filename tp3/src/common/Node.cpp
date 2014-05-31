@@ -1,3 +1,6 @@
+#include "Node.h"
+
+/*
 //
 //  Node.cpp
 //  Ej3TP2
@@ -28,3 +31,4 @@ Node::~Node() {
         delete prevNodes[i];
     }
 }
+*/

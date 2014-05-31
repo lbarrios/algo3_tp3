@@ -1,0 +1,30 @@
+% Búsqueda local
+
+% Explicación inicial
+
+
+% Solución inicial
+Partimos desde una solución factible obtenida a partir de un algoritmo goloso. En caso de que el algoritmo anterior no devuelva una solución factible, corremos Dijkstra utilizando la sumatoria de los pesos $\omega_1$ como función objetivo. Si Dijkstra tampoco devuelve una solución factible, podemos asegurar que no existe solución al problema\footnote{Demostrado en la sección de heurística golosa}. En este caso, devolvemos ``no''.
+
+Solución Inicial 2:
+Corro dijkstra con omega1 y omega2, formando $c^1$ y $c^2$. Tomo el conjunto U de nodos formados por $c_1 \interseccion c_2$. Para cada par de nodos $n_1,n_2$ adyacentes, me fijo si puedo formar un camino mejor valuado en $\omega_2$ reemplazando el camino $c^1_{n_1,n_2}$ por $c^2_{n_1,n_2}$, siempre que el nuevo camino no se pase de K al valuarlo en $\omega_2$. La evaluación se hace ordenando por omega2, de forma tal que el camino obtenido sea el que minimice la misma en comparación con el resto de los posibles caminos que se podrían obtener con este método.
+
+% Definición de vecindad
+Vecindad <<A>>: 
+
+Dado el grafo inicial G, y una solución formada por un camino $c \in G$, definimos sus soluciones vecinas como aquellas resultantes de tomar un subcamino $d_{n_1,n_2} \in c$ entre dos pares de nodos $n_1,n_2$ cualesquiera, y reemplazarlo por un camino ``mejor'' $d_{n_1,n_2}^* \in G$, de tal forma que el camino $c^* = c - d_{n_1,n_2} + d_{n_1,n_2}^*$ resultante cumpla: 
+\begin{list}
+\item $\omega_1(c^*) \leq k $
+\item $\omega_2(c^*) < \omega_2(c)$
+\end{list}
+
+Dada una solución $S$ formada por un camino $c$ definimos su vecindad como el conjunto $S^*$ de todos los caminos $c^*$ posibles.
+
+% Selección de vecino
+Dada una vecindad $S^*$, se probaron los siguientes métodos de elegir al vecino:
+\begin{list}
+	\item Steepest descent, con $\omega_2$ como función objetivo.
+	\item Steepest descent, con $\omega_1*\omega_2$ como función objetivo.
+	\item Elegir el primero que se encuentre.
+	\item Stochastic \fixme{completar} eligiendo el vecino de forma pseudoaleatoria.
+\end{list}

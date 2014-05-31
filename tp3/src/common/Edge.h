@@ -5,9 +5,9 @@
 class Edge
 {
 public:
+    Edge(int fromNode, int toNode, double omega1, double omega2);
     int fromNode;
     int toNode;
-    int weight;
-    
-    Edge(int fromNode, int toNode, double weight);
+    double omega1;
+    double omega2; 
 };

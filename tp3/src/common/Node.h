@@ -1,3 +1,8 @@
+#pragma once
+
+typedef int Node;
+
+/*
 //
 //  Node.h
 //  Ej3TP2
@@ -34,3 +39,4 @@ public:
     
     void connectToNextNode(Node* node, int powerUsed, int kUsed);
 };
+*/
