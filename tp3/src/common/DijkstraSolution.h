@@ -10,9 +10,9 @@ class DijkstraSolution
 public:
     int fromNode;
     int* prevNodes;
-    double* dist;
+    int totalK;
     
     DijkstraSolution(int n);
     
-    void getPath(int toNode, list<Edge*> *path);
+    void getPath(int toNode, Graph* graph, list<Edge*> &path, double &totalK);
 };
