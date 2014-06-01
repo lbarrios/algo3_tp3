@@ -31,9 +31,11 @@ $(OBJSDIR):
 	mkdir -p $(OBJSDIR)
 $(COMMON_OBJSDIR):
 	mkdir -p $(COMMON_OBJSDIR)
-$(OBJSDIR)/%.o: %.cpp %.h | $(OBJSDIR)
+#$(OBJSDIR)/%.o: %.cpp %.h | $(OBJSDIR)
+$(OBJSDIR)/%.o: %.cpp | $(OBJSDIR)
 	$(CC) -c $(CFLAGS) $< -o $@
-$(COMMON_OBJSDIR)/%.o: $(COMMON_DIR)/%.cpp $(COMMON_DIR)/%.h | $(COMMON_OBJSDIR)
+#$(COMMON_OBJSDIR)/%.o: $(COMMON_DIR)/%.cpp $(COMMON_DIR)/%.h | $(COMMON_OBJSDIR)
+$(COMMON_OBJSDIR)/%.o: $(COMMON_DIR)/%.cpp | $(COMMON_OBJSDIR)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
