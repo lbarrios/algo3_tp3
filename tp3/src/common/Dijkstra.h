@@ -1,11 +1,11 @@
 #pragma once
 
-#include "Graph.h"
 #include <vector>
 #include <queue>
 #include <iostream>
+#include <limits> //< numeric_limits
+#include "Graph.h"
 #include "DijkstraSolution.h"
-#include "limits.h"
 
 using namespace std;
 

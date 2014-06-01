@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef> // NULL
 #include "Graph.h"
 
 class ProblemInstance

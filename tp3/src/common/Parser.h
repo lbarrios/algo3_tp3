@@ -1,8 +1,10 @@
 #pragma once
 
-#include "Graph.h"
 #include <vector>
 #include <iostream>
+#include <cstdlib> //< atoi
+
+#include "Graph.h"
 #include "ProblemInstance.h"
 
 using namespace std;
