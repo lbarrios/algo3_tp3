@@ -39,5 +39,5 @@ $(COMMON_OBJSDIR)/%.o: $(COMMON_DIR)/%.cpp | $(COMMON_OBJSDIR)
 	$(CC) -c $(CFLAGS) $< -o $@
 
 clean:
-	rm -rf $(OBJS) $(COMMON_OBJS)
+	rm -rf $(OBJS) $(COMMON_OBJS) $(EXE)
 	#rm -rf $(COMMON_OBJSDIR)
