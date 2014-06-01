@@ -1,5 +1,5 @@
 #include <iostream>
-#include "../greedy_heuristic_common/GreedyHeuristic.h"
+#include "../common/GreedyHeuristic.h"
 #include "../common/Dijkstra.h"
 
 using namespace std;
