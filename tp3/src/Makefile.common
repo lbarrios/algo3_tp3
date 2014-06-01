@@ -8,6 +8,9 @@ endif
 ifeq ($(OBJSDIR),)
 	OBJSDIR=OBJS
 endif
+ifeq ($(CC),)
+	CC=g++
+endif
 #CC=g++ # setear CC manualmente con "setenv CC ..."
 CFLAGS=-Wall -pedantic -std=c++11
 COMMON_DIR=../common
