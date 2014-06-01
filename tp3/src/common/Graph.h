@@ -13,8 +13,8 @@ public:
   ~Graph();
 
   void addEdge( Node fromNode, Node toNode, double omega1, double omega2 );
-  vector<Node>::iterator getAdjacent( int aNode );
-  Edge& getEdge( Node aNode, Node anotherNode );
+  vector<Node>& getAdjacent( Node n );
+  Edge* getEdge( Node aNode, Node anotherNode );
   int nodeCount;
 
   //void getEdgesFromNode(Node node, vector<Edge*> *output);
