@@ -1,7 +1,7 @@
 % ------ headers globales -------------
 \documentclass[12pt, a4paper, twoside]{article}
-\usepackage{header_tp2}
-\includeonly{instrucciones, codigo-fuente, conclusiones, introduccion, problema1, problema2, problema3} %arreglar y agregar problema3
+\usepackage{header_tp3}
+\includeonly{instrucciones, codigo-fuente, conclusiones, introduccion, problema1, problema2, problema3}
 \begin{document}{}
 % -------------------------------------
 % -- Carátula --
@@ -16,7 +16,7 @@
 \newpage{\pagestyle{empty}\tableofcontents\cleardoublepage}
 
 %-- Dentro de TP2 redefino ciertos comandos para que se pueda compilar todo individualmente --
-\begin{TP2}
+\begin{TP3}
 %-- Introduccion --
 \section{Introducción}\label{sec:introduccion}
 \input{introduccion}
@@ -29,13 +29,27 @@
 %-- Desarrollo --
 \section{Desarrollo del TP}\label{sec:desarrollo}
   
+  %-- Backtracking --
+  \subsection{Backtracking}\label{subsec:backtracking}
+  \input{backtracking/backtracking}
+  \newpage
+
   %-- Greedy --
-  \subsection{Greedy}\label{subsec:ej1}
+  \subsection{Greedy}\label{subsec:greedy}
   \input{greedy/greedy}
   \newpage
 
+  %-- Local Search --
+  \subsection{Local Search}\label{subsec:local}
+  \input{local/local}
+  \newpage
+
+  \subsection{GRASP}\label{subsec:grasp}
+  \input{grasp/grasp}
+  \newpage
+
 %-- Apéndices --
-\section{Apéndices}
+\section{Apéndices}\label{sec:apendices}
   
   \subsection{Código Fuente (resumen)}\label{subsec:codigo-fuente}
   \input{codigo-fuente}
@@ -63,5 +77,5 @@
 
   %\end{thebibliography}
 
-\end{TP2}
+\end{TP3}
 \end{document}
