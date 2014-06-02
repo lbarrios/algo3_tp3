@@ -1,2 +1,2 @@
-COMMON_OBJS := Graph Edge
+COMMON_OBJS := Graph Edge Parser ProblemInstance
 include ../Makefile.common

@@ -8,7 +8,7 @@ ProblemInstance::ProblemInstance()
 	K = 0;
 }
 
-ProblemInstance::ProblemInstance(Graph* graph, int u, int v, int K) 
+ProblemInstance::ProblemInstance(Graph* graph, int u, int v, int K)
 {
 	this->graph = graph;
 	this->u = u;
@@ -16,7 +16,7 @@ ProblemInstance::ProblemInstance(Graph* graph, int u, int v, int K)
 	this->K = K;
 }
 
-ProblemInstance::~ProblemInstance() 
+ProblemInstance::~ProblemInstance()
 {
 	delete graph;
 }
