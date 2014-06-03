@@ -11,8 +11,13 @@ endif
 ifeq ($(CC),)
 	CC=g++
 endif
+ifeq ($(CC),g++-4.6)
+	C11_FLAG=c++0x
+else
+	C11_FLAG=c++11
+endif
 #CC=g++ # setear CC manualmente con "setenv CC ..."
-CFLAGS=-Wall -pedantic -std=c++11
+CFLAGS=-Wall -pedantic -std=$(C11_FLAG)
 COMMON_DIR=../common
 COMMON_OBJSDIR=${COMMON_DIR}/${OBJSDIR}
 # Replace OBJS with OBJSDIR/OBJS
