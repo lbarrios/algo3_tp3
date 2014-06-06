@@ -17,7 +17,7 @@ public:
 private:
   enum initial_solution_enum {INITIAL_SOLUTION_A = 1, INITIAL_SOLUTION_B, INITIAL_SOLUTION_C};
   enum neighborhood_selector_enum {NEIGHBORHOOD_SELECTOR_A = 1, NEIGHBORHOOD_SELECTOR_B, NEIGHBORHOOD_SELECTOR_C};
-  std::unique_ptr<InitialSolution> initial_solution = NULL;
-  std::unique_ptr<NeighborhoodSelector> selector = NULL;
-  std::unique_ptr<LocalHeuristic> heuristic = NULL;
+  std::unique_ptr<InitialSolution> initial_solution;
+  std::unique_ptr<NeighborhoodSelector> selector;
+  std::unique_ptr<LocalHeuristic> heuristic;
 };
