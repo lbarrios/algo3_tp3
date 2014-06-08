@@ -65,6 +65,8 @@ ShortestPath* createShortestPathMatrix(ProblemInstance* instance) {
   return matrix;
 }
 
+printSolution ( solution )
+
 
 int main( int argc, char const* argv[] )
 {
@@ -79,7 +81,7 @@ int main( int argc, char const* argv[] )
   // instantiate the neighborhood selector using the neighborhood selector parameter
   std::unique_ptr<NeighborhoodSelector> selector = heuristicFactory.createNeighborhoodSelector( neighborhoodSelectorParameter );
   // instantiate the heuristic using the initial solution and the neighborhood selector
-  std::unique_ptr<LocalHeuristic> heuristic = heuristicFactory.createHeuristic( std::move( solution ), std::move( selector ) );
+  //std::unique_ptr<LocalHeuristic> heuristic = heuristicFactory.createHeuristic( std::move( solution ), std::move( selector ) );
   // parse the input
   parser.parseInput();
   /*************************
@@ -92,7 +94,13 @@ int main( int argc, char const* argv[] )
     **************/
     // obtain the initial time
     timer.setInitialTime( "todo_el_codigo" );
+    // obtain the initial solution
+    solution = InitialSolution.getInitialSolution( instance );
     // run the heuristic
+    do
+    {
+      newSolution = selector.getBestNeighbour( solution );
+    } while( newSolution < solution );
     /*
     solution = heuristic.run( instance );
     */
@@ -134,9 +142,8 @@ int main( int argc, char const* argv[] )
     /***************
       Output Print
     ****************/
-    /*
-      code to print result
-    */
+    // print the solution
+    printSolution ( solution );
     // save all obtained times to output
     timer.saveAllTimes();
   }
