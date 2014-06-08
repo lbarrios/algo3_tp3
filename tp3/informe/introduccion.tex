@@ -1,0 +1,23 @@
+
+En este trabajo pr\'actico nos piden analizar el problema del \textit{Camino Acotado de Costo M\'inimo} ($CACM$), y desarrollar distintos algoritmos para resolver el mismo. 
+
+El problema consiste en que dado un Grafo $G = (V,E)$, dos funciones de peso $\omega_1, \omega_2: V \mapsto \mathbb{R}_+$, y un natural $K$, encontrar un camino $P$ entre dos nodos $u, v \in V$ con costo $\omega_1(P) \leq K$ de manera tal que $\omega_2(P)$ sea m\'inimo. 
+
+Donde el costo del camino $\omega_x(P)$, con $1 \leq x \leq 2$, se define como
+
+\begin{equation*}
+ \omega_x(P) = \sum_{e \text{ arista de } P} \omega_x(e)
+\end{equation*}
+
+$CACM$ es un problema conocido, y tiene muchas aplicaciones en la vida real. Por ejemplo, supongamos que somos una empresa de turismo que ofrece paquetes de viajes. Una situaci\'on que se nos puede presentar es que un cliente nos pide organizarle un viaje de una ciudad $X$ a otra ciudad $Y$ para poder llegar en el m\'inimo tiempo, pero nos dice que el presupuesto que cuenta para gastar en transporte es de \$$K$. Este problema se puede modelar con $CACM$, donde las ciudades son los nodos del grafo, las aristas del mismo existen si entre las ciudades en cuesti\'on hay alg'un medio de transporte, $\omega_1$ representa el costo del viaje, y $\omega_2$ es el tiempo que toma el viaje. 
+
+Aunque si bien $CACM$ es un problema conocido, no se conocen algoritmos polinomiales que lo resuelvan y por lo tanto pertenecen al conjunto de los problemas NP. Nosotros en este TP analizaremos 6 m\'etodos para resolverlo, una soluci\'on exacta y 5 aproximaciones a trav\'es de heur\'isticas. En concreto, los algoritmos que implementaremos son: 
+
+\begin{enumerate}
+\item Un \textit{Backtracking} como algoritmo exacto.
+\item Tres heur\'isticas \textit{constructivas greedy}, cada una con un criterio goloso diferente. 
+\item Una heur\'istica de \textit{b\'usqueda local}.
+\item Una heur\'istica \textit{GRASP}.
+\end{enumerate}
+
+Nos centraremos en experimentar sobre estos algoritmos, analizando su complejidad y la calidad de las soluciones de las heur\'isticas. Tambi\'en trataremos de definir las familias de grafos para las cu\'ales las heur\'isticas implementadas funcionan muy bien, y aquellas para las cu\'ales las mismas hallan una soluci\'on muy alejada de la \'optima, o lo que es peor, que podr\'ian no hallar ninguna. 

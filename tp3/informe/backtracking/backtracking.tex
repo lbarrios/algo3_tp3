@@ -4,9 +4,47 @@
 \begin{document}{}
 % -----------------------------------------------
 
+Debido a la dificultad computacional del problema, no existe a\'un una soluci\'on exacta de tiempo polinomial, y a pesar que lo discutimos nosotros no pudimos encontrarla tampoco. En su defecto implementamos un algoritmo de backtracking que recorre todos los caminos posibles de $u$ a $v$ y se queda con el de menor $\omega_2$ tal que $\omega_1 \leq K$. 
 
-% TODO: Escribir aquí dentro. Borrar este comentario.
-a
+El algoritmo funciona de la siguiente manera: en un momento dado va a tener construido un camino $P = [v_1, \dots, v_{i-1}]$, y toma un nodo $v_i$, lo marca como visitado y lo agrego a $P$. Luego si $\omega_1(P)$ cumple que es menor que igual a $K$, entonces me fijo si $v_i$ es $v$, en dicho caso me fijo si el peso de $P$ seg\'un $\omega_2$ es mejor al que hubiera encontrado como \'optimo anteriormente, o lo guardo como una potencial soluci\'on si es la primera que encuentra. Si $v_i$ no es el nodo buscado, entonces repito todo el procedimiento para cada vecino de este que no haya sido recorrido todav\'ia. 
+
+De esta forma, el backtracking empieza con $P = \emptyset$ y tomando como nodo inicial a $u$, y va a parar cuando haya recorrido todas las posibles formas de llegar hasta $v$, y cuando lo haga va a haber guardado la soluci\'on \'optima. 
+
+A continuaci\'on, escribimos el pseudoc\'odigo de la funci\'on \texttt{main}
+
+\begin{algorithm}[H]
+\caption{main()}
+\begin{algorithmic}[1]
+  \State Camino mejorSolucion = []
+  \State Camino ramaActual = []
+  \State Nodo u, v
+  \State Grafo G
+  \State backtrack( u, u )
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{backtrack(Nodo actual, Nodo padre)}
+\begin{algorithmic}[1]
+  \State ramaActual.push( actual )
+  \State visitados[actual] $\leftarrow$ true
+  \If{$\omega_1$(ramaActual) $< K$}
+    \If{actual = dst \textbf{and} $\omega_2$(ramaActual) $< \omega_2$(mejorSolucion)} 
+      \State mejorSolucion $\leftarrow$ ramaActual
+    \ElsIf{actual $\neq$ dst}
+      \For{\textbf{cada} Nodo n \textbf{en} G.adyacentes( actual ) }
+	\If{\textbf{no} visitado[n] }
+	  \State backtrack( n, actual )
+	\EndIf
+      \EndFor
+    \EndIf
+  \EndIf
+  \State ramaActual.pop( actual )
+  \State visitados[actual] $\leftarrow$ false
+\end{algorithmic}
+\end{algorithm}
+
+De esta forma, cuando corremos \texttt{backtrack(src, src)} y termina, vamos a tener en \texttt{mejorSolucion} la soluci\'on \'optima. 
 
 % -----------------------------------------------
 \end{document}
