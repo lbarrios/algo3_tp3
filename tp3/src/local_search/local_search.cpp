@@ -82,18 +82,22 @@ int main( int argc, char const* argv[] )
   std::unique_ptr<LocalHeuristic> heuristic = heuristicFactory.createHeuristic( std::move( solution ), std::move( selector ) );
   // parse the input
   parser.parseInput();
-  /*************
-    Resolution
-  **************/
-  // obtain the initial time
-  timer.setInitialTime( "todo_el_codigo" );
-  /*
-    code to resolve local heuristic
-  */
-
-  for ( int i = 0; i < parser.problemInstances.size(); i++ )
+  /*************************
+    Iterate over instances
+  **************************/
+  for(auto instance:parser.problemInstances)
   {
-    ProblemInstance* instance = parser.problemInstances[0];
+    /*************
+      Resolution
+    **************/
+    // obtain the initial time
+    timer.setInitialTime( "todo_el_codigo" );
+    // run the heuristic
+    /*
+    solution = heuristic.run( instance );
+    */
+
+
     // creo el dijkstra
     Dijkstra<ObjectiveFunctionOmega1> dijsktra;
     // creo la solucion
@@ -105,7 +109,9 @@ int main( int argc, char const* argv[] )
     double totalOmega1;
     double totalOmega2;
     sol.getPath( instance->v, instance->graph, path, totalOmega1, totalOmega2 );
-    
+
+
+
     ShortestPath* matrix = createShortestPathMatrix(instance);
 
     int n = instance->graph->nodeCount;
@@ -122,17 +128,17 @@ int main( int argc, char const* argv[] )
         cout << endl << endl;*/
       }
     }
-  }
 
-  // obtain the final time
-  timer.setFinalTime( "todo_el_codigo" );
-  /***************
-    Output Print
-  ****************/
-  /*
-    code to print result
-  */
-  // save all obtained times to output
-  timer.saveAllTimes();
+    // obtain the final time
+    timer.setFinalTime( "todo_el_codigo" );
+    /***************
+      Output Print
+    ****************/
+    /*
+      code to print result
+    */
+    // save all obtained times to output
+    timer.saveAllTimes();
+  }
   return 0;
 }
