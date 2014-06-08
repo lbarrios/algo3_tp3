@@ -17,8 +17,8 @@ print "createInput_kn " + str(file_id) + " " + str(instanceCount) + " (file_id, 
 fo = open("../input/kn_" + str(file_id) + ".txt", "wb")
 
 for r in range(0, instanceCount):
-    nMin = 10
-    nMax = 100    
+    nMin = 3
+    nMax = 3
     kMult = 10
     #defino el nombre de cada archivo    
     n = randint(nMin, nMax) # Cantidad de nodos

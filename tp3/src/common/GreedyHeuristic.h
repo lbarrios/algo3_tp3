@@ -36,22 +36,23 @@ void GreedyHeuristic<ObjectiveFunction>::run()
     // creo el dijkstra
     Dijkstra<ObjectiveFunction> dijsktra;
     // creo la solucion
-    DijkstraSolution sol( instance->graph->nodeCount );
+    DijkstraSolution sol( instance->graph->nodeCount, instance->u );
     // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
-    dijsktra.findPath( instance->graph, instance->u, &sol );
+    dijsktra.findPath( instance->graph, &sol );
     // obtengo el path que me interesa
     list<Edge*> path;
-    double totalK;
-    sol.getPath( instance->v, instance->graph, path, totalK );
+    double totalOmega1;
+    double totalOmega2;
+    sol.getPath( instance->v, instance->graph, path, totalOmega1, totalOmega2 );
 
     // imprimo el path
     if ( path.size() == 0 )
     {
       cout << "No se encontro el path." << endl;
     }
-    else if ( totalK > instance->K )
+    else if ( totalOmega1 > instance->K )
     {
-      cout << "Se supero el K " << totalK << "/" << instance->K << "!" << endl;
+      cout << "Se supero el K " << totalOmega1 << "/" << instance->K << "!" << endl;
 
       for ( auto it = begin( path ); it != end( path ); ++it )
       {

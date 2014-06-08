@@ -28,7 +28,7 @@ class Dijkstra
 public:
     Dijkstra();
     
-    void findPath(Graph* graph, int fromNode, DijkstraSolution* solution);
+    void findPath(Graph* graph, DijkstraSolution* solution);
     
 };
 
@@ -37,18 +37,18 @@ Dijkstra<ObjectiveFunction>::Dijkstra() {
 }
 
 template<class ObjectiveFunction>
-void Dijkstra<ObjectiveFunction>::findPath(Graph* graph, int fromNode, DijkstraSolution* solution) {
+void Dijkstra<ObjectiveFunction>::findPath(Graph* graph, DijkstraSolution* solution) {
     int* prevNodes = solution->prevNodes;
     double* dist = new double[graph->nodeCount];
     for (int i=0; i<graph->nodeCount; i++) {
         dist[i] = INF;
         prevNodes[i] = -1;
     }
-    dist[fromNode-1] = 0;
+    dist[solution->fromNode-1] = 0;
 
     ObjectiveFunction objFunc;
 
-    unvisited.push(new UnvisitedNode(fromNode, 0, 0));
+    unvisited.push(new UnvisitedNode(solution->fromNode, 0, 0));
     
     while (unvisited.size() > 0) {
         UnvisitedNode* currNode = unvisited.top();
