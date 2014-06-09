@@ -1,9 +1,21 @@
 #include "HeuristicFactory.h"
 
-HeuristicFactory::HeuristicFactory() {
-  this->initial_solution = NULL;
-  this->selector = NULL;
-  this->heuristic = NULL;
+HeuristicFactory::HeuristicFactory()
+: initial_solution(NULL), selector(NULL), heuristic(NULL)
+{
+}
+
+HeuristicFactory::~HeuristicFactory()
+{
+  if(this->initial_solution) {
+    delete this->initial_solution;
+  }
+  if(this->selector) {
+    delete this->selector;
+  }
+  if(this->heuristic) {
+    delete this->heuristic;
+  }
 }
 
 InitialSolution* HeuristicFactory::createInitialSolution( const char* initial_solution_param )
@@ -64,16 +76,12 @@ NeighbourhoodSelector* HeuristicFactory::createNeighborhoodSelector( const char*
   return this->selector;
 }
 
-LocalHeuristic* HeuristicFactory::createHeuristic(
-  InitialSolution* initialSolution, NeighbourhoodSelector* neighbourhoodSelector )
+LocalHeuristic* HeuristicFactory::createHeuristic( InitialSolution* initialSolution, NeighbourhoodSelector* neighbourhoodSelector )
 {
   if(this->heuristic) {
     delete this->heuristic;
     this->heuristic = NULL;
   }
   this->heuristic = new LocalHeuristic( initialSolution, neighbourhoodSelector );
-  /*
-
-  */
   return this->heuristic;
 }

@@ -13,6 +13,6 @@ Solution* NeighbourhoodSelectorA::getBestNeighbour(Solution* solution)
        		 Solution* path = &(pathMatrix[(i-1)+ (j-1) * nodeCount]);
       	}
     }*/
-    return solution;
+    return bestSolution;
 }
 

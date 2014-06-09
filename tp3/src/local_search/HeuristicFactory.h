@@ -16,7 +16,7 @@ class HeuristicFactory
 {
 public:
   HeuristicFactory();
-  ~HeuristicFactory() = default;
+  ~HeuristicFactory();
   InitialSolution* createInitialSolution( const char* );
   NeighbourhoodSelector* createNeighborhoodSelector( const char* );
   LocalHeuristic* createHeuristic( InitialSolution*, NeighbourhoodSelector* );
