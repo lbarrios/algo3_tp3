@@ -1,9 +1,12 @@
 #pragma once
 
-class InitialSolutionC : InitialSolution
+#include "InitialSolution.h"
+
+class InitialSolutionC : public InitialSolution
 {
 public:
 	InitialSolutionC() = default;
-	~InitialSolutionC() = default;
+	virtual ~InitialSolutionC() = default;
 	
+	Solution* getInitialSolution(ProblemInstance* instance);
 };

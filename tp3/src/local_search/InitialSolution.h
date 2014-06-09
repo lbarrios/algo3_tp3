@@ -1,11 +1,12 @@
 #pragma once
 
 #include "Solution.h"
+#include "../common/ProblemInstance.h"
 
 class InitialSolution
 {
 public:
-  InitialSolution() = default;
-  ~InitialSolution() = default;
-  virtual Solution getInitialSolution();
+  InitialSolution();
+  virtual ~InitialSolution() = default;
+  virtual Solution* getInitialSolution(ProblemInstance* instance) = 0;
 };
