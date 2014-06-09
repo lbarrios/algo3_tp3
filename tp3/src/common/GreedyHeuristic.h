@@ -40,7 +40,7 @@ void GreedyHeuristic<ObjectiveFunction>::run()
     // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
     dijsktra.findPath( instance->graph, &sol );
     // obtengo el path que me interesa
-    list<Edge*> path;
+    vector<Edge*> path;
     double totalOmega1;
     double totalOmega2;
     sol.getPath( instance->v, instance->graph, path, totalOmega1, totalOmega2 );

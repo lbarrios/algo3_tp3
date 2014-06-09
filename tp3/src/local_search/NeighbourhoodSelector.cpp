@@ -24,20 +24,22 @@ NeighbourhoodSelector::NeighbourhoodSelector()
 }
 
 void NeighbourhoodSelector::initialize(ProblemInstance* instance)
-{		
+{	
+
 	if(pathMatrix) {
 		delete pathMatrix;
 	}
-
   	nodeCount = instance->graph->nodeCount;
-  	pathMatrix = new Solution[nodeCount*nodeCount];    
+  	pathMatrix = new Solution[nodeCount*nodeCount];        
+
   	for(int j=1; j<=nodeCount; j++) {
-    	Dijkstra<ObjectiveFunctionOmega2> dijsktra;    
-	    DijkstraSolution sol( instance->graph->nodeCount, j );    
-	    dijsktra.findPath( instance->graph, &sol );
+    	Dijkstra<ObjectiveFunctionOmega2> dijsktra;          
+	    DijkstraSolution sol( instance->graph->nodeCount, j );                
+	    dijsktra.findPath( instance->graph, &sol );                  
 	    for(int k=1; k<=nodeCount; k++) {        
-	    	  Solution* solution = &pathMatrix[j-1 + (k-1) * nodeCount];
-	    	  sol.getPath(k, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2);
+	    	  Solution* solution = &pathMatrix[j-1 + (k-1) * nodeCount];                    
+	    	  sol.getPath(k, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2);          
 	    }
+
   	}
 }

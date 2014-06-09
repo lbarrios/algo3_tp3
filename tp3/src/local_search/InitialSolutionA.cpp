@@ -19,7 +19,7 @@ public:
 };
 
 Solution* InitialSolutionA::getInitialSolution(ProblemInstance* instance)
-{
+{    
 	// creo el dijkstra
     Dijkstra<ObjectiveFunctionOmega1> dijsktra;
     // creo la solucion

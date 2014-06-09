@@ -47,12 +47,13 @@ int main( int argc, char const* argv[] )
   {
     /*************
       Resolution
-    **************/      
+    **************/           
     selector->initialize(instance);        
-
+    
     // obtain the initial time
     timer.setInitialTime( "todo_el_codigo" );
     // obtain the initial solution
+    
     Solution* solution = initialSolution->getInitialSolution( instance );
 
     // run the heuristic

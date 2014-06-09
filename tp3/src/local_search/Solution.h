@@ -1,6 +1,6 @@
 #pragma once
 
-#include <list>
+#include <vector>
 #include <iostream>
 #include "../common/Edge.h"
 
@@ -14,7 +14,7 @@ public:
 
 	double totalOmega1;
   	double totalOmega2;
-  	list<Edge*> path;
+  	vector<Edge*> path;
 
   	bool operator == (const Solution &other) const;
     bool operator < (const Solution &other) const;
