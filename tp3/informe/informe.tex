@@ -1,7 +1,18 @@
 % ------ headers globales -------------
 \documentclass[12pt, a4paper, twoside]{article}
 \usepackage{header_tp3}
-\includeonly{instrucciones, codigo-fuente, conclusiones, introduccion, problema1, problema2, problema3}
+\raggedbottom % para evitar que se formatee automaticamente "vertically justified" 
+
+%uso: \ponerGrafico{file}{caption}{scale}{label}
+\newcommand{\ponerGrafico}[4]
+{\begin{figure}[H]
+	\centering
+	\subfloat{\includegraphics[scale=#3]{#1}}
+	\caption{#2} \label{fig:#4}
+\end{figure}
+}
+
+%\includeonly{instrucciones, codigo-fuente, conclusiones, introduccion, problema1, problema2, problema3}
 \begin{document}{}
 % -------------------------------------
 % -- Carátula --
