@@ -1,5 +1,12 @@
 #include "Parser.h"
 
+#include <iostream>
+#include <cstdlib> //< atoi
+#include <string>
+#include "Graph.h"
+
+using namespace std;
+
 void splitString( vector<string>* out, string str, string delimiter )
 {
   unsigned long fromIndex = 0;

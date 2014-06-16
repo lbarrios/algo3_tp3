@@ -5,5 +5,5 @@
 class NeighbourhoodSelectorB : public NeighbourhoodSelector
 {
 public:
-	Solution* getBestNeighbour(Solution* solution);
+	Solution* getBestNeighbour(const Solution* solution);
 };

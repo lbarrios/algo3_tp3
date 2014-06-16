@@ -21,18 +21,20 @@ void DijkstraSolution::getPath(int toNode, Graph* graph, vector<Edge*> &path, do
         totalOmega2 += edge->omega2;
         toNode = prevNode;
         prevNode = prevNodes[prevNode-1];
-    }    
-    path.resize(pathList.size());
-    int index = 0;
-    for(list<Edge*>::iterator it = pathList.begin(); it != pathList.end(); it++) {
-        path[index] = *it;
-        index++;
-    }
+    }        
 
     // toNode va cambiando dentro del while
     // si llegado a este punto, toNode != fromNode, significa que no hay camino entre toNode y fromNode    
     if(toNode != fromNode) {
         totalOmega1 = INF;
         totalOmega2 = INF;
+    } else {
+        // solo devuelvo un camino si existe un camino posible entre fromNode y toNode
+        path.resize(pathList.size());
+        int index = 0;
+        for(list<Edge*>::iterator it = pathList.begin(); it != pathList.end(); it++) {
+            path[index] = *it;
+            index++;
+        }
     }
 }

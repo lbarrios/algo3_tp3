@@ -9,14 +9,13 @@ using namespace std;
 class Solution
 {
 public:
-	Solution() = default;
+	Solution() = default;	
 	~Solution() = default;
 
 	double totalOmega1;
   	double totalOmega2;
   	vector<Edge*> path;
 
-  	bool operator == (const Solution &other) const;
-    bool operator < (const Solution &other) const;
-    bool operator > (const Solution &other) const;
+    Solution* createSubSolutionBetween(int node1, int node2) const;
+    void print();
 };
