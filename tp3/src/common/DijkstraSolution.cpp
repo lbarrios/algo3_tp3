@@ -7,6 +7,7 @@
 DijkstraSolution::DijkstraSolution(int n, int fromNode) {    
     prevNodes = new int[n];   
     this->fromNode = fromNode;
+    totalOmega1 = totalOmega2 = INF;
 }
 
 void DijkstraSolution::getPath(int toNode, Graph* graph, vector<Edge*> &path, double &totalOmega1, double &totalOmega2) {	
@@ -28,6 +29,7 @@ void DijkstraSolution::getPath(int toNode, Graph* graph, vector<Edge*> &path, do
     if(toNode != fromNode) {
         totalOmega1 = INF;
         totalOmega2 = INF;
+        // el path que se devuelve en la solucion queda vacio
     } else {
         // solo devuelvo un camino si existe un camino posible entre fromNode y toNode
         path.resize(pathList.size());

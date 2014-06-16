@@ -48,6 +48,7 @@ int main( int argc, char const* argv[] )
     cout << "Initial solution: ";
     solution->print();
 
+    // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica
     if(solution->totalOmega1 < instance->K) {
       // run the heuristic
       Solution* newSolution = NULL;    
@@ -67,10 +68,7 @@ int main( int argc, char const* argv[] )
           huboMejora = false;
         }      
       } while(huboMejora);
-    } else {
-      // El dijkstra de omega1 no cumple con el K, asi que no tiene correr la heuristica
-    }
-    
+    } 
     
     // obtain the final time
     timer.setFinalTime( "todo_el_codigo" );

@@ -25,22 +25,22 @@ public:
 };
 
 template<class ObjectiveFunction>
-class Dijkstra
+class DijkstraRandomized
 {
 	priority_queue<UnvisitedNode* ,std::vector<UnvisitedNode*>, ObjectiveFunction> unvisited;
 public:
-    Dijkstra();
+    DijkstraRandomized();
     
     void findPath(Graph* graph, DijkstraSolution* solution);
     
 };
 
 template<class ObjectiveFunction>
-Dijkstra<ObjectiveFunction>::Dijkstra() {
+DijkstraRandomized<ObjectiveFunction>::DijkstraRandomized() {
 }
 
 template<class ObjectiveFunction>
-void Dijkstra<ObjectiveFunction>::findPath(Graph* graph, DijkstraSolution* solution) {
+void DijkstraRandomized<ObjectiveFunction>::findPath(Graph* graph, DijkstraSolution* solution) {
     int* prevNodes = solution->prevNodes;
     double* dist = new double[graph->nodeCount];
     for (int i=0; i<graph->nodeCount; i++) {
