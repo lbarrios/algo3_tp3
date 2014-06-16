@@ -52,5 +52,5 @@ $(COMMON_OBJSDIR)/%.o.time: $(COMMON_DIR)/%.cpp | $(COMMON_OBJSDIR)
 	$(CC) -c $(CFLAGS_TIME) $< -o $@
 
 clean:
-	rm -rf $(OBJS) $(COMMON_OBJS) $(COMMON_OBJS_TIME) $(EXE)
+	rm -rf $(OBJS) $(COMMON_OBJS) $(COMMON_OBJS_TIME) $(EXE) $(EXE).time
 	#rm -rf $(COMMON_OBJSDIR)
