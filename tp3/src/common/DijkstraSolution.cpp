@@ -6,8 +6,7 @@
 
 DijkstraSolution::DijkstraSolution(int n, int fromNode) {    
     prevNodes = new int[n];   
-    this->fromNode = fromNode;
-    totalOmega1 = totalOmega2 = INF;
+    this->fromNode = fromNode;    
 }
 
 void DijkstraSolution::getPath(int toNode, Graph* graph, vector<Edge*> &path, double &totalOmega1, double &totalOmega2) {	

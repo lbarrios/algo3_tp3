@@ -6,20 +6,10 @@
 #include <limits> //< numeric_limits
 #include "Graph.h"
 #include "DijkstraSolution.h"
+#include "defines.h"
+#include "UnvisitedNode.h"
 
 using namespace std;
-
-#define INF (std::numeric_limits<double>::max())
-
-class UnvisitedNode
-{
-public:
-	Node node;
-	double omega1;
-	double omega2;
-
-	UnvisitedNode(Node n, double o1, double o2) : node(n), omega1(o1), omega2(o2) {} 
-};
 
 template<class ObjectiveFunction>
 class Dijkstra

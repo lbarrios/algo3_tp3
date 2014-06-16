@@ -1,4 +1,5 @@
 #include "InitialSolutionB.h"
+#include "../common/DijkstraRandomized.h"
 
 Solution* InitialSolutionB::getInitialSolution(ProblemInstance* instance)
 {

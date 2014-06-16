@@ -19,8 +19,8 @@ int main( int argc, char const* argv[] )
     Initialization
   ******************/
   // get console parameters
-  const char* initialSolutionParameter = ( argc >= 2 ? argv[1] : NULL );
-  const char* neighborhoodSelectorParameter = ( argc >= 3 ? argv[2] : NULL );
+  int initialSolutionParameter = ( argc >= 2 ? atoi(argv[1]) : 0 );
+  int neighborhoodSelectorParameter = ( argc >= 3 ? atoi(argv[2]) : 0 );
   // instantiate the initial solution using the initial solution parameter
   InitialSolution* initialSolution =  heuristicFactory.createInitialSolution( initialSolutionParameter );
   // instantiate the neighborhood selector using the neighborhood selector parameter

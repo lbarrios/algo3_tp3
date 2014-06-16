@@ -1,2 +1,2 @@
-COMMON_OBJS := Graph Edge Parser ProblemInstance DijkstraSolution Dijkstra GreedyHeuristic
+COMMON_OBJS := Graph Edge Parser ProblemInstance DijkstraSolution Dijkstra GreedyHeuristic UnvisitedNode
 include ../Makefile.common

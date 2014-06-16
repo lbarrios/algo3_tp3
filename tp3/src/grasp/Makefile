@@ -1,3 +1,3 @@
-COMMON_OBJS := Graph Edge Parser ProblemInstance Timer DijkstraSolution Dijkstra DijkstraRandomized
-OBJS := InitialSolution Solution NeighbourhoodSelector LocalHeuristic HeuristicFactory NeighbourhoodSelectorA NeighbourhoodSelectorB NeighbourhoodSelectorC InitialSolutionA InitialSolutionB InitialSolutionC
+COMMON_OBJS := Graph Edge Parser ProblemInstance Timer DijkstraSolution Dijkstra DijkstraRandomized UnvisitedNode
+OBJS := grasp InitialSolution Solution NeighbourhoodSelector LocalHeuristic HeuristicFactory NeighbourhoodSelectorA NeighbourhoodSelectorB NeighbourhoodSelectorC InitialSolutionA InitialSolutionB InitialSolutionC
 include ../Makefile.common

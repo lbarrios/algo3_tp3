@@ -8,21 +8,12 @@
 #include "Graph.h"
 #include "DijkstraSolution.h"
 #include <iostream>
+#include "defines.h"
+#include "UnvisitedNode.h"
 
 using namespace std;
 
-#define INF (std::numeric_limits<double>::max())
 #define RCL_SIZE 10
-
-class UnvisitedNode
-{
-public:
-	Node node;
-	double omega1;
-	double omega2;
-
-	UnvisitedNode(Node n, double o1, double o2) : node(n), omega1(o1), omega2(o2) {} 
-};
 
 template<class ObjectiveFunction>
 class DijkstraRandomized

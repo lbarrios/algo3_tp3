@@ -18,14 +18,14 @@ HeuristicFactory::~HeuristicFactory()
   }
 }
 
-InitialSolution* HeuristicFactory::createInitialSolution( const char* initial_solution_param )
+InitialSolution* HeuristicFactory::createInitialSolution( int initial_solution_param )
 {
   if(this->initial_solution) {
     delete this->initial_solution;
     this->initial_solution = NULL;
   }
-  // initial_solution_param debe ser un int, ver initial_solution_enum en HeuristicFactory.h
-  switch ( initial_solution_param != NULL ? atoi( initial_solution_param ) : 0 )
+  // los posibles valores de initial_solution_param estan en defines.h
+  switch ( initial_solution_param )
   {
   case INITIAL_SOLUTION_A:
     this->initial_solution = new InitialSolutionA();
@@ -47,14 +47,14 @@ InitialSolution* HeuristicFactory::createInitialSolution( const char* initial_so
   return this->initial_solution;
 }
 
-NeighbourhoodSelector* HeuristicFactory::createNeighborhoodSelector( const char* neighbourhood_selector_param )
+NeighbourhoodSelector* HeuristicFactory::createNeighborhoodSelector( int neighbourhood_selector_param )
 {
   if(this->selector) {
     delete this->selector;
     this->selector = NULL;
   }
-  // neighborhood_selector_param debe ser un int, ver neighborhood_selector_enum en HeuristicFactory.h
-  switch ( neighbourhood_selector_param != NULL ? atoi( neighbourhood_selector_param ) : 0 )
+  // los posibles valores de neighbourhood_selector_param estan en defines.h
+  switch ( neighbourhood_selector_param )
   {
   case NEIGHBORHOOD_SELECTOR_A:
     this->selector = new NeighbourhoodSelectorA();
