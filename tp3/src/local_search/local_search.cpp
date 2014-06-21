@@ -6,9 +6,9 @@
 #include "Solution.h"
 #include "../common/Parser.h"
 #include "../common/Timer.h"
-#include "HeuristicFactory.h"
+#include "HeuristicFactoryL.h"
 
-HeuristicFactory heuristicFactory;
+HeuristicFactoryL heuristicFactory;
 Parser parser;
 Timer timer( cerr );
 

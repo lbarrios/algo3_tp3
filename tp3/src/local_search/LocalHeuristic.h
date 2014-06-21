@@ -1,6 +1,6 @@
 #pragma once
 
-#include "InitialSolution.h"
+#include "../common/InitialSolution.h"
 #include "NeighbourhoodSelector.h"
 #include <memory> // unique_ptr
 

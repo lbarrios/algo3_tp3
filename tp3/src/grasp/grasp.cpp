@@ -7,10 +7,10 @@
 #include "Solution.h"
 #include "../common/Parser.h"
 #include "../common/Timer.h"
-#include "HeuristicFactory.h"
+#include "HeuristicFactoryG.h"
 #include <math.h>
 
-HeuristicFactory heuristicFactory;
+HeuristicFactoryG heuristicFactory;
 Parser parser;
 Timer timer( cerr );
 
