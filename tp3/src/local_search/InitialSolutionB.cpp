@@ -1,10 +1,11 @@
 #include "InitialSolutionB.h"
 #include "../common/DijkstraRandomized.h"
+#include "../common/ObjectiveFunctions.h"
 
 Solution* InitialSolutionB::getInitialSolution(ProblemInstance* instance)
 {
 	// creo el dijkstra
-    DijkstraRandomized<InitialSolution::ObjectiveFunctionOmega1> dijsktraRandom;
+    DijkstraRandomized<ObjectiveFunctionA> dijsktraRandom;
     // creo la solucion
     DijkstraSolution dijkstraSolution( instance->graph->nodeCount, instance->u);
     // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial

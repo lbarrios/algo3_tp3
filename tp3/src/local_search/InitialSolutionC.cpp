@@ -1,9 +1,10 @@
 #include "InitialSolutionC.h"
+#include "../common/ObjectiveFunctions.h"
 
 Solution* InitialSolutionC::getInitialSolution(ProblemInstance* instance)
 {
 	// creo el dijkstra
-    Dijkstra<InitialSolution::ObjectiveFunctionOmega1> dijsktra;
+    Dijkstra<ObjectiveFunctionA> dijsktra;
     // creo la solucion
     DijkstraSolution sol( instance->graph->nodeCount, instance->u);
     // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
