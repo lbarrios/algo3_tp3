@@ -32,3 +32,36 @@ Dada una vecindad $S^*$, se probaron los siguientes métodos de elegir al vecino
 \end{list}
 
 \end{comment}
+
+% Familias malas
+Familias malas
+
+Si elegimos como solución inicial a las heurísticas Greedy B o C desarrolladas en la sección previa, se ha expuesto que pueden fallar en el
+intento de dar una solución factible, aún existiendo una. El Greedy A siempre encuentra una solución factible de existir ésta. Veamos que
+tomándola como solución inicial, nuestra heurística de búsqueda local puede quedar arbitrariamente lejos de la solución óptima.
+
+Presentamos la siguiente familia de grafos.
+
+\ponerGrafico{imagenes/maloLocalA.png}{}{0.5}{malo-para-local-a}
+
+Para ir de 1 a 5 hay tres caminos posibles: ($C_1$) $1 \rightarrow 2 \rightarrow 5$; ($C_2$) $1 \rightarrow 3 \rightarrow 5$;
+($C_3$) $1 \rightarrow 4 \rightarrow 5$;
+
+\begin{eqnarray}
+ \omega_1(C_1) &=& 4	\\ 
+ \omega_2(C_1) &=& 2	\\
+ \omega_1(C_2) &=& 2	\\
+ \omega_2(C_2) &=& 2x   \\
+ \omega_1(C_3) &=& 6	\\
+ \omega_2(C_3) &=& 1
+\end{eqnarray}
+
+Supongamos que K vale 4.
+Como decíamos, partimos del camino mínimo entre $u$ y $v$ de acuerdo a $\omega_1$, $C_2$. El algoritmo va a intentar intercambiar $C_2$ por
+$C_3$, el camino que minimiza $\omega_2$. Sin embargo, como éste se pasa del límite K, el algoritmo no puede seguir y devuelve $C_2$. Sin
+embargo $C_1$ era una solución mejor.
+
+$\frac{\omega_2(C_2)}{\omega_2(C_1)} = x$.
+
+Haciendo crecer el valor de $x$ podemos encontrar grafos en los que nuestro algoritmo devuelve una
+solución arbitrariamente lejos de la óptima.
