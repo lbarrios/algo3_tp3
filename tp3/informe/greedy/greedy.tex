@@ -54,7 +54,7 @@ La modificaci\'on est\'a la l\'inea 7, que en vez de sumar a $\pi(v)$ el peso de
 \subsubsection{Greedy A}\label{subsubsec:greedy-a}
 Dado un grafo $G = (V,E)$, obtenemos el camino m\'inimo entre $u$ y $v$ seg\'un $\omega_1$. 
 
-Familias malas
+A continuación definimos una familia de grafos en los cuales nuestro algoritmo puede devolver resultados muy malos.
 \ponerGrafico{imagenes/maloGreedyA.png}{}{0.5}{malo-para-greedy-a}
 
 Para ir de 1 a 4 hay dos caminos posibles: ($C_1$) $1 \rightarrow 2 \rightarrow 4$; ($C_2$) $1 \rightarrow 3 \rightarrow 4$
@@ -66,12 +66,36 @@ Para ir de 1 a 4 hay dos caminos posibles: ($C_1$) $1 \rightarrow 2 \rightarrow 
  \omega_2(C_2) &=& 2
 \end{eqnarray}
 
+Supongamos que K vale 2x, es decir, los dos caminos son válidos. Nuestro algoritmo elige $C_1$.
+$\frac{\omega_2(C_1)}{\omega_2(C_2)}$ = x
+Como x lo podemos variar, este cociente puede ser tan grande como queramos. Es decir que el algoritmo goloso puede devolver una solución
+arbitrariamente alejada de la óptima.
+
 %-- Goloso B --
 \clearpage
 \subsubsection{Greedy B}\label{subsubsec:greedy-b}
 Dado un grafo $G = (V,E)$, obtenemos el camino m\'inimo entre $u$ y $v$ seg\'un $\omega_2$. 
 
+A continuación definimos una familia de grafos en los cuales nuestro algoritmo puede devolver resultados muy malos.
+\ponerGrafico{imagenes/maloGreedyB.png}{}{0.5}{malo-para-greedy-b}
+
+Para ir de 1 a 4 hay dos caminos posibles: ($C_1$) $1 \rightarrow 2 \rightarrow 4$; ($C_2$) $1 \rightarrow 3 \rightarrow 4$
+
+\begin{eqnarray}
+ \omega_1(C_1) &=& 4 	\\ 
+ \omega_2(C_1) &=& 2	\\
+ \omega_1(C_2) &=& 2	\\
+ \omega_2(C_2) &=& 2x
+\end{eqnarray}
+
+Supongamos que K vale 2. Nuestro algoritmo elige $C_1$, pero al no ser válido, se ve obligado a devolver ``no". Pero $C_2$ era una solución
+válida. Ésto se cumple para cualquier valor de x.
+
 \clearpage
 %-- Goloso C --
 \subsubsection{Greedy C}\label{subsubsec:greedy-c}
 Dado un grafo $G = (V,E)$, obtenemos el camino m\'inimo entre $u$ y $v$ seg\'un $\omega_1\omega_2$. 
+
+Esta heurística se puede comportar de la misma forma que el Greedy B, si consideramos la familia mala de grafos desarrollada para el Greedy B,
+restringiendonos a valores de x mayores a 2. Se eligiría $C_1$  para minimizar el producto de las funciones de peso. Como no es válido,
+se deberá devolver ``no", a pesar de que $C_2$ es válido. 
