@@ -60,7 +60,7 @@ int main( int argc, char const* argv[] )
 
         for(int i = 0; i<iteracionesMax; i++) {    
             // instantiate the initial solution using the initial solution parameter
-            InitialSolution* initialSolution =  heuristicFactory.createInitialSolution( INITIAL_SOLUTION_B );        
+            InitialSolution* initialSolution =  heuristicFactory.createInitialSolution( initialSolutionParameter );        
             Solution* solution = initialSolution->getInitialSolution( instance );
             if(solution->path.size() == 0) {
                 // no encontre un path entre u y v

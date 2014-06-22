@@ -5,7 +5,7 @@
 Solution* InitialSolutionG_B::getInitialSolution(ProblemInstance* instance)
 {
 	// creo el dijkstra
-    DijkstraRandomized<ObjectiveFunctionA> dijsktraRandom;
+    DijkstraRandomized<ObjectiveFunctionB> dijsktraRandom;
     // creo la solucion
     DijkstraSolution dijkstraSolution( instance->graph->nodeCount, instance->u);
     // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
