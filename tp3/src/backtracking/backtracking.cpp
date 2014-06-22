@@ -1,9 +1,12 @@
 #include <iostream>
 #include <vector>
 #include "../common/Graph.h"
+#include "../common/Timer.h"
 using namespace std;
 
 #define INF 1<<30
+
+Timer timer( cout );
 
 class Solucion {
 public:
@@ -38,16 +41,22 @@ void tomarParametros();
 
 
 int main() {
-    tomarParametros();
-    backtrack(U, U);
-    cout << mejorSolucion;
-    delete G; //queda horrible jaja
+    while (cin >> N && N) {
+        cout << "hola" << endl;
+        tomarParametros();
+        timer.setInitialTime( "todo_el_codigo" );
+        backtrack(U, U);
+        timer.setFinalTime( "todo_el_codigo" );
+        timer.saveAllTimes();
+        cout << mejorSolucion;
+        delete G;
+    }
     return 0;
 }
 
 
 void tomarParametros() {
-    cin >> N >> M >> U >> V >> K;
+    cin >> M >> U >> V >> K;
     G = new Graph(N);
     visitados = vector<bool>(N+1, false);
     int v1, v2;
