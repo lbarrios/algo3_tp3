@@ -11,7 +11,12 @@ Donde el costo del camino $\omega_x(P)$, con $1 \leq x \leq 2$, se define como
 
 $CACM$ es un problema conocido, y tiene muchas aplicaciones en la vida real. Por ejemplo, supongamos que somos una empresa de turismo que ofrece paquetes de viajes. Una situaci\'on que se nos puede presentar es que un cliente nos pide organizarle un viaje de una ciudad $X$ a otra ciudad $Y$ para poder llegar en el m\'inimo tiempo, pero nos dice que el presupuesto que cuenta para gastar en transporte es de \$$K$. Este problema se puede modelar con $CACM$, donde las ciudades son los nodos del grafo, las aristas del mismo existen si entre las ciudades en cuesti\'on hay alg'un medio de transporte, $\omega_1$ representa el costo del viaje, y $\omega_2$ es el tiempo que toma el viaje. 
 
-Aunque si bien $CACM$ es un problema conocido, no se conocen algoritmos polinomiales que lo resuelvan y por lo tanto pertenecen al conjunto de los problemas NP. Nosotros en este TP analizaremos 6 m\'etodos para resolverlo, una soluci\'on exacta y 5 aproximaciones a trav\'es de heur\'isticas. En concreto, los algoritmos que implementaremos son: 
+Otro ejemplo similar tiene que ver con el Mapa Interactivo de la Ciudad de Buenos Aires. Se busca llegar de un punto de la ciudad a otro en el
+menor tiempo, aunque se puede especificar la máxima cantidad de metros por caminar. Es un grafo muy evidente, donde las aristas son cuadras a
+recorrer. Las aristas recorridas caminando suman 100 metros a la cantidad caminada, mientras que las recorridas en colectivo no suman metros
+caminados.
+
+Aunque $CACM$ es un problema conocido, no se conocen algoritmos polinomiales que lo resuelvan y por lo tanto pertenece al conjunto de los problemas NP. Nosotros en este TP analizaremos 6 m\'etodos para resolverlo, una soluci\'on exacta y 5 aproximaciones a trav\'es de heur\'isticas. En concreto, los algoritmos que implementaremos son: 
 
 \begin{enumerate}
 \item Un \textit{Backtracking} como algoritmo exacto.
