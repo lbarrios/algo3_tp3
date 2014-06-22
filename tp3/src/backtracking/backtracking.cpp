@@ -42,7 +42,6 @@ void tomarParametros();
 
 int main() {
     while (cin >> N && N) {
-        cout << "hola" << endl;
         tomarParametros();
         timer.setInitialTime( "todo_el_codigo" );
         backtrack(U, U);
