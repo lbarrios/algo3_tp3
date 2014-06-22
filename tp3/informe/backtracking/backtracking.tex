@@ -54,11 +54,11 @@ A continuaci\'on, escribimos el pseudoc\'odigo de la funci\'on \texttt{main}.
 
 Complejidad:
 
-Analizemos cuantas llamadas se hacen a $backtrack$. Se exploran caminos de a los sumo $n$ nodos. El primer nodo está fijo en $u$. El segundo nodo
+Analicemos cuantas llamadas se hacen a $backtrack$. Se exploran caminos de a los sumo $n$ nodos. El primer nodo está fijo en $u$. El segundo nodo
 pertenece a la adyacencia del primero, que en peor caso tiene tamaño $n - 1$. El tercero pertenece a la adyacencia del segundo, que no hayan sido
 visitados, cuyo tamaño es a lo sumo $n - 2$. Y asi sucesivamente. En peor caso se llama a $backtrack$ $n!$ veces.
 
-Analizemos el cómputo que se realiza en cada llamada a $backtrack$. Preguntar si un nodo está visitado es acceder a un arreglo en forma constante.
+Analicemos el cómputo que se realiza en cada llamada a $backtrack$. Preguntar si un nodo está visitado es acceder a un arreglo en forma constante.
 El costo de una función de peso asociada a un camino se va acumulando a medida que se agregan nodos. El costo se guarda y se puede acceder en
 forma constante. Lo queda por estudiar es la complejidad del ciclo $for$ que recorre la adyacencia del nodo visitado. Guardamos una lista de
 adyacencia por lo que podemos recorrer la adyacencia de cualquier nodo con complejidad lineal en relación a su tamaño. El tamaño de la adyacencia
