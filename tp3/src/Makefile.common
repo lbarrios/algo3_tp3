@@ -23,6 +23,7 @@ COMMON_DIR=../common
 COMMON_OBJSDIR=${COMMON_DIR}/${OBJSDIR}
 # Replace OBJS with OBJSDIR/OBJS
 OBJS := $(addprefix ${OBJSDIR}/,$(addsuffix .o,${OBJS}))
+OBJS_TIME := $(addsuffix .time,${OBJS})
 COMMON_OBJS := $(addprefix ${COMMON_OBJSDIR}/,$(addsuffix .o,${COMMON_OBJS}))
 COMMON_OBJS_TIME := $(addsuffix .time,${COMMON_OBJS})
 
@@ -32,8 +33,8 @@ time: $(EXE).time
 
 $(EXE): $(OBJS) $(COMMON_OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(COMMON_OBJS) -o $@
-$(EXE).time: $(OBJS) $(COMMON_OBJS_TIME)
-	$(CC) $(CFLAGS_TIME) $(OBJS) $(COMMON_OBJS_TIME) -o $@ -lrt
+$(EXE).time: $(OBJS_TIME) $(COMMON_OBJS_TIME)
+	$(CC) $(CFLAGS_TIME) $(OBJS_TIME) $(COMMON_OBJS_TIME) -o $@ -lrt
 
 
 
@@ -45,6 +46,8 @@ $(COMMON_OBJSDIR):
 #$(OBJSDIR)/%.o: %.cpp %.h | $(OBJSDIR)
 $(OBJSDIR)/%.o: %.cpp | $(OBJSDIR)
 	$(CC) -c $(CFLAGS) $< -o $@
+$(OBJSDIR)/%.o.time: %.cpp | $(OBJSDIR)
+	$(CC) -c $(CFLAGS_TIME) -ltr $< -o $@
 #$(COMMON_OBJSDIR)/%.o: $(COMMON_DIR)/%.cpp $(COMMON_DIR)/%.h | $(COMMON_OBJSDIR)
 $(COMMON_OBJSDIR)/%.o: $(COMMON_DIR)/%.cpp | $(COMMON_OBJSDIR)
 	$(CC) -c $(CFLAGS) $< -o $@
