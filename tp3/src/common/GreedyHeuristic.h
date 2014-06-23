@@ -3,18 +3,29 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <time.h>
 #include "../common/Graph.h"
 #include "../common/Parser.h"
 #include "../common/DijkstraSolution.h"
 #include "../common/Dijkstra.h"
+#include "../common/Solution.h"
+#include "../common/Timer.h"
 
 using namespace std;
 
 template<class ObjectiveFunction>
 class GreedyHeuristic
 {
+private: 
+  int _take_time;
+  int _iters;
+  string _save2file;
+  Solution* solution;
+
 public:
   GreedyHeuristic();
+  GreedyHeuristic(int take_time, int iters, string save2file);
+  void resolveInstance( ProblemInstance* );
   void run();
 };
 
@@ -22,6 +33,28 @@ public:
 template<class ObjectiveFunction>
 GreedyHeuristic<ObjectiveFunction>::GreedyHeuristic()
 {
+  solution = new Solution();
+}
+
+template<class ObjectiveFunction>
+GreedyHeuristic<ObjectiveFunction>::GreedyHeuristic(int take_time, int iters, string save2file)
+{
+  solution = new Solution();
+  _take_time = take_time;
+  _iters = iters;
+  _save2file = save2file;
+}
+
+template<class ObjectiveFunction>
+void GreedyHeuristic<ObjectiveFunction>::resolveInstance( ProblemInstance* instance ){
+  // creo el dijkstra
+  Dijkstra<ObjectiveFunction> dijsktra;
+  // creo la solucion
+  DijkstraSolution sol( instance->graph->nodeCount, instance->u );
+  // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
+  dijsktra.findPath( instance->graph, &sol );
+  // obtengo el path que me interesa
+  sol.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
 }
 
 template<class ObjectiveFunction>
@@ -33,40 +66,26 @@ void GreedyHeuristic<ObjectiveFunction>::run()
   for ( int i = 0; i < parser.problemInstances.size(); i++ )
   {
     ProblemInstance* instance = parser.problemInstances[0];
-    // creo el dijkstra
-    Dijkstra<ObjectiveFunction> dijsktra;
-    // creo la solucion
-    DijkstraSolution sol( instance->graph->nodeCount, instance->u );
-    // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
-    dijsktra.findPath( instance->graph, &sol );
-    // obtengo el path que me interesa
-    vector<Edge*> path;
-    double totalOmega1;
-    double totalOmega2;
-    sol.getPath( instance->v, instance->graph, path, totalOmega1, totalOmega2 );
 
-    // imprimo el path
-    if ( path.size() == 0 )
-    {
-      cout << "No se encontro el path." << endl;
-    }
-    else if ( totalOmega1 > instance->K )
-    {
-      cout << "Se supero el K " << totalOmega1 << "/" << instance->K << "!" << endl;
-
-      for ( auto it = begin( path ); it != end( path ); ++it )
-      {
-        cout << ( *it )->fromNode << " -> " << ( *it )->toNode << endl;
+    if( _take_time ){
+      ofstream fs;
+      fs.open( _save2file, std::ofstream::app ); // apend
+      Timer timer(cerr);
+      
+      timer.setInitialTime("resolver");
+      for( int i = 0; i < _iters; i++ ){
+        resolveInstance( instance ); 
       }
-    }
-    else
-    {
-      cout << "Encontré el path:" << endl;
+      timer.setFinalTime("resolver");
 
-      for ( auto it = begin( path ); it != end( path ); ++it )
-      {
-        cout << ( *it )->fromNode << " -> " << ( *it )->toNode << endl;
-      }
+      fs << instance->countNodes() << "\t" 
+         << instance->countEdges() << "\t"
+         << instance->K << "\t"
+         << timer.getTime("resolver") / _iters << endl;
+
     }
+    resolveInstance( instance ); 
+
+    solution->print();
   }
 }

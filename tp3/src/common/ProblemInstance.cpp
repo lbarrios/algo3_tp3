@@ -20,3 +20,11 @@ ProblemInstance::~ProblemInstance()
 {
 	delete graph;
 }
+
+int ProblemInstance::countNodes(){
+	return this->graph->countNodes();
+}
+
+int ProblemInstance::countEdges(){
+	return this->graph->countEdges();
+}

@@ -16,6 +16,10 @@ public:
   vector<Node>& getAdjacent( Node n );
   Edge* getEdge( Node aNode, Node anotherNode );
   int nodeCount;
+  int edgeCount;
+
+  int countNodes();
+  int countEdges();
 
   //void getEdgesFromNode(Node node, vector<Edge*> *output);
   //void getAdjacentNodes(Node node, vector<Node> *output);

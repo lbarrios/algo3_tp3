@@ -21,4 +21,7 @@ public:
 	 */
 	ProblemInstance(Graph* graph, int u, int v, int K);
 	~ProblemInstance();
+
+	int countNodes();
+	int countEdges();
 };
