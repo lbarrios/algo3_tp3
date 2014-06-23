@@ -47,7 +47,9 @@ int main() {
         backtrack(U, U);
         timer.setFinalTime( "todo_el_codigo" );
         timer.saveAllTimes();
+        #ifndef TIME
         cout << mejorSolucion;
+        #endif
         delete G;
     }
     return 0;
