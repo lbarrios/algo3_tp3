@@ -27,6 +27,8 @@ if N == -1:
     N = 20
 if M == -1:
     M = randint(N-1, N*(N-1)/2)  # vamos a hacerlo conexo
+elif M < N - 1:
+    raise Exception("M debe ser al menos N-1, para que sea conexo")
 if K == -1:
     K = randint(N, N * M)  # pensar
 
