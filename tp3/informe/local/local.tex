@@ -1,46 +1,130 @@
 
 % Búsqueda local
+La búsqueda local es un método heurístico para encontrar una solución factible a un problema. Se basa en obtener una solución inicial, $s$, y luego mejorar esa solución iterativamente, tomando la mejor solución de un conjunto de vecinos de $s$. El conjunto de los vecinos se determina mediante algún criterio y se usa una función objetivo para comparar las soluciones en la vecindad de $s$ y discernir cual es la mejor.
 
-% Explicación inicial
+La búsqueda local se puede expresar de la siguiente manera:\\\\
+Sea $s \in S$ una solución inicial\\
+Mientras exista $s' \in N(s)$ con $f(s') > f(s)$:\\
+\hspace*{1 cm} $s \leftarrow s'$
+
+Siendo $N(s)$ la vecindad de $s$ y $f$ la función objetivo.
 
 % Solución inicial
-Partimos desde una solución factible obtenida a partir de un algoritmo goloso. En caso de que el algoritmo anterior no devuelva una solución factible, corremos Dijkstra utilizando la sumatoria de los pesos $\omega_1$ como función objetivo. Si Dijkstra tampoco devuelve una solución factible, podemos asegurar que no existe solución al problema\footnote{Demostrado en la sección de heurística golosa}. En este caso, devolvemos ``no''.
+Solución inicial:
 
-Solución Inicial 2:
-Corro dijkstra con omega1 y omega2, formando $c_1$ y $c_2$. Tomo el conjunto $U$ de nodos formados por $c_1 \cap c_2$. Para cada par de nodos $n_1,n_2$ adyacentes, me fijo si puedo formar un camino mejor valuado en $\omega_2$ reemplazando el camino $c^1_{n_1,n_2}$ por $c^2_{n_1,n_2}$, siempre que el nuevo camino no se pase de K al valuarlo en $\omega_2$. La evaluación se hace ordenando por omega2, de forma tal que el camino obtenido sea el que minimice la misma en comparación con el resto de los posibles caminos que se podrían obtener con este método.
+Para obtener una solución inicial utilizamos Dijkstra. Experimentamos con la funciones objetivo Greedy A y Greedy C descritas en el apartado anterior(ver sección de heurística golosa). En caso de que no obtener una solución inicial factible, corremos Dijkstra nuevamente, pero utilizando la sumatoria de los pesos $\omega_1$ como función objetivo(o sea, Greedy A), pero solo en caso que no haya sido la función objetivo inicialmente usada. La razón de usar esa función objetivo es que se minimiza el $\omega_1$ total del camino encontrado y por ende hay una chance máxima de obtener una solución que cumpla con la cota K. Eso es porque Dijkstra encuentra el camino mínimo de uno nodo hacia todos los demás\footnote{Demostrado en la sección de heurística golosa}, y si no se encuentra un camino con $\omega_1$ mínimo que cumpla con la cota K, significa que no existe ningún otro camino que cumpla con la cota. En caso de que eso suceda, podemos asegurar que no existe solución al problema.
 
-\begin{comment}
+% Definición de la vecindad
+Definición de la vecindad:
 
-% Definición de vecindad
-Vecindad <<A>>: 
+En cada iteración definimos la vecindad de $s$, $N(s)$, de la siguiente manera: dado el grafo inicial G, y una solución formada por un camino $c \in G$, definimos sus soluciones vecinas como aquellas resultantes de tomar un subcamino $d_{n_1,n_2} \in c$ entre un par de nodos $n_1,n_2$ cualesquiera, y reemplazarlo por otro camino $d_{n_1,n_2}^* \in G$, de tal forma que el camino $c^* = c - d_{n_1,n_2} + d_{n_1,n_2}^*$ resultante cumpla: 
 
-Dado el grafo inicial G, y una solución formada por un camino $c \in G$, definimos sus soluciones vecinas como aquellas resultantes de tomar un subcamino $d_{n_1,n_2} \in c$ entre dos pares de nodos $n_1,n_2$ cualesquiera, y reemplazarlo por un camino ``mejor'' $d_{n_1,n_2}^* \in G$, de tal forma que el camino $c^* = c - d_{n_1,n_2} + d_{n_1,n_2}^*$ resultante cumpla: 
-\begin{list}
-\item $\omega_1(c^*) \leq k $
-\item $\omega_2(c^*) < \omega_2(c)$
-\end{list}
+$\omega_1(c^*) < K$ 
 
-Dada una solución $S$ formada por un camino $c$ definimos su vecindad como el conjunto $S^*$ de todos los caminos $c^*$ posibles.
+$\omega_2(c^*) < \omega_2(c)$
+
+%\begin{list}
+%\item $\omega_1(c^*) < K$
+%\item $\omega_2(c^*)$ < $\omega_2(c)$
+%\end{list}
+
+De la forma descripta, dada una solución $S$ formada por un camino $c$ definimos su vecindad como el conjunto $S^*$ de todos los caminos $c^*$ posibles.
+
+Para obtener el camino $d_{n_1,n_2}^*$ utilizamos Dijkstra con la sumatoria de los pesos $\omega_2$ como función objetivo(Greedy B). Lo que buscamos es mejorar el subcamino $d_{n_1,n_2} \in c$ obteniendo otro camino que tenga menor $\omega_2$, y dado que usamos Dijkstra para encontrar el camino con $\omega_2$ mínimo entre los nodos, entonces estamos obteniendo un camino que va a tener igual o menor $\omega_2$. En caso de que sea posible hacer el reemplazo, como disminuimos el $\omega_2$ de una parte del camino y dejamos el resto del camino igual, estamos logrando disminuir el $\omega_2$ del camino completo.
 
 % Selección de vecino
-Dada una vecindad $S^*$, se probaron los siguientes métodos de elegir al vecino:
-\begin{list}
-	\item Steepest descent, con $\omega_2$ como función objetivo.
-	\item Steepest descent, con $\omega_1*\omega_2$ como función objetivo.
-	\item Elegir el primero que se encuentre.
-	\item Stochastic \fixme{completar} eligiendo el vecino de forma pseudoaleatoria.
-\end{list}
+Dada la vecindad $S^*$, se elige al vecino usando Steepest descent, con $\omega_2$ como función objetivo.
 
-\end{comment}
+A continuación escribimos el pseudocódigo de la función \texttt{main}:
+\begin{algorithm}[H]
+\caption{$main$(int tipo\_solucionInicial, Graph g, Nodo n1, Nodo n2)}
+\begin{algorithmic}[1]
+  \State Solution solucion = obtenerSolucionInicial(tipo\_solucionInicial, g, n1, n2)
+  \If{tipo\_solutionInicial $\neq$ Greedy\_A \&\& $\omega_1$(solucion) $>$ K}
+    solucion = obtenerSolucionInicial(Greedy\_A, g, n1, n2)
+  \EndIf
+  
+  \If{$\omega_1$(solucion) $\leq$ K}    
+    \While{True}    	        
+    	\State Solution nuevaSolucion = dameMejorVecino(solucion)
+	\If{nuevaSolucion == NULL} 
+		\State break	
+	\EndIf    
+	\State solucion = nuevaSolucion	
+    \EndWhile
+  \EndIf
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{$obtenerSolucionInicial$(int tipo, Graph g, Nodo n1, Nodo n2)}
+\begin{algorithmic}[1]
+  \If{tipo == Greedy\_C}
+	\State return resolverConDijkstra(g, n1, n2, ObjectiveFunctionC)
+  \EndIf
+  \State return resolverConDijkstra(g, n1, n2, ObjectiveFunctionA)
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{$dameMejorVecino$(Solution solucionOriginal)}
+\begin{algorithmic}[1]	
+	  \State Solution mejorSolucion = solucionOriginal
+	  \State vector<int> nodos = nodos(solucionOriginal)
+	  \For{i=0; i<size(nodos); i++}
+	  	\For{j=i+1; j<size(nodos); j++}
+			\State Solution subSolucion = crearSubSolucionEntre(solucionOriginal, nodos[i], nodos[j])
+			\If{subSolucion == NULL}
+				\State continue
+			\EndIf
+			\State Solution solucion\_ij = dameCaminoResueltoEntre(nodos[i], nodos[j])
+			\State Solution nuevaSolucion\_$\omega_2$ = $\omega_2$(solucionOriginal) - $\omega_2$(subSolucion) + $\omega_2$(solucion\_ij)
+			\State Solution nuevaSolucion\_$\omega_1$ = $\omega_1$(solucionOriginal) - $\omega_1$(subSolucion) + $\omega_1$(solucion\_ij)			
+			\If{nuevaSolucion\_$\omega_2$ $<$ $\omega_2$(mejorSolucion) \&\& nuevaSolucion\_$\omega_1$ $<$ K)}
+				\State mejorSolucion = crearSolucionReemplazandoCamino(solucionOriginal, solucion\_ij)
+			\EndIf
+		\EndFor
+	\EndFor
+	\State return mejorSolucion
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{$crearSolucionReemplazandoCamino$(Solution orig, Solution sub)}
+\begin{algorithmic}[1]	
+	 \State Solution res
+	 \State res = obtenerCaminoHasta(nodos(sub)[0])
+	 \State res += sub
+	 \State int subSize = size(nodos(sub))
+	 \State res += obtenerCaminoDesde(nodos(sub)[subSize-1])	  
+	\State return res
+\end{algorithmic}
+\end{algorithm}
+
+% Complejidad
+Complejidad:
+
+La complejidad del algoritmo es la suma de obtener la solución inicial y el ciclo que se usa para mejorarla buscando un mejor vecino en cada iteración.
+
+Para obtener la solución inicial, usamos obtenerSolucionInicial. Esta función devuelve un camino mínimo entre 2 nodos llamando a resolverConDijkstra con alguna función objetivo(Greedy\_A o Greedy\_C). La función resolverConDijkstra primero ejecuta Dijkstra para encontrar todos los caminos mínimos entre n1 y los demás nodos y después hace un traceback desde n2 hasta n1 para dar con el camino míinimo entre ellos. Como se comprobó en el apartado anterior, la complejidad de Dijkstra es $O(m log(n))$ y el traceback es $O(n)$, por lo que en total la complejidad de obtenerSolucionInicial es $O(m log(n))$. Cabe notar que la función objetivo usada en Dijkstra no influye en la complejidad, ya que solo comparara los valores de $\omega_1$ y $\omega_2$ y por lo que tiene complejidad $O(1)$.
+
+Para mejorar la solución usamos un ciclo y en cada iteración obtenemos el mejor vecino del camino actual usando dameMejorVecino. Ejecutamos el ciclo mientras que hayamos encontrado una mejora al camino actual en la última iteración. 
+Dado que un vecino consiste en reemplazar la porción del camino actual que une 2 nodos n1 y n2 por el camino mínimo entre ellos, y que cada vez que se hace el reemplazo se disminuye $\omega_2$ del camino actual, se pueden hacer a lo sumo tantos reemplazos como caminos mínimos entre todo par de nodos del grafo existan. 
+La cantidad de caminos mínimos entre todo par de nodos de un grafo es $n * (n-1) / 2$, ya que cada nodo tiene un camino mínimo hacia todos los demás y no a sí mismo. Esto es, si hay n nodos, el nodo $n_1$, tiene un camino mínimo hacia los nodos $n_2$, ..., $n_n$, el nodo $n_2$ tiene un camino hacia $n_3$, ..., $n_n$ ya que no se vuelve a contar el camino entre $n_1$ y $n_2$ y así hasta $n_{n-1}$ que tiene un camino hasta $n_n$.
+Luego, la cantidad máxima de iteraciones es $n * (n-1) / 2$.
+
+Ahora analizaremos la complejidad de cada iteración. 
+
+
 
 % Familias malas
-Familias malas
+Familias malas:
 
-Si elegimos como solución inicial a las heurísticas Greedy B o C desarrolladas en la sección previa, se ha expuesto que pueden fallar en el
-intento de dar una solución factible, aún existiendo una. El Greedy A siempre encuentra una solución factible de existir ésta. Veamos que
-tomándola como solución inicial, nuestra heurística de búsqueda local puede quedar arbitrariamente lejos de la solución óptima.
+Si elegimos como solución inicial a la heurística Greedy B en la sección previa, se ha expuesto que puede fallar en el intento de dar una solución factible, aún existiendo una. El Greedy A siempre encuentra una solución factible de existir ésta. 
 
-Presentamos la siguiente familia de grafos.
+Veamos que tomando nuestra heurística de búsqueda local como solución inicial, puede quedar arbitrariamente lejos de la solución óptima.
+
+Presentamos la siguiente familia de grafos:
 
 \ponerGrafico{imagenes/maloLocalA.png}{}{0.5}{malo-para-local-a}
 
@@ -65,3 +149,4 @@ $\frac{\omega_2(C_2)}{\omega_2(C_1)} = x$.
 
 Haciendo crecer el valor de $x$ podemos encontrar grafos en los que nuestro algoritmo devuelve una
 solución arbitrariamente lejos de la óptima.
+
