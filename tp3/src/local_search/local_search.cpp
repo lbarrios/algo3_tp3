@@ -58,7 +58,7 @@ int main( int argc, char const* argv[] )
     solution->print();
 
     // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica
-    if(solution->totalOmega1 < instance->K) {
+    if(solution->totalOmega1 <= instance->K) {
       // run the heuristic
       Solution* newSolution = NULL;    
       bool huboMejora = false;
