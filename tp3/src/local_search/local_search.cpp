@@ -3,7 +3,7 @@
 #include "../common/DijkstraSolution.h"
 #include "../common/Dijkstra.h"
 #include "../common/GreedyHeuristic.h"
-#include "Solution.h"
+#include "../common/Solution.h"
 #include "../common/Parser.h"
 #include "../common/Timer.h"
 #include "HeuristicFactoryL.h"
@@ -23,6 +23,7 @@ int main( int argc, char const* argv[] )
   int neighborhoodSelectorParameter = ( argc >= 3 ? atoi(argv[2]) : 0 );
   // instantiate the initial solution using the initial solution parameter
   InitialSolution* initialSolution =  heuristicFactory.createInitialSolution( initialSolutionParameter );
+  InitialSolution* initialSolutionBestOmega1 =  heuristicFactory.createInitialSolution( INITIAL_SOLUTION_A );
   // instantiate the neighborhood selector using the neighborhood selector parameter
   NeighbourhoodSelector* selector = heuristicFactory.createNeighborhoodSelector( neighborhoodSelectorParameter );
   // instantiate the heuristic using the initial solution and the neighborhood selector
@@ -45,6 +46,14 @@ int main( int argc, char const* argv[] )
     // obtain the initial solution
     
     Solution* solution = initialSolution->getInitialSolution( instance );
+    // si no encuentro el path que cumpla con K, pruebo usando dijkstra con omega1.
+    // Tambien puede pasar que no encuentre ningun path, por lo que totalOmega1 = INF, y en ese 
+    // caso tambien pruebo buscar otro path
+    if(initialSolution->type != initialSolutionBestOmega1->type && solution->totalOmega1 > instance->K) {
+      delete solution;
+      solution = initialSolutionBestOmega1->getInitialSolution(instance);
+    }
+
     cout << "Initial solution: ";
     solution->print();
 

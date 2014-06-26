@@ -1,6 +1,8 @@
 #include "InitialSolutionL_C.h"
 #include "../common/ObjectiveFunctions.h"
 
+InitialSolutionL_C::InitialSolutionL_C(int type) : InitialSolution(type) {}
+
 Solution* InitialSolutionL_C::getInitialSolution(ProblemInstance* instance)
 {
 	// creo el dijkstra

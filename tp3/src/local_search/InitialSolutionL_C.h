@@ -5,5 +5,6 @@
 class InitialSolutionL_C : public InitialSolution
 {
 public:
+	InitialSolutionL_C(int type);
 	Solution* getInitialSolution(ProblemInstance* instance);
 };

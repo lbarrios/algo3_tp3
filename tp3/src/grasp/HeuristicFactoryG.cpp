@@ -2,6 +2,7 @@
 
 InitialSolution* HeuristicFactoryG::createInitialSolution( int initial_solution_param )
 {
+  
   if(this->initial_solution) {
     delete this->initial_solution;
     this->initial_solution = NULL;
@@ -10,19 +11,19 @@ InitialSolution* HeuristicFactoryG::createInitialSolution( int initial_solution_
   switch ( initial_solution_param )
   {
   case INITIAL_SOLUTION_A:
-    this->initial_solution = new InitialSolutionG_A();
+    this->initial_solution = new InitialSolutionG_A(initial_solution_param);
     break;
 
   case INITIAL_SOLUTION_B:
-    this->initial_solution = new InitialSolutionG_B();
+    this->initial_solution = new InitialSolutionG_B(initial_solution_param);
     break;
 
   case INITIAL_SOLUTION_C:
-    this->initial_solution = new InitialSolutionG_C();
+    this->initial_solution = new InitialSolutionG_C(initial_solution_param);
     break;
 
   default:
-    this->initial_solution = new InitialSolutionG_A();
+    this->initial_solution = new InitialSolutionG_A(initial_solution_param);
     break;
   }
 

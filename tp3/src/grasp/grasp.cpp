@@ -4,7 +4,7 @@
 #include "../common/Dijkstra.h"
 #include "../common/DijkstraRandomized.h"
 #include "../common/GreedyHeuristic.h"
-#include "Solution.h"
+#include "../common/Solution.h"
 #include "../common/Parser.h"
 #include "../common/Timer.h"
 #include "HeuristicFactoryG.h"

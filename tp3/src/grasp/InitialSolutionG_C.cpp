@@ -1,5 +1,8 @@
 #include "InitialSolutionG_C.h"
 #include "../common/ObjectiveFunctions.h"
+#include "../common/DijkstraRandomized.h"
+
+InitialSolutionG_C::InitialSolutionG_C(int type) : InitialSolution(type) {}
 
 Solution* InitialSolutionG_C::getInitialSolution(ProblemInstance* instance)
 {

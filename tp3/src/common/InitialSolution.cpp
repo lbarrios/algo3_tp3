@@ -1,14 +1,7 @@
 #include "InitialSolution.h"
 
 
-InitialSolution::InitialSolution() 
+InitialSolution::InitialSolution(int type) 
 {
-
+	this->type = type;	
 }
-
-/* Funciones virtuales puras no se declaran... creo ** /
-Solution* InitialSolution::getInitialSolution(ProblemInstance* instance)
-{
-	return NULL;
-}
-*/

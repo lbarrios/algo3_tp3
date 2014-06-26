@@ -2,6 +2,8 @@
 #include "../common/DijkstraRandomized.h"
 #include "../common/ObjectiveFunctions.h"
 
+InitialSolutionG_B::InitialSolutionG_B(int type) : InitialSolution(type) {}
+
 Solution* InitialSolutionG_B::getInitialSolution(ProblemInstance* instance)
 {
 	// creo el dijkstra

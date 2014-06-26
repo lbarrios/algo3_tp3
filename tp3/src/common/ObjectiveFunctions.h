@@ -1,5 +1,7 @@
 #pragma once
 
+#include "UnvisitedNode.h"
+
 class ObjectiveFunctionA
 {
 public:

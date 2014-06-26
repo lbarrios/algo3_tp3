@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../common/ProblemInstance.h"
-#include "Solution.h"
+#include "../common/Solution.h"
 
 class NeighbourhoodSelector
 {	
