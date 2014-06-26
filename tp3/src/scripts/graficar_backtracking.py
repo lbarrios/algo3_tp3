@@ -27,6 +27,7 @@ for f in files:
     testtype = line.split()[0]
     value = line.split()[1]
     x = int(testsize)
+    if x < 40: continue  # esto es muy arbitrario 
     y = int(value)
     tests[testname][testtype][x].append(y)
   file.close()
@@ -69,7 +70,7 @@ subplot.yaxis.set_major_formatter(formatter)
 plt.grid(True)
 plt.title("Backtracking")
 plt.ylabel('Tiempo (segundos)')
-plt.xlabel(u'Tamaño de entrada')
+plt.xlabel(u'Tamaño de entrada (n + m)')
 
 """
 linestyle or ls [ ‘-‘ | ‘--’ | '.' | ‘-.’ | ‘:’ | ‘steps’ | ...]
@@ -85,11 +86,12 @@ for test_number in range(0,t_names):
   #plt.plot(x, y, linestyle='-',  color=colors[test_number], linewidth=0.2, label=testname, alpha=1)
   x = np.array( zip(*tests_mean_p_xy[testname][testtype])[0] )
   y = np.array( zip(*tests_mean_p_xy[testname][testtype])[1] )
-  plt.plot(x, y, linestyle='-',  color=colors[test_number], linewidth=0.6, label=testname, alpha=1) #, marker='.', markersize=0.3)
+  plt.plot(x, y, linestyle='-',  color=colors[test_number], linewidth=0.6, label=None, alpha=1) #, marker='.', markersize=0.3)
 
 # ploteo cota teórica
 #subplot.plot(x, ((x*x)*22)/float(1e9),    '--', color='black', linewidth=2, label="$c.x^2$")
 plt.legend(loc=2)
+plt.tight_layout()  # para que entren las labels
 
 #plt.show()
 if not os.path.exists('../graficos/') or not os.path.isdir('../graficos/'):

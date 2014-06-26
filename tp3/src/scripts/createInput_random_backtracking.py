@@ -26,7 +26,7 @@ if instanceCount == -1:
 if N == -1:
     N = 20
 if M == -1:
-    M = randint(N-1, N*(N-1)/2)  # vamos a hacerlo conexo
+    M = randint(0, N*(N-1)/2)
 elif M < N - 1:
     raise Exception("M debe ser al menos N-1, para que sea conexo")
 if K == -1:
@@ -52,7 +52,7 @@ for r in range(0, instanceCount):
         neighbours.append([i+1])
     neighbours.append([])
 
-    added = N - 1
+    added = N-1 
     while added < M:
         i = randint(1, N)
         j = i
