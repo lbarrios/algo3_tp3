@@ -66,3 +66,15 @@ es a lo sumo $m$. Para cada nodo adyacente se efectúan operaciones constantes, 
 llamadas lo estamos calculando por separado.
 
 En definitiva hacemos $O(n!)$ llamadas a una función que de por si toma $O(m)$ operaciones. La complejidad del algoritmo es $O(m*n!)$.
+
+Experimentación:
+
+Generamos en primera instancia grafos con una cantidad de nodos pequeña - entre 3 y 15. La cantidad de aristas, es decir, la densidad del grafo,
+se eligió aleatoriamente entre 0 y (n * (n - 1)) / 2, la cantidad máxima posible. La distribución de las aristas, sus pesos, y el valor de $k$
+también se eligieron de forma aleatoria.
+
+A continuación presentamos los tiempos de ejecución de nuestro algoritmo frente a estas instancias. 
+
+\includepdf[pages={1}]{imagenes/backtracking-aleatorio.pdf}
+
+Para tamaños de grafo menores que 40, los tiempos de ejecución fueron despreciables. :w
