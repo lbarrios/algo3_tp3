@@ -35,8 +35,10 @@ for f in files:
   cota_teorica.append( (testsize, float( k/MMM ) ) )
   print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
   for line in file:
+    if len(line.split())<2:
+      continue
     #testtype = line.split()[0]
-    testtype = "Valor Encontrado"
+    testtype = "Promedio"
     value = line.split()[1]
     x = int(testsize)
     #if x < 40: continue  # esto es muy arbitrario 
@@ -92,7 +94,7 @@ subplot.yaxis.set_major_formatter(formatter)
 
 # Aplico formato
 plt.grid(True)
-plt.title(u"Búsqueda local (densidad alta)")
+plt.title(u"Búsqueda local (densidad media)")
 plt.ylabel('Omega 2')
 plt.xlabel(u'Tamaño de entrada (n + m)')
 
@@ -123,8 +125,8 @@ print t_y
 subplot.plot(t_x, t_y,    '--', color='black', linewidth=2, label="Optima")
 plt.legend(loc=2)
 plt.tight_layout()  # para que entren las labels
-plt.xlim(xmax=20000)
-#plt.ylim(ymax=20000)
+plt.xlim(xmax=3000)
+plt.ylim(ymin=15,ymax=500)
 
 #plt.show()
 if not os.path.exists('../graficos/') or not os.path.isdir('../graficos/'):

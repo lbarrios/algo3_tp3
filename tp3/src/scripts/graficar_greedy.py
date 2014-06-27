@@ -1,4 +1,4 @@
-#!/usr/bin
+#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 
 import sys
@@ -22,18 +22,18 @@ tests = defaultdict(make_listdictdict)
 files = sorted(glob("../output/greedy_heuristic_{}/*.txt".format(greedy)))
 for f in files:
   file = open(f)
-  print file
   filename = f.split("/")[-1]
   testname = filename.split("_")[0]
   (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
   testsize = n+m
   print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
   for line in file:
-    print line
+    if len(line.split())<2:
+      continue
     testtype = line.split()[0]
     value = line.split()[1]
     x = int(testsize)
-    if x < 40: continue  # esto es muy arbitrario 
+    #if x < 40: continue  # esto es muy arbitrario 
     y = int(value)
     tests[testname][testtype][x].append(y)
   file.close()
@@ -56,7 +56,7 @@ for testname in tests:
     tests_mean_p_xy[testname][testtype].sort()
 
 t_names = len(tests_mean_xy)
-#t_types = len(tests_mean_xy[testname])
+t_types = len(tests_mean_xy[testname])
 
 colors = ['blue','green','red','cyan','magenta','yellow','black','grey','white']
 
@@ -74,7 +74,7 @@ subplot.yaxis.set_major_formatter(formatter)
 
 # Aplico formato
 plt.grid(True)
-plt.title("Greedy")
+plt.title(u"Heurística Greedy")
 plt.ylabel('Tiempo (segundos)')
 plt.xlabel(u'Tamaño de entrada (n + m)')
 
@@ -92,12 +92,14 @@ for test_number in range(0,t_names):
   #plt.plot(x, y, linestyle='-',  color=colors[test_number], linewidth=0.2, label=testname, alpha=1)
   x = np.array( zip(*tests_mean_p_xy[testname][testtype])[0] )
   y = np.array( zip(*tests_mean_p_xy[testname][testtype])[1] )
-  plt.plot(x, y, linestyle='-',  color=colors[test_number], linewidth=0.6, alpha=1, label='-') #, marker='.', markersize=0.3)
+  plt.plot(x, y, linestyle='-',  color=colors[test_number], linewidth=0.6, label=None, alpha=1) #, marker='.', markersize=0.3)
 
 # ploteo cota teórica
 #subplot.plot(x, ((x*x)*22)/float(1e9),    '--', color='black', linewidth=2, label="$c.x^2$")
-#plt.legend(loc=2)
-#plt.tight_layout()  # para que entren las labels
+plt.legend(loc=2)
+plt.tight_layout()  # para que entren las labels
+#plt.xlim(xmax=12800)
+#plt.ylim(ymax=0.0076)
 
 #plt.show()
 if not os.path.exists('../graficos/') or not os.path.isdir('../graficos/'):

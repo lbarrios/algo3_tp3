@@ -64,7 +64,7 @@ void GreedyHeuristic<ObjectiveFunction>::run()
 
   for ( int i = 0; i < parser.problemInstances.size(); i++ )
   {
-    ProblemInstance* instance = parser.problemInstances[0];
+    ProblemInstance* instance = parser.problemInstances[i];
     
     timer->setInitialTime("todo_el_codigo");
     resolveInstance( instance );       

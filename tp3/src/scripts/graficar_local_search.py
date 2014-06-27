@@ -24,6 +24,8 @@ for f in files:
   testsize = n+m
   print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
   for line in file:
+    if len(line.split())<2:
+      continue
     testtype = line.split()[0]
     value = line.split()[1]
     x = int(testsize)

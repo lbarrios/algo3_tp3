@@ -99,7 +99,7 @@ int main( int argc, char const* argv[] )
 
                 if(bestSolution == NULL) {
                     bestSolution = solution;
-                } else if(solution->totalOmega2 > bestSolution->totalOmega2) {
+                } else if(solution->totalOmega2 < bestSolution->totalOmega2) {
                     delete bestSolution;
                     bestSolution = solution;
                 } else {

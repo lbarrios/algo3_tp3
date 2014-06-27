@@ -29,14 +29,16 @@ for f in files:
   testname = filename.split("_")[0]
   (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
   testsize = n+m
+  print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
   #print testsize
   cota_teorica_x.append(testsize)
   cota_teorica_y.append(k)
   cota_teorica.append( (testsize, float( k/MMM ) ) )
-  print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
   for line in file:
+    if len(line.split())<2:
+      continue
     #testtype = line.split()[0]
-    testtype = "Valor Encontrado"
+    testtype = "Promedio"
     value = line.split()[1]
     x = int(testsize)
     #if x < 40: continue  # esto es muy arbitrario 
@@ -92,7 +94,7 @@ subplot.yaxis.set_major_formatter(formatter)
 
 # Aplico formatoex
 plt.grid(True)
-plt.title("GRASP (densidad baja)")
+plt.title("GRASP (densidad media)")
 plt.ylabel('Omega 2')
 plt.xlabel(u'Tamaño de entrada (n + m)')
 
@@ -112,18 +114,18 @@ for test_number in range(0,t_names):
   y = np.array( zip(*tests_mean_p_xy[testname][testtype])[1] )
   print x
   print y
-  plt.plot(x, y, linestyle='-',  color=colors[test_number], linewidth=1, label=testtype, alpha=1) #, marker='.', markersize=0.3)
+  plt.plot(x, y*MMM, linestyle='-',  color=colors[test_number], linewidth=1, label=testtype, alpha=1) #, marker='.', markersize=0.3)
 
 t_x = np.array( [x for (x,y) in cota_teorica] )
 t_y = np.array( [y for (x,y) in cota_teorica] )
 # ploteo cota teórica
 print t_x
 print t_y
-subplot.plot(t_x, t_y,    '--', color='black', linewidth=2, label="teorica")
+subplot.plot(t_x, t_y*MMM,    '--', color='black', linewidth=2, label="Optima")
 plt.legend(loc=2)
 plt.tight_layout()  # para que entren las labels
-plt.xlim(xmin=250,xmax=2250)
-#plt.ylim(ymax=0.0076)
+plt.xlim(xmin=15,xmax=3000)
+plt.ylim(ymax=500)
 
 #plt.show()
 if not os.path.exists('../graficos/') or not os.path.isdir('../graficos/'):
