@@ -6,9 +6,9 @@ ifeq ($(UNAME_S),FreeBSD)
 	MAKE := gmake
 endif
 
-.PHONY: clean greedy all
+.PHONY: clean greedy all backtracking grasp local_search
 
-all: greedy
+all: greedy backtracking grasp local_search
 
 greedy: greedy_a greedy_b greedy_c
 
@@ -18,6 +18,15 @@ greedy_b:
 	cd greedy_heuristic_B && $(MAKE) && $(MAKE) time
 greedy_c:
 	cd greedy_heuristic_C && $(MAKE) && $(MAKE) time
+
+backtracking:
+	cd backtracking && $(MAKE) && $(MAKE) time
+
+grasp:
+	cd grasp && $(MAKE) && $(MAKE) time
+
+local_search:
+	cd local_search && $(MAKE) && $(MAKE) time
 
 clean:
 	cd backtracking && $(MAKE) clean

@@ -6,7 +6,7 @@ using namespace std;
 
 #define INF 1<<30
 
-Timer timer( cout );
+Timer timer( cerr );
 
 class Solucion {
 public:
@@ -47,9 +47,7 @@ int main() {
         backtrack(U, U);
         timer.setFinalTime( "todo_el_codigo" );
         timer.saveAllTimes();
-        #ifndef TIME
         cout << mejorSolucion;
-        #endif
         delete G;
     }
     return 0;
