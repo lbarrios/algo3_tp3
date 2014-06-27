@@ -44,9 +44,10 @@ if not inputFiles:
     quit()
 
 for input in sorted(inputFiles):
-    output = input.replace("input","output/backtracking")
-    if not os.path.exists("../output/backtracking") or not os.path.isdir("../output/backtracking"):
-        os.makedirs("../output/backtracking")
-    command = "{} < {} > {}".format(heuristic_bin,input,output)
+    output_dir = "output/{}".format(heuristic)
+    output = input.replace("input", output_dir)
+    if not os.path.exists("../"+output_dir) or not os.path.isdir("../"+output_dir):
+        os.makedirs("../"+output_dir)
+    command = "{} < {} 2> {}".format(heuristic_bin,input,output)
     print("Running:",command)
     os.system(command)
