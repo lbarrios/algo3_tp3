@@ -1,11 +1,10 @@
 %Grasp
-\begin{comment}
 La metaheurística Grasp es una combinación entre una heurística golosa aleatorizada y un procedimiento de búsqueda local.
 Sea $S$ el conjunto de soluciones iniciales, el algoritmo que se usa es el siguiente:\\\\
 \hspace*{1 cm} Mientras no se alcance el criterio de terminación:\\
 \hspace*{2 cm} Obtener $s \in S$ mediante una heurística golosa aleatorizada.\\
 \hspace*{2 cm} Mejorar $s$ mediante búsqueda local.\\
-\hspace*{2 cm} Recordar la mejor solución obtenida hasta el momento.\\
+\hspace*{2 cm} Recordar la mejor solución obtenida hasta el momento.\\
 %Solucion inicial
 \subsubsection{Solución inicial}
 
@@ -106,4 +105,3 @@ Vale hacer una aclaración que es que como se usa una cola con prioridad para lo
 Por lo tanto la complejidad de resolverConDijkstraAleatorio no resulta diferente resolverConDijkstra, usada en busqueda local y por ende la complejidad de cada iteración resulta igual a la complejidad de una ejecución de búsqueda local, o sea tiene complejidad $O(n^5)$.
 
 Luego la complejidad total es $O(n^5 * iteracionesMax)$ = $O(n^5 * n*log(n))$ = $O(n^6 * log(n))$.
-\end{comment}
