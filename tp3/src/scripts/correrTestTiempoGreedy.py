@@ -40,14 +40,14 @@ except:
     print("Error: Debe ingresar el tipo de input como segundo parámetro.")
     quit()
 # me fijo si existen inputs con ese prefijo
-inputFiles = glob("../input/{}/{}_*.txt".format(heuristic,tipo_de_input))
+inputFiles = glob("../input/greedy/{}_*.txt".format(tipo_de_input))
 if not inputFiles:
     print("Error: No se encontraron input con el prefijo '{}' ingresado".format(tipo_de_input))
     quit()
 
 for input in sorted(inputFiles):
-    output_dir = "output"
-    output = input.replace("input", output_dir)
+    output_dir = "output/{}".format(heuristic)
+    output = input.replace("input/greedy", output_dir)
     if not os.path.exists("../"+output_dir) or not os.path.isdir("../"+output_dir):
         os.makedirs("../"+output_dir)
     command = "{} < {} 2> {}".format(heuristic_bin,input,output)

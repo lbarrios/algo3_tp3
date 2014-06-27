@@ -8,18 +8,15 @@ instanceCount = -1
 N = -1
 M = -1
 K = -1
-greedy = "A"
 
 if len(sys.argv) > 1:
-    greedy = sys.argv[1]
+    instanceCount = int(sys.argv[1])
     if len(sys.argv) > 2:
-        instanceCount = int(sys.argv[2])
+        N = int(sys.argv[2])
         if len(sys.argv) > 3:
-            N = int(sys.argv[3])
+            M = int(sys.argv[3])
             if len(sys.argv) > 4:
-                M = int(sys.argv[4])
-                if len(sys.argv) > 5:
-                    K = int(sys.argv[5])
+                K = int(sys.argv[4])
 
 print "Se llamo a script con parametros:"
 print "createInput_random instanceCount: %d n:%d m:%d k:%d" % (instanceCount, N, M, K)
@@ -35,7 +32,7 @@ elif M < N - 1:
 if K == -1:
     K = randint(N, N * M)  # pensar
 
-fo = open("../input/greedy_heuristic_%s/random_x%d_n%d_m%d_k%d.txt" % (greedy,instanceCount, N, M, K), "wb")
+fo = open("../input/greedy/random_x%d_n%d_m%d_k%d.txt" % (instanceCount, N, M, K), "wb")
 
 for r in range(0, instanceCount):
     U = randint(1, N) # Nodo inicial
