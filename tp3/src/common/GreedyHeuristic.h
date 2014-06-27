@@ -21,10 +21,11 @@ private:
   int _iters;
   string _save2file;
   Solution* solution;
+  Timer* timer;
 
 public:
   GreedyHeuristic();
-  GreedyHeuristic(int take_time, int iters, string save2file);
+  GreedyHeuristic(Timer*);
   void resolveInstance( ProblemInstance* );
   void run();
 };
@@ -37,12 +38,10 @@ GreedyHeuristic<ObjectiveFunction>::GreedyHeuristic()
 }
 
 template<class ObjectiveFunction>
-GreedyHeuristic<ObjectiveFunction>::GreedyHeuristic(int take_time, int iters, string save2file)
+GreedyHeuristic<ObjectiveFunction>::GreedyHeuristic(Timer* t)
 {
   solution = new Solution();
-  _take_time = take_time;
-  _iters = iters;
-  _save2file = save2file;
+  timer = t;
 }
 
 template<class ObjectiveFunction>
@@ -66,26 +65,12 @@ void GreedyHeuristic<ObjectiveFunction>::run()
   for ( int i = 0; i < parser.problemInstances.size(); i++ )
   {
     ProblemInstance* instance = parser.problemInstances[0];
-
-    if( _take_time ){
-      ofstream fs;
-      fs.open( _save2file, std::ofstream::app ); // apend
-      Timer timer(cerr);
-      
-      timer.setInitialTime("resolver");
-      for( int i = 0; i < _iters; i++ ){
-        resolveInstance( instance ); 
-      }
-      timer.setFinalTime("resolver");
-
-      fs << instance->countNodes() << "\t" 
-         << instance->countEdges() << "\t"
-         << instance->K << "\t"
-         << timer.getTime("resolver") / _iters << endl;
-
-    }
-    resolveInstance( instance ); 
-
+    
+    timer->setInitialTime("todo_el_codigo");
+    resolveInstance( instance );       
+    timer->setFinalTime("todo_el_codigo");
+    timer->saveAllTimes();
+    
     solution->print();
   }
 }

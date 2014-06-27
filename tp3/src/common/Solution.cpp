@@ -45,11 +45,8 @@ Solution* Solution::createSubSolutionBetween(int node1, int node2) const {
 
 void Solution::print()
 {
-  cout << "Omega1: " << totalOmega1 << ", Omega2: " << totalOmega2 << endl;
-  cout << "Path: ";
+  cout << totalOmega1 << " " << totalOmega2 << " ";
   for ( auto it = begin( path ); it != end( path ); ++it )
-  {
-    cout << ( *it )->fromNode << " -> " << ( *it )->toNode << ", ";
-  }
+    cout << ( *it )->fromNode << " ";
   cout << endl;
 }

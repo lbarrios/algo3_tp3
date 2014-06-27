@@ -2,12 +2,14 @@
 #include "../common/GreedyHeuristic.h"
 #include "../common/Dijkstra.h"
 #include "../common/ObjectiveFunctions.h"
+#include "../common/Timer.h"
 
 using namespace std;
 
 int main()
 {
-	GreedyHeuristic<ObjectiveFunctionB> greedy;
+	Timer timer(cerr);
+	GreedyHeuristic<ObjectiveFunctionB> greedy(&timer);
 	greedy.run();	
     
     return 0;

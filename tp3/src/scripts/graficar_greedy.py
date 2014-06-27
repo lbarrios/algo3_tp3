@@ -22,12 +22,14 @@ tests = defaultdict(make_listdictdict)
 files = sorted(glob("../output/greedy_heuristic_{}/*.txt".format(greedy)))
 for f in files:
   file = open(f)
+  print file
   filename = f.split("/")[-1]
   testname = filename.split("_")[0]
   (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
   testsize = n+m
   print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
   for line in file:
+    print line
     testtype = line.split()[0]
     value = line.split()[1]
     x = int(testsize)
