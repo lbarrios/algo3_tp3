@@ -1,4 +1,6 @@
 #include "Solution.h"
+#include <limits>
+#define INF (std::numeric_limits<double>::max())
 
 Solution* Solution::createSubSolutionBetween(int node1, int node2) const {
 	Solution* res = new Solution();
@@ -45,8 +47,15 @@ Solution* Solution::createSubSolutionBetween(int node1, int node2) const {
 
 void Solution::print()
 {
-  cout << totalOmega1 << " " << totalOmega2 << " ";
-  for ( auto it = begin( path ); it != end( path ); ++it )
-    cout << ( *it )->fromNode << " ";
-  cout << endl;
+  if (totalOmega1==INF || totalOmega2==INF)
+  {
+    cout << "no" << endl;
+  }
+  else
+  {
+    cout << totalOmega1 << " " << totalOmega2 << " ";
+    for ( auto it = begin( path ); it != end( path ); ++it )
+      cout << ( *it )->fromNode << " ";
+    cout << endl;
+  }
 }
