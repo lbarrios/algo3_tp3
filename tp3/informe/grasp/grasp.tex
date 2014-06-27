@@ -105,3 +105,21 @@ Vale hacer una aclaración que es que como se usa una cola con prioridad para lo
 Por lo tanto la complejidad de resolverConDijkstraAleatorio no resulta diferente resolverConDijkstra, usada en busqueda local y por ende la complejidad de cada iteración resulta igual a la complejidad de una ejecución de búsqueda local, o sea tiene complejidad $O(n^5)$.
 
 Luego la complejidad total es $O(n^5 * iteracionesMax)$ = $O(n^5 * n*log(n))$ = $O(n^6 * log(n))$.
+
+\subsubsection{Experimentación}
+
+A continuación presentamos los resultados de la experimentación del tiempo de ejecución de
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[angle=0, scale=.75]{imagenes/calidad_grasp_2014-06-27_08-58-53.pdf}
+\label{grafico local}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[angle=0, scale=.75]{imagenes/calidad_grasp_2014-06-27_08-54-46.pdf}
+\label{grafico local}
+\end{center}
+\end{figure}
