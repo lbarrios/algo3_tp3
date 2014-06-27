@@ -12,7 +12,9 @@ Siendo $N(s)$ la vecindad de $s$ y $f$ la función objetivo.
 % Solución inicial
 \subsubsection{Solución inicial}
 
-Para obtener una solución inicial utilizamos Dijkstra. Experimentamos con la funciones objetivo Greedy A y Greedy C descritas en el apartado anterior(ver sección de heurística golosa). En caso de que no obtener una solución inicial factible, corremos Dijkstra nuevamente, pero utilizando la sumatoria de los pesos $\omega_1$ como función objetivo(o sea, Greedy A), pero solo en caso que no haya sido la función objetivo inicialmente usada. La razón de usar esa función objetivo es que se minimiza el $\omega_1$ total del camino encontrado y por ende hay una chance máxima de obtener una solución que cumpla con la cota K. Eso es porque Dijkstra encuentra el camino mínimo de uno nodo hacia todos los demás\footnote{Demostrado en la sección de heurística golosa}, y si no se encuentra un camino con $\omega_1$ mínimo que cumpla con la cota K, significa que no existe ningún otro camino que cumpla con la cota. En caso de que eso suceda, podemos asegurar que no existe solución al problema.
+Para obtener una solución inicial utilizamos Dijkstra. Experimentamos con la funciones objetivo Greedy A y Greedy C descritas en el apartado anterior(ver sección de heurística golosa). No utilizamos Greedy B, ya que de encontrar una solución usando la sumatoria de los pesos $\omega_2$ como función objetivo, podía pasar que no encontremos una solución o que encontremos la solución y en ese caso, no tiene sentido usar búsqueda local, ya que no hay mejor solución posible.
+
+En caso de usar Greedy C y no obtener una solución inicial factible, corremos Dijkstra nuevamente, pero utilizando la sumatoria de los pesos $\omega_1$ como función objetivo(o sea, Greedy A). La razón de usar esa función objetivo es que se minimiza el $\omega_1$ total del camino encontrado y por ende hay una chance máxima de obtener una solución que cumpla con la cota K. Eso es porque Dijkstra encuentra el camino mínimo de uno nodo hacia todos los demás\footnote{Demostrado en la sección de heurística golosa}, y si no se encuentra un camino con $\omega_1$ mínimo que cumpla con la cota K, significa que no existe ningún otro camino que cumpla con la cota. En caso de que eso suceda, podemos asegurar que no existe solución al problema.
 
 % Definición de la vecindad
 \subsubsection{Definición de la vecindad}
@@ -33,7 +35,10 @@ Para obtener el camino $d_{n_1,n_2}^*$ utilizamos Dijkstra con la sumatoria de l
 
 Dada la vecindad $S^*$, se elige al vecino usando Steepest descent, con $\omega_2$ como función objetivo.
 
-A continuación escribimos el pseudocódigo de la función \texttt{main}:
+\subsubsection{Pseudocódigo}
+
+El algoritmo está implementado en la función \texttt{main}:
+
 \begin{algorithm}[H]
 \caption{$main$(int tipo\_solucionInicial, Graph g, Nodo n1, Nodo n2)}
 \begin{algorithmic}[1]
@@ -106,7 +111,7 @@ A continuación escribimos el pseudocódigo de la función \texttt{main}:
 Implementamos el algoritmo en la función $main$. La complejidad del algoritmo resulta la suma de obtener la solución inicial y el ciclo que se usa para mejorarla buscando un mejor vecino en cada iteración. 
 Además, en $main$, inicialmente, se llama a una función crearMatrizCaminosMinimos que abordaremos más adelante.
 
-Para obtener la solución inicial, usamos obtenerSolucionInicial. Esta función devuelve un camino mínimo entre 2 nodos llamando a resolverConDijkstra con alguna función objetivo(Greedy\_A o Greedy\_C). La función resolverConDijkstra primero ejecuta Dijkstra para encontrar todos los caminos mínimos entre n1 y los demás nodos y después hace un traceback desde n2 hasta n1 para dar con el camino míinimo entre ellos. Como se comprobó en el apartado anterior, la complejidad de Dijkstra es $O(m log(n))$ y el traceback es $O(n)$, por lo que en total la complejidad de obtenerSolucionInicial es $O(m log(n))$. Cabe notar que la función objetivo usada en Dijkstra no influye en la complejidad, ya que solo comparara los valores de $\omega_1$ y $\omega_2$ y por lo que tiene complejidad $O(1)$.
+Para obtener la solución inicial, usamos obtenerSolucionInicial. Esta función devuelve un camino mínimo entre 2 nodos llamando a resolverConDijkstra con alguna función objetivo(Greedy\_A o Greedy\_C). La función resolverConDijkstra primero ejecuta Dijkstra para encontrar todos los caminos mínimos entre n1 y los demás nodos y después hace un traceback desde n2 hasta n1 para dar con el camino mínimo entre ellos. Como se comprobó en el apartado anterior, la complejidad de Dijkstra es $O(m log(n))$ y el traceback es $O(n)$, por lo que en total la complejidad de obtenerSolucionInicial es $O(m log(n))$. Cabe notar que la función objetivo usada en Dijkstra no influye en la complejidad, ya que solo comparara los valores de $\omega_1$ y $\omega_2$ y por lo que tiene complejidad $O(1)$.
 
 Para mejorar la solución usamos un ciclo y en cada iteración obtenemos el mejor vecino del camino actual usando dameMejorVecino. Ejecutamos el ciclo mientras que hayamos encontrado una mejora al camino actual en la última iteración. 
 Dado que un vecino consiste en reemplazar la porción del camino actual que une 2 nodos $n_1$ y $n_2$ por el camino mínimo entre ellos, y que cada vez que se hace el reemplazo se disminuye $\omega_2$ del camino actual, se pueden hacer a lo sumo tantos reemplazos como caminos mínimos entre todo par de nodos del grafo existan. 
