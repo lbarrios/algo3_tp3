@@ -47,11 +47,11 @@ El algoritmo está implementado en la función \texttt{main}:
   \State int iteracionesSinInitialPathCount = 0
   \State int iteracionesSinInitialPathMax = n
   \State mejorSolucion = NULL
-  \For{i=0; i<iteracionesMax; i++}
+  \For{i=0; i$<$iteracionesMax; i++}
   	\State Solution solucion = obtenerSolucionInicial(tipo\_solucionInicial, g, n1, n2)	
 	\If{$\omega_1$(solucion) $>$ K}
     		\State iteracionesSinInitialPathCount++
-		\If{iteracionesSinInitialPathCount >= iteracionesSinInitialPathMax}
+		\If{iteracionesSinInitialPathCount $\geq$ iteracionesSinInitialPathMax}
 			break
 		\EndIf
         \EndIf
