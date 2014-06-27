@@ -110,6 +110,16 @@ Luego la complejidad total es $O(n^5 * iteracionesMax)$ = $O(n^5 * n*log(n))$ = 
 
 A continuación presentamos los resultados de la experimentación del tiempo de ejecución de la metaheurística GRASP.
 
+\begin{figure}[H]
+\begin{center}
+\includegraphics[angle=0, scale=.75]{imagenes/grasp_2014-06-27_19-18-59.pdf}
+\label{grafico local}
+\end{center}
+\end{figure}
+
+No se pareciera estar frente a una polinomio de grado 6, sin embargo, es evidente que tiene mucha más concavidad que la gráfica de la búsqueda
+local. Ésto proviene trivialmente del hecho de repetir una cantidad que puede llegar a ser n * log(n) veces la búsqueda local.
+
 Pasamos a experimentar con la calidad de la solución.
 
 \begin{figure}[H]
@@ -130,4 +140,5 @@ Grata fue la sorpresa al ver a GRASP en acción. Al igual que la búsqueda local
 óptimo. Pero esta vez hemos logrado reducir la amplitud entre nuestros resultados y de esta forma acercar todo el cuerpo de nuestras soluciones
 a la solución óptima.
 Los buenos resultados obtenidos se deben a la naturaleza de GRASP, que consiste en iterativamente correr una búsqueda local sobre múltiples
-soluciones iniciales generadas con un componente aleatorio. El repetir el experimento disminuye la varianza.
+soluciones iniciales generadas con un componente aleatorio. El repetir el experimento disminuye la varianza y garantiza una mejor solución
+final.
