@@ -1,3 +1,5 @@
+\subsubsection{Descripción}
+
 Debido a la dificultad computacional del problema, no existe a\'un una soluci\'on exacta de tiempo polinomial, y a pesar de que nos entretuvimos
 discutiendo, nosotros no pudimos encontrarla tampoco. En su defecto implementamos un algoritmo de backtracking que recorre todos los caminos
 posibles de $u$ a $v$ y se queda con el de menor $\omega_2$ tal que $\omega_1 \leq K$. 
@@ -52,7 +54,7 @@ A continuaci\'on, escribimos el pseudoc\'odigo de la funci\'on \texttt{main}.
 \end{algorithmic}
 \end{algorithm}
 
-Complejidad:
+\subsubsection{Complejidad}
 
 Analicemos cuantas llamadas se hacen a $backtrack$. Se exploran caminos de a los sumo $n$ nodos. El primer nodo está fijo en $u$. El segundo nodo
 pertenece a la adyacencia del primero, que en peor caso tiene tamaño $n - 1$. El tercero pertenece a la adyacencia del segundo, que no hayan sido
@@ -67,7 +69,7 @@ llamadas lo estamos calculando por separado.
 
 En definitiva hacemos $O(n!)$ llamadas a una función que de por si toma $O(m)$ operaciones. La complejidad del algoritmo es $O(m*n!)$.
 
-Experimentación:
+\subsubsection{Experimentación}
 
 Generamos en primera instancia grafos con una cantidad de nodos pequeña - entre 3 y 15. La cantidad de aristas, es decir, la densidad del grafo,
 se eligió aleatoriamente entre 0 y (n * (n - 1)) / 2, la cantidad máxima posible. La distribución de las aristas, sus pesos, y el valor de $k$
@@ -80,4 +82,3 @@ A continuación presentamos los tiempos de ejecución de nuestro algoritmo frent
 Para tamaños de grafo menores que 40, los tiempos de ejecución fueron despreciables. Se puede apreciar el carácter exponencial del tiempo de
 ejecución de nuestro algoritmo en función del tamaño de entrada.
 
-\fixme{Hacer mas experimentación? dejando fijo n y m? fue dificil sacar resultados para eso}
