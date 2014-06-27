@@ -192,9 +192,10 @@ Se puede percibir el carácter no lineal de la complejidad. Sin embargo no se ev
 previamente. Puede ser necesario un tamaño mayor para poder apreciar esa complejidad, o quizás la cota teórica no se alcanza en la práctica.
 Probablemente haya un factor que se amortice, habiendo escapado de nuestro escrutinio.
 
-Se generó una familia de grafos en la que ya sabemos el valor de $\omega_2$ de la solución óptima, para cualquier tamaño de grafo. Experimentamos
-con distintas densidades de grafos. Primero con grafos densos, es decir con una cantidad de aristas del orden de $n^2$. Luego con grafos
-de densidad media, con una cantidad de aristas del orden de $\sqrt{n}*n$. Finalmente probamos con grafos ralos, con una cantidad de aristas
+Se generó una familia de grafos en la que ya sabemos el valor de $\omega_2$ de la solución óptima, para cualquier tamaño de grafo. Se intento
+de alguna forma balancear los pesos, es decir, si una arista recibe un $\omega_1$ bajo, entonces le asignábamos un $\omega_2$ alto, y viceversa.
+Experimentamos con distintas densidades de grafos. Primero con grafos densos, es decir con una cantidad de aristas del orden de $n^2$. Luego con
+grafos de densidad media, con una cantidad de aristas del orden de $\sqrt{n}*n$. Finalmente probamos con grafos ralos, con una cantidad de aristas
 del orden de la cantidad de nodos.
 
 \begin{figure}[H]
