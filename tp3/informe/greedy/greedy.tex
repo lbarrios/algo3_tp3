@@ -49,6 +49,11 @@ Out: Arreglo $\pi$ con camino m\'inimo en funci\'on de $f$ a cada nodo.
 
 La modificaci\'on est\'a la l\'inea 7, que en vez de sumar a $\pi(v)$ el peso de la arista, como es en el algoritmo original, le suma el valor de una funci\'on que define el peso de la arista. Esto nos permite mucha flexibilidad a la hora de cambiar la ``decisi\'on golosa''.
 
+Complejidad: 
+
+Veamos que nuestro algoritmo es el mismo que el de Dijkstra salvo por que ejecuta la funci\'on $f((v,w))$, que al poder ejecutarse en tiempo constante, la complejidad total del algoritmo sigue siendo la misma que la de Dijkstra. 
+
+
 %-- Goloso A --
 \clearpage
 \subsubsection{Greedy A}\label{subsubsec:greedy-a}
