@@ -50,15 +50,15 @@ Out: Arreglo $\pi$ con camino m\'inimo en funci\'on de $f$ a cada nodo.
 
 La modificaci\'on est\'a la l\'inea 7, que en vez de sumar a $\pi(v)$ el peso de la arista, como es en el algoritmo original, le suma el valor de una funci\'on que define el peso de la arista. Esto nos permite mucha flexibilidad a la hora de cambiar la ``decisi\'on golosa''.
 
-/subsubsection{Complejidad}
+\subsubsection{Complejidad}
 
-Veamos que nuestro algoritmo es el mismo que el de Dijkstra salvo por que ejecuta la funci\'on $f((v,w))$, que al poder ejecutarse en tiempo constante, la complejidad total del algoritmo sigue siendo la misma que la de Dijkstra. 
+Veamos que nuestro algoritmo es el mismo que el de Dijkstra salvo por que ejecuta la funci\'on $f((v,w))$, que al hacer operaciones que son constantes en el tiempo no altera la complejidad de final del algoritmo. 
 
-\subsubsection{Familias malas}
+De acuerdo al libro de Brassard antes mencionado, demuestran que la complejidad de Dijkstra implementada sobre un heap es $O(m \log n)$, y como esta es la mejor complejidad que se puede conseguir, nosotros lo implementamos sobre un \texttt{priority\_queue} de $C++$ que nos garantiza las mismas complejidades de un heap\footnote{http://www.cplusplus.com/reference/queue/priority\_queue/priority\_queue/}. 
 
 %-- Goloso A --
 \clearpage
-\subsubsection{Greedy A}\label{subsubsec:greedy-a}
+\subsubsection{Familias Malas: Greedy A}\label{subsubsec:greedy-a}
 Dado un grafo $G = (V,E)$, obtenemos el camino m\'inimo entre $u$ y $v$ seg\'un $\omega_1$. 
 
 A continuación definimos una familia de grafos en los cuales nuestro algoritmo puede devolver resultados muy malos.
@@ -80,7 +80,7 @@ arbitrariamente alejada de la óptima.
 
 %-- Goloso B --
 \clearpage
-\subsubsection{Greedy B}\label{subsubsec:greedy-b}
+\subsubsection{Familias Malas: Greedy B}\label{subsubsec:greedy-b}
 Dado un grafo $G = (V,E)$, obtenemos el camino m\'inimo entre $u$ y $v$ seg\'un $\omega_2$. 
 
 A continuación definimos una familia de grafos en los cuales nuestro algoritmo puede devolver resultados muy malos.
@@ -100,7 +100,7 @@ válida. Ésto se cumple para cualquier valor de x.
 
 \clearpage
 %-- Goloso C --
-\subsubsection{Greedy C}\label{subsubsec:greedy-c}
+\subsubsection{Familias Malas: Greedy C}\label{subsubsec:greedy-c}
 Dado un grafo $G = (V,E)$, obtenemos el camino m\'inimo entre $u$ y $v$ seg\'un $\omega_1\omega_2$. 
 
 Esta heurística se puede comportar de la misma forma que el Greedy B, si consideramos la familia mala de grafos desarrollada para el Greedy B,
