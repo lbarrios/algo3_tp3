@@ -46,8 +46,6 @@ for f in files:
     tests[testname][testtype][x].append(y)
   file.close()
 
-cota_teorica.sort()
-
 
 files = sorted(glob("../output/greedy_heuristic_B/*.txt.calidad"))
 for f in files:
@@ -103,6 +101,7 @@ for f in files:
     tests[testname][testtype][x].append(y)
   file.close()
 
+print("GRASP:")
 files = sorted(glob("../output/grasp/*.txt.calidad"))
 for f in files:
   file = open(f)
@@ -111,7 +110,7 @@ for f in files:
   testname = "Grasp"
   (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
   testsize = n+m
-  print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
+  print "\tx={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
   for line in file:
     if len(line.split())<2:
       continue
@@ -121,6 +120,7 @@ for f in files:
     tests[testname][testtype][x].append(y)
   file.close()
 
+print("BACKTRACKING:")
 files = sorted(glob("../output/backtracking/*.txt.calidad"))
 for f in files:
   file = open(f)
@@ -129,7 +129,7 @@ for f in files:
   testname = "Backtracking"
   (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
   testsize = n+m
-  print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
+  print "\tx={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
   for line in file:
     if len(line.split())<2:
       continue
@@ -139,13 +139,16 @@ for f in files:
     tests[testname][testtype][x].append(y)
   file.close()
 
-
 tests_mean_xy = defaultdict(make_listdict)
 tests_mean_p_xy = defaultdict(make_listdict)
 for testname in tests:
+  print("Recorriendo {}".format(testname))
   for testtype in tests[testname]:
+    print("Recorriendo {} de {}".format(testtype,testname))
     for testsize in tests[testname][testtype]:
+      #print("Recorriendo {} de {} (x={})".format(testtype,testname,testsize))
       y_values = tests[testname][testtype][testsize]
+      print "\ty =",y_values
       #y_p_values = [yp for yp in y_values if yp < np.percentile(y_values,75) and yp > np.percentile(y_values,25) ]
       y_p_values = [yp for yp in y_values ]
       y_p_values_min = [yp for yp in y_values if yp == np.min(y_values) ]
@@ -161,18 +164,18 @@ for testname in tests:
       tests_mean_p_xy[testname][testtype].append( (x,y_p) )
       #tests_mean_p_xy["Minimo"]["Minimo"].append( (x,y_p_min) )
       #tests_mean_p_xy["Maximo"]["Maximo"].append( (x,y_p_max) )
+    print "{}, {}".format(testname,testtype)
+    print tests_mean_p_xy[testname][testtype]
     tests_mean_xy[testname][testtype].sort()
     tests_mean_p_xy[testname][testtype].sort()
     #tests_mean_p_xy["Minimo"]["Minimo"].sort()
     #tests_mean_p_xy["Maximo"]["Maximo"].sort()
 
 
+cota_teorica.sort()
+
 t_names = len(tests_mean_p_xy)
 t_types = len(tests_mean_p_xy[testname])
-
-
-print tests_mean_p_xy
-
 
 colors = ['cyan','green','red','blue','magenta','yellow','black','grey','white']
 
@@ -211,7 +214,10 @@ for test_number in range(0,t_names):
   #print testtype
   #print x
   #print y
-  plt.plot(x, y, linestyle='-',  color=colors[test_number], linewidth=1, label=testname, alpha=1) #, marker='.', markersize=0.3)
+  if testname == 'Backtracking':
+    plt.plot(x, y, linestyle='-',  color=colors[test_number], linewidth=1, label=testname, alpha=1) #, marker='.', markersize=0.3)
+  else:
+    plt.plot(x, y, linestyle='-',  color=colors[test_number], linewidth=1, label=testname, alpha=0.49, marker='o', markersize=4.5)
 
 #t_x = np.array( [x for (x,y) in cota_teorica] )
 #t_y = np.array( [y for (x,y) in cota_teorica] )

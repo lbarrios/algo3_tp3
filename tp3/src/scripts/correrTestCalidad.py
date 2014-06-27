@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 from glob import glob
 import os
 import sys
 
-# redefino la señal de interrupción
-import signal
-import sys
-def signal_handler(signal, frame):
-        print('You pressed Ctrl+C!')
-        sys.exit(0)
-signal.signal(signal.SIGINT, signal_handler)
+# redefino la senial de interrupcion
+#import signal
+#import sys
+#def signal_handler(signal, frame):
+#        print('You pressed Ctrl+C!')
+#        sys.exit(0)
+#signal.signal(signal.SIGINT, signal_handler)
 
 # chequeo si existe la carpeta de output, si no la creo
 if not os.path.exists("../output/") or not os.path.isdir("../output/"):
@@ -48,6 +49,6 @@ for input in sorted(inputFiles):
     output = input.replace("input", output_dir)
     if not os.path.exists("../"+output_dir) or not os.path.isdir("../"+output_dir):
         os.makedirs("../"+output_dir)
-    command = "{} < {} 1> {}.calidad 2> /dev/null".format(heuristic_bin,input,output)
+    command = "{} < {} 1 > {}.calidad 2> /dev/null".format(heuristic_bin,input,output)
     print("Running:",command)
     os.system(command)
