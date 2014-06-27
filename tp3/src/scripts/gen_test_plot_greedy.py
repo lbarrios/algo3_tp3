@@ -8,12 +8,12 @@ for n in range(5, 110):
 
 greedy = "A"
 subprocess.call(["python", "correrTestTiempoGreedy.py", "greedy_heuristic_%s"%(greedy), "magic"])
-subprocess.call(["python", "graficar_greedy.py", greedy])
 
 greedy = "B"
 subprocess.call(["python", "correrTestTiempoGreedy.py", "greedy_heuristic_%s"%(greedy), "magic"])
-subprocess.call(["python", "graficar_greedy.py", greedy])
 
 greedy = "C"
 subprocess.call(["python", "correrTestTiempoGreedy.py", "greedy_heuristic_%s"%(greedy), "magic"])
+
+
 subprocess.call(["python", "graficar_greedy.py", greedy])

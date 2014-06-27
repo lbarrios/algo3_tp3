@@ -5,7 +5,7 @@ import os
 import math
 from datetime import datetime
 
-os.system("tar czf ../backup/grasp_%s.tar.gz ../input ../output/grasp" % datetime.now().strftime("%Y-%m-%d_%H_%M_%S"))
+#os.system("tar czf ../backup/grasp_%s.tar.gz ../input ../output/grasp" % datetime.now().strftime("%Y-%m-%d_%H_%M_%S"))
 os.system("rm ../input/*")
 os.system("rm ../output/grasp/*")
 
@@ -22,7 +22,7 @@ while n<200:
     #m = (n*(n-1))/2
     m = int(math.sqrt(n))*n
     #m = 10*n
-    subprocess.call(["python", "createInput_magic.py", "20", str(n), str(m)])
+    subprocess.call(["python", "createInput_magic.py", "10", str(n), str(m)])
 
-subprocess.call(["python3", "correrTestCalidad.py", "grasp", "magic"])
-subprocess.call(["python", "graficar_grasp_calidad.py"])
+subprocess.call(["python3", "correrTestTiempo.py", "grasp", "magic"])
+#subprocess.call(["python", "graficar_grasp.py"])
