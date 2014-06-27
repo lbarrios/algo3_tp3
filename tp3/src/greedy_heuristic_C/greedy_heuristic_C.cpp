@@ -10,7 +10,6 @@ int main()
 {
 	Timer timer(cerr);
 	GreedyHeuristic<ObjectiveFunctionC> greedy(&timer);
-	greedy.run();	
-    
-    return 0;
+	greedy.run();
+  return 0;
 }

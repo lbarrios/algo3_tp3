@@ -72,7 +72,7 @@ Solution* NeighbourhoodSelectorA::getBestNeighbour(const Solution* origSolution)
   }
   nodes[nodesCount-1] = origSolution->path[edgesCount-1]->toNode; // ultimo nodo del path
 
-  cout << endl;
+  //cout << endl;
       
   Solution* bestSolution = NULL;
   for(int i=0; i<nodes.size() - 1; i++) {    

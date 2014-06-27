@@ -54,8 +54,8 @@ int main( int argc, char const* argv[] )
       solution = initialSolutionBestOmega1->getInitialSolution(instance);
     }
 
-    cout << "Initial solution: ";
-    solution->print();
+    //cout << "Initial solution: ";
+    //solution->print();
 
     // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica
     if(solution->totalOmega1 <= instance->K) {
@@ -67,9 +67,9 @@ int main( int argc, char const* argv[] )
         newSolution = selector->getBestNeighbour( solution );
         // Si no logro mejorar la solucion, termino      
         if(newSolution != NULL) {
-          cout << "Mejore omega2!" << endl;
-          cout << "new solution: ";
-          newSolution->print();
+          //cout << "Mejore omega2!" << endl;
+          //cout << "new solution: ";
+          //newSolution->print();
           delete solution;
           solution = newSolution;          
           huboMejora = true;  
@@ -86,8 +86,9 @@ int main( int argc, char const* argv[] )
       Output Print
     ****************/
     // print the solution
-    cout << "Final solution: ";
+    //cout << "Final solution: ";
     solution->print();
+    //solution->printTP();
 
     delete solution;
     

@@ -92,6 +92,8 @@ for test_number in range(0,t_names):
 #subplot.plot(x, ((x*x)*22)/float(1e9),    '--', color='black', linewidth=2, label="$c.x^2$")
 plt.legend(loc=2)
 plt.tight_layout()  # para que entren las labels
+plt.xlim(xmax=12800)
+plt.ylim(ymax=0.0076)
 
 #plt.show()
 if not os.path.exists('../graficos/') or not os.path.isdir('../graficos/'):

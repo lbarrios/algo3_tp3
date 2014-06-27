@@ -17,7 +17,7 @@ else
 	C11_FLAG=c++11
 endif
 #CC=g++ # setear CC manualmente con "setenv CC ..."
-CFLAGS=-Wall -pedantic -std=$(C11_FLAG) -O3
+CFLAGS=-Wall -pedantic -std=$(C11_FLAG) -O0 -g
 CFLAGS_TIME=-Wall -pedantic -std=$(C11_FLAG) -DTIME -O2
 COMMON_DIR=../common
 COMMON_OBJSDIR=${COMMON_DIR}/${OBJSDIR}

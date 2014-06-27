@@ -48,6 +48,6 @@ for input in sorted(inputFiles):
     output = input.replace("input", output_dir)
     if not os.path.exists("../"+output_dir) or not os.path.isdir("../"+output_dir):
         os.makedirs("../"+output_dir)
-    command = "{} < {} 2> {}".format(heuristic_bin,input,output)
+    command = "{} < {} 2> {} 1> /dev/null".format(heuristic_bin,input,output)
     print("Running:",command)
     os.system(command)

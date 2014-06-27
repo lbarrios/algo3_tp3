@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-SCALE = 100
+SCALE = 1000
 
 import sys
 from random import randint
