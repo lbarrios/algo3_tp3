@@ -71,15 +71,17 @@ Solution* NeighbourhoodSelectorA::getBestNeighbour(const Solution* origSolution)
     nodes[i] = edge->fromNode;
   }
   nodes[nodesCount-1] = origSolution->path[edgesCount-1]->toNode; // ultimo nodo del path
-
   //cout << endl;
       
   Solution* bestSolution = NULL;
   for(int i=0; i<nodes.size() - 1; i++) {    
-    for(int j=i+1; j<nodes.size(); j++) {            
+    for(int j=i+1; j<nodes.size(); j++) {           
       Solution* subSolution = origSolution->createSubSolutionBetween(nodes[i], nodes[j]); // solution con sub path entre los nodos
-      if(subSolution == NULL) continue; // puede fallar o esto esta demas?
+      if(subSolution == NULL) continue; // puede fallar o esto esta demas?      
       Solution* solution_ij = getSolvedPathBetween(nodes[i], nodes[j]); // dijkstra por omega2 entre los nodos
+      if(solution_ij == NULL) {
+        continue;
+      }      
       /*cout << "Between (" << nodes[i] << ", " << nodes[j] << "):" << endl;
       cout << "subSolution: ";
       subSolution->print();
@@ -89,16 +91,16 @@ Solution* NeighbourhoodSelectorA::getBestNeighbour(const Solution* origSolution)
       // Si el path creado con dijkstra usando omega2, tiene menos omega2 total, que el path actual entre
       // los nodos i y j, entonces chequeo si al crear una nueva solucion tendra menos omega2 que la mejor solucion.
       // En ese caso me guardo esta nueva solucion como la mejor hasta ahora.
-      // Ademas chequeo que se cumpla con el K requerido.                    
+      // Ademas chequeo que se cumpla con el K requerido.                          
       double bestSolutionOmega2 = bestSolution == NULL ? origSolution->totalOmega2 : bestSolution->totalOmega2;
       double newSolutionOmega2 = origSolution->totalOmega2 - subSolution->totalOmega2 + solution_ij->totalOmega2;
-      double newSolutionOmega1 = origSolution->totalOmega1 - subSolution->totalOmega1 + solution_ij->totalOmega1;
-      if(newSolutionOmega2 < bestSolutionOmega2 && newSolutionOmega1 <= K) {     
+      double newSolutionOmega1 = origSolution->totalOmega1 - subSolution->totalOmega1 + solution_ij->totalOmega1;      
+      if(newSolutionOmega2 < bestSolutionOmega2 && newSolutionOmega1 <= K) {             
         if(bestSolution != NULL) {
           delete bestSolution;   
         }       
         // creo la nueva mejor solucion
-        bestSolution = createNewSolutionReplacingPath(origSolution, solution_ij);             
+        bestSolution = createNewSolutionReplacingPath(origSolution, solution_ij);            
         //cout << "hubo mejora!" << endl;
         //cout << "bestSolution: ";
         //bestSolution->print();
