@@ -1,4 +1,3 @@
-
 % Búsqueda local
 La búsqueda local es un método heurístico para encontrar una solución factible a un problema. Se basa en obtener una solución inicial, $s$, y luego mejorar esa solución iterativamente, tomando la mejor solución de un conjunto de vecinos de $s$. El conjunto de los vecinos se determina mediante algún criterio y se usa una función objetivo para comparar las soluciones en la vecindad de $s$ y discernir cual es la mejor.
 
@@ -191,7 +190,34 @@ Pudimos analizar el tiempo de ejecución frente a grafos de un tamaño considera
 
 Se puede percibir el carácter no lineal de la complejidad. Sin embargo no se evidencia a luces claras la cota teórica de $n^5$ desarrollada
 previamente. Puede ser necesario un tamaño mayor para poder apreciar esa complejidad, o quizás la cota teórica no se alcanza en la práctica.
+Probablemente haya un factor que se amortice, habiendo escapado de nuestro escrutinio.
 
-Se generó una familia de grafos en la que ya sabemos el valor de $\omega_2$ de la solución óptima, para cualquier tamaño de grafo. Nos aseguramos
-de que haya una gran cantidad de caminos, como para que el algoritmo deba buscar antes de encontrarlo. Probablemente haya un factor que se
-amortice, habiendo escapado de nuestro escrutinio.
+Se generó una familia de grafos en la que ya sabemos el valor de $\omega_2$ de la solución óptima, para cualquier tamaño de grafo. Experimentamos
+con distintas densidades de grafos. Primero con grafos densos, es decir con una cantidad de aristas del orden de $n^2$. Luego con grafos
+de densidad media, con una cantidad de aristas del orden de $\sqrt{n}*n$. Finalmente probamos con grafos ralos, con una cantidad de aristas
+del orden de la cantidad de nodos.
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[angle=0, scale=.75]{imagenes/local_search_densidad_baja.pdf}
+\label{grafico local}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[angle=0, scale=.75]{imagenes/local_search_densidad_media.pdf}
+\label{grafico local}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[angle=0, scale=.75]{imagenes/local_search_densidad_alta.pdf}
+\label{grafico local}
+\end{center}
+\end{figure}
+
+Se puede notar, a medida que aumenta el tamaño del grafo, un mayor rango de resultados. Ésto tiene cierta intuición. A medida que el grafo es
+más grande, son más los caminos posibles y hay más variedad de soluciones. La solución media, no obstante, parece preservar cierta distancia
+relativa a la solución óptima. La mejor solución encontrada guarda muy estrecha distancia con la óptima.
