@@ -179,11 +179,18 @@ solución arbitrariamente lejos de la óptima.
 \newpage
 \subsubsection{Experimentación}
 
+Pudimos analizar el tiempo de ejecución frente a grafos de un tamaño considerable. A continuación presentamos un gráfico.
+
 \begin{figure}[H]
 \begin{center}
-%\includepdf[pages={1}]{imagenes/local_search_time.pdf}
-\includegraphics[angle=90]{imagenes/local_search_time.pdf}
+\includegraphics[angle=0, scale=.75]{imagenes/local_search_time.pdf}
 \label{grafico local}
 \end{center}
 \end{figure}
 
+
+Se puede percibir el carácter no lineal de la complejidad. Sin embargo no se evidencia a luces claras la cota teórica de $n^5$ desarrollada
+previamente. Puede ser necesario un tamaño mayor para poder apreciar esa complejidad, o quizás la cota teórica no se alcanza en la práctica.
+
+Se generó una familia de grafos en la que ya sabemos el valor de $\omega_2$ de la solución óptima, para cualquier tamaño de grafo. Nos aseguramos
+de que haya una gran cantidad de caminos, como para que el algoritmo deba buscar antes de encontrarlo.
