@@ -2,20 +2,20 @@
 #include <vector>
 #include "../common/Graph.h"
 #include "../common/Timer.h"
+#include "../common/Dijkstra.h"
+#include "../common/DijkstraSolution.h"
 using namespace std;
 
 #define INF 1<<30
 
 Timer timer( cerr );
 
-class Solucion {
+class Solution {
 public:
-    vector<Node> camino;
-    int sumaOmega1;
-    int sumaOmega2;
-    int cantAristas;
+    vector<Node> path;
+    int totalOmega1;
+    int totalOmega2;
 };
-
 
 ostream& operator<<(ostream& os, const Solucion &s) {
     if (s.sumaOmega2 == INF) {
@@ -30,80 +30,82 @@ ostream& operator<<(ostream& os, const Solucion &s) {
     return os;
 }
 
-int N, M, U, V, K;
-Graph *G;
-vector<bool> visitados;
-Solucion mejorSolucion;
-Solucion ramaActual;
+class Backtracking_Heuristic {
+public: // no te olvides el constructor
+    int N, M, U, V, K;
+    Graph G;
+    double *distancesOmega1;
+    double *distancesOmega2;
+    vector<bool> visited;
+    Solution bestSolutionFound;
+    Solution currentBranch;
 
-void backtrack(Node actual, Node padre);
-void tomarParametros();
+    void backtrack(Edge*); // que arranque ya con el nodo U en el camino
+};
 
+void Backtracking_Heuristic::backtrack(Edge *e) {
+    Node fromNode = e->fromNode;
+    Node toNode = e->toNode;
+    this->currentBranch.path.push_back(toNode);
+    this->currentBranch.totalOmega1 += e->omega1;
+    this->currentBranch.totalOmega2 += e->omega2;
+    this->visited[toNode] = true;
+    
+    bool podar = ((this->currentBranch.totalOmega1 + this->distancesOmega1[toNode]) > this->K) ||
+        ((this->currentBranch.totalOmega2 + this->distancesOmega2[toNode]) >= this->bestSolutionFound.totalOmega2);
+
+    if (!podar) {
+        if (toNode == this->V) {
+            this->bestSolutionFound = currentBranch;
+        } else {
+            vector<Node> adjacent = G->getAdjacent(toNode); // se pasa por referencia
+            for (int i = 0; i < adjacent.size(); i++) {
+                Node n = adjacent[i];
+                if (!visited[n]) {
+                    Edge *f = this->G->getEdge(toNode, n);
+                    backtrack(f);
+                }
+            }
+        }
+    }
+
+    this->currentBranch.path.pop_back();
+    this->currentBranch.totalOmega1 -= e->omega1;
+    this->currentBranch.totalOmega2 -= e->omega2;
+    this->visited[toNode] = false;
+}
+
+void parseInput(Backtracking_Heuristic*);
 
 int main() {
     while (cin >> N && N) {
-        tomarParametros();
+        Backtracking_Heuristic *b;
+        parseInput(b);
         timer.setInitialTime( "todo_el_codigo" );
+
+
+
         backtrack(U, U);
         timer.setFinalTime( "todo_el_codigo" );
         timer.saveAllTimes();
         cout << mejorSolucion;
-        delete G;
     }
     return 0;
 }
 
 
-void tomarParametros() {
+void parseInput(Backtracking_Heuristic *b) {
     cin >> M >> U >> V >> K;
-    G = new Graph(N);
-    visitados = vector<bool>(N+1, false);
+    b->G = Graph(N);
+    b->visited = vector<bool>(N+1, false);
     int v1, v2;
     double w1, w2;
     for(int i = 0; i < M; i++) {
         cin >> v1 >> v2 >> w1 >> w2;
-        G->addEdge(v1, v2, w1, w2);
+        b->G->addEdge(v1, v2, w1, w2);
     }
-    mejorSolucion.sumaOmega2 = INF;
+    b->mejorSolucion.sumaOmega2 = INF;
     ramaActual.sumaOmega1 = 0;
     ramaActual.sumaOmega2 = 0;
     ramaActual.cantAristas = 0;
-}
-
-
-void backtrack(Node actual, Node padre) {
-    // primero agrego el nodo
-    ramaActual.camino.push_back(actual);
-
-    Edge *e = G->getEdge(padre, actual);
-
-    if (actual != padre) {  // me cubro del nodo inicial
-        ramaActual.sumaOmega1 += e->omega1;
-        ramaActual.sumaOmega2 += e->omega2;
-    }
-    ramaActual.cantAristas++;
-    visitados[actual] = true;
-    
-    if (ramaActual.sumaOmega1 > K) {
-        // no haces nada
-    } else if (actual == V) { 
-        if (ramaActual.sumaOmega2 < mejorSolucion.sumaOmega2)
-            mejorSolucion = ramaActual;
-    } else { // llamas a la recursion
-        vector<Node> vecinos = G->getAdjacent(actual);
-        for (int i = 0; i < vecinos.size(); i++) {
-            Node vecino = vecinos[i];
-            if (! visitados[vecino]) {
-                backtrack(vecino, actual);
-            }
-        }
-    }
-    // dejas todo como estaba, antes de retornar
-    ramaActual.camino.pop_back();
-    if (actual != padre) {
-        ramaActual.sumaOmega1 -= e->omega1;
-        ramaActual.sumaOmega2 -= e->omega2;
-    }
-    ramaActual.cantAristas--;
-    visitados[actual] = false;
 }

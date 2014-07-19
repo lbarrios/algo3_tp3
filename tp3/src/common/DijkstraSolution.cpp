@@ -6,6 +6,7 @@
 
 DijkstraSolution::DijkstraSolution(int n, int fromNode) {    
     prevNodes = new int[n];   
+    distances = new double[n];
     this->fromNode = fromNode;    
 }
 
