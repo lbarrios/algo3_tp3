@@ -1,28 +1,27 @@
+Para compilar el proyecto completo: entrar en la carpeta \texttt{src} y correr \texttt{make all}.
 
-Para compilar el proyecto completa: entrar en la carpeta src y correr make all.
+Para compilar cada una de las partes por separado: en la carpeta \texttt{src}, estan las carpetas \texttt{backtracking}, \texttt{grasp}, \texttt{greedy\_heuristic\_\{A,B,C\}} y \texttt{local\_search}. Se puede compilar cada parte de forma independiente, entrando en cada carpeta y ejecutando \texttt{make}. 
 
-Para compilar cada una de las partes por separado: en la carpeta src, estan las carpetas backtracking, grasp, greedy\_heuristic\_\{A,B,C\} y local\_search. Se puede compilar cada parte independiente, entrando en cada carpeta y ejecuenta make. 
-
-Archivo MakeFile:
+Funcionamiento de los archivos \texttt{Makefile}:
 
 \begin{itemize}
-  \item Hay un archivo Makefile.common que se usa como input para los makefile del resto de las carpetas.
+    \item Hay un archivo \texttt{Makefile.common} que se usa como input para los \texttt{Makefile} del resto de las carpetas.
   La sintaxis para incluirlo es: \texttt{include ../Makefile.common}
   
-  \item Por defecto, compila el archivo que tenga el mismo nombre de la carpeta, y busca el .cpp y el .h.
-	  Ejemplo, si estamos en la carpeta backtracking va a buscar backtracking.cpp y backtracking.h y lo compila en backtracking.
+  \item Por defecto, compila el archivo que tenga el mismo nombre de la carpeta, y busca el \texttt{.cpp} y el \texttt{.h}.
+      Por ejemplo, si estamos en la carpeta \texttt{backtracking} va a buscar \texttt{backtracking.cpp} y \texttt{backtracking.h} y lo va a compilar en \texttt{backtracking}.
 	  
-  \item Siempre va a crear una carpeta OBJS en donde guarda los archivos .o
+  \item Siempre va a crear una carpeta \texttt{OBJS} en donde guarda los archivos \texttt{.o}
   
-  \item Cuando se desean incluir archivos que se encuentren en la carpeta common, se debe anteponer COMMON\_OBJS al include:
+  \item Cuando se desean incluir archivos que se encuentren en la carpeta \texttt{common}, se debe anteponer \texttt{COMMON\_OBJS} al \texttt{include}:
   
   \begin{verbatim}
       COMMON\_OBJS := ClassName1 ClassName2
       include ../Makefile.common
   \end{verbatim}
   
-  en donde ClassName es el nombre de la clase. Ejemplo, COMMON\_OBJS := Graph Edge
+  en donde \texttt{ClassName} es el nombre de la clase. Por ejemplo, \texttt{COMMON\_OBJS := Graph Edge}
 
-  \item Pueden agregar targets específicos que deseen luego del include ../Makefile.common, tal y como harían en un Makefile normal
+  \item Se pueden agregar targets específicos que luego del \texttt{include ../Makefile.common}.
   
 \end{itemize}

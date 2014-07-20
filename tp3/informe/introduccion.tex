@@ -11,18 +11,19 @@ Donde si $w$ es una función de peso definida sobre aristas, se entiende $w(P)$ 
 
 $CACM$ es un problema conocido, y tiene muchas aplicaciones en la vida real. Una agencia de vuelos puede estar interesada en ofrecer el viaje más corto entre dos ciudades, dado un cliente con un presupuesto acotado. Los nodos representan ciudades. $u$ y $v$ son las ciudades de origen y destino, respectivamente. Una arista es un vuelo particular entre dos ciudades. El peso por $\omega_1$ es el costo del pasaje y el peso por $\omega_2$  es la duración del vuelo. Un camino es una secuencia de vuelos, es decir, un vuelo que puede o no tener escalas. K viene a ser el presupuesto del cliente. El camino buscado es entonces el que, entre todos los vuelos (con o sin escalas) entre la ciudad de origen y destino que el cliente puede pagar, tiene la menor duración.
 
-Otro ejemplo similar tiene que ver con el Mapa Interactivo de la Ciudad de Buenos Aires. Se busca llegar de un punto de la ciudad a otro en el
+Otro ejemplo similar está relacionado con el Mapa Interactivo de la Ciudad de Buenos Aires. Se busca llegar de un punto de la ciudad a otro en el
 menor tiempo, aunque se puede especificar la máxima cantidad de metros por caminar. Los nodos son alturas de calles, es decir puntos geográficos sobre alguna calle. Una arista entre dos nodos es un segmento de calle - junto con un medio de transporte - que une dos puntos geográficos. El peso por $\omega_1$ es la longitud del segmento si el medio de transporte es `caminar' y 0 si no. El peso por $\omega_2$ es el tiempo que demora recorrer el segmento usando el correspondiente medio de transporte. El valor K, especificado por el usuario, es la máxima cantidad de metros que está dispuesto a caminar. Un camino entre un punto $u$ de origen a otro punto $v$ de destino es una sucesión de segmentos recorridos con un correspondiente medio de transporte. Se busca, entre todos los caminos cuyos metros caminados totales no exceden K, el de menor duración.
 
 Un ejemplo reciente fue obtenido del \textit{MIT Technology Review}\footnote{technologyreview.com/view/528836/forget-the-shortest-route-across-a-city-new-algorithm-finds-the-most-beautiful/}. \fixme{guarda que este es maximo, explicar}
 
-Aunque $CACM$ es un problema conocido, no se conocen algoritmos polinomiales que lo resuelvan y por lo tanto pertenece al conjunto de los problemas NP. Nosotros en este TP analizaremos 6 m\'etodos para resolverlo, una soluci\'on exacta y 5 aproximaciones a trav\'es de heur\'isticas. En concreto, los algoritmos que implementaremos son: 
+Aunque $CACM$ es un problema conocido, no se conocen algoritmos polinomiales que lo resuelvan y se estima que pertenece al conjunto de problemas NP. En este trabajo se analizaran varios métodos para resolverlo: una soluci\'on exacta y 5 aproximaciones a trav\'es de heur\'isticas. En concreto, se implementarán los siguientes algoritmos:
 
 \begin{enumerate}
 \item Un \textit{Backtracking} como algoritmo exacto.
-\item Tres heur\'isticas \textit{constructivas greedy}, cada una con un criterio goloso diferente. 
+\item Una heur\'istica \textit{constructiva greedy}.
 \item Una heur\'istica de \textit{b\'usqueda local}.
 \item Una heur\'istica \textit{GRASP}.
 \end{enumerate}
 
-Nos centraremos en experimentar sobre estos algoritmos, analizando su complejidad y la calidad de las soluciones de las heur\'isticas. Tambi\'en trataremos de definir las familias de grafos para las cu\'ales las heur\'isticas implementadas funcionan muy bien, y aquellas para las cu\'ales las mismas hallan una soluci\'on muy alejada de la \'optima, o lo que es peor, que podr\'ian no hallar ninguna. 
+El enfoque estará puesto en experimentar sobre cada uno de estos algoritmos, analizando su complejidad y la calidad de las solucion en el caso de las heur\'isticas.
+Se intentará definir diferentes familias de grafos sobre los cuales poder obtener resultados concluyentes sobre el comportamiento del algoritmo.

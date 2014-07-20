@@ -1,56 +1,50 @@
 \subsubsection{Descripción}
 
-Debido a la dificultad computacional del problema, no existe a\'un una soluci\'on exacta de tiempo polinomial, y a pesar de que nos entretuvimos
-discutiendo, nosotros no pudimos encontrarla tampoco. En su defecto implementamos un algoritmo de backtracking que recorre todos los caminos
-posibles de $u$ a $v$ y se queda con el de menor $\omega_2$ tal que $\omega_1 \leq K$. 
+El algoritmo a cada paso tiene un camino $P = [v_1 = u, \dots, v_{i-1}]$ e intenta agregar al camino un nuevo nodo $v_i$ de la adyacencia de $v_{i-1}$, hasta que llega al nodo destino $V$. De esta forma recorre todos los caminos entre $U$ y $V$. De entre todos los caminos tales que el peso por $\omega_1$ es menor o igual a K, se guarda el de menor $\omega_2$.
 
-El algoritmo funciona de la siguiente manera: en un momento dado va a tener construido un camino $P = [v_1 = u, \dots, v_{i-1}]$, y toma un nodo
-$v_i$ aun no visitado de la adyacencia de $v_{i-1}$, lo marca como visitado y lo agrega a $P$. Si $\omega_1(P)$ se pasa de $K$, este camino ya no
-nos sirve y no sigo avanzando en la recursión. Caso contrario, se llama a la recursión sobre el camino aumentado.
+Se implementaron las siguientes podas:
 
-En el caso en que $v_i$ = $v$, sabemos que tenemos una solución candidata. Comparamos $\omega_2(P)$ con el menor $\omega_2$ entre las soluciones
-candidatas, y si es mejor solución, se guarda. Cuando hemos llegado a $v$ no hace falta llamar a la recursión.
+\begin{itemize}
+    \item Se exploran solamente caminos simples. Si un camino tiene ciclos, removiéndolo se obtiene uno con menor longitud tanto en $\omega_1$ como en $\omega_2$. Por lo tanto la solución que buscamos no puede tener ciclos, y nos restringimos a caminos simples. La poda se implementó guardando un arreglo que marca para cada nodo si es parte del camino o no. No se agrega nuevamente si ya es parte del camino.
+    \item Si el camino parcial $P = [v_1 = u, \dots, v_{i-1}]$ cumple:
 
-Siempre antes de retornar tras explorar un nodo de un camino, se lo marca como no visitado, para que pueda ser recorrido en otros caminos que se
-recorran.
+        $omega_1(P)$, sumado a la distancia según $\omega_1$ entre $v_{i-1}$ y $V$, es mayor que $K$
 
-A continuaci\'on, escribimos el pseudoc\'odigo de la funci\'on \texttt{main}.
+entonces se abandona la rama, es decir, no se recorren los caminos que empiezan en $P$, ya que cualquiera de éstos no va a cumplir con la restricción de que $omega_1$ sea menor o igual a $K$.
+    \item Si el camino parcial $P = [v_1 = u, \dots, v_{i-1}]$ cumple:
+
+        $omega_2(P)$, sumado a la distancia según $\omega_2$ entre $v_{i-1}$ y $V$, es mayor o igual que el peso según $\omega_2$ del mejor camino encontrado hasta el momento
+
+entonces se abandona la rama, es decir, no se recorren los caminos que empiezan en $P$, ya que cualquiera de éstos no va a proporcionar una solución mejor que la ya encontrada.
+\end{itemize}
+
+A continuaci\'on, detallamos el pseudoc\'odigo de la funci\'on \texttt{backtrack}.
+
 \begin{algorithm}[H]
-\caption{$main$()}
+    \caption{\texttt{backtrack}(Edge e)}
 \begin{algorithmic}[1]
-  \State Camino mejorSolucion
-  \State $\omega_2$(mejorSolucion) $\leftarrow$ $\infty$
-  \State Camino ramaActual $\leftarrow$ []
-  \For{i \textbf{en} 1 \textbf{a} n}
-    \State visitados[i] = False
-  \EndFor
-  \State backtrack( u, null )
-  \If{$\omega_2$(mejorSolucion) $<$ $\infty$}
-    \State imprimir(mejorSolucion)
+  \State Node n $\leftarrow$ e.toNode
+  \State currentBranch.path.push\_back(n)
+  \State currentBranch.totalOmega1 += e.omega1
+  \State currentBranch.totalOmega2 += e.omega2
+  \State visited[n] $\leftarrow$ true
+  \State podar $\leftarrow$ currentBranch.totalOmega1 + distanceToVOmega1[n] $>$ K \textbf{or} currentBranch.totalOmega2 + distanceToVOmega2[n] $\geq$ bestSolutionFound.totalOmega2
+  \If{\textbf{not} podar}
+  \If{n = V}
+      \State bestSolutionFound $\leftarrow$ currentBranch
   \Else{}
-    \State imprimir("no")
-  \EndIf
-\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}[H]
-\caption{$backtrack$(Nodo actual, Nodo padre)}
-\begin{algorithmic}[1]
-  \State ramaActual.push( actual )
-  \State visitados[actual] $\leftarrow$ true
-  \If{$\omega_1$(ramaActual) $< K$}
-    \If{actual = v \textbf{and} $\omega_2$(ramaActual) $< \omega_2$(mejorSolucion)} 
-      \State mejorSolucion $\leftarrow$ ramaActual
-      \ElsIf{actual $\neq$ v \textbf{and} $\omega_1$(ramaActual) $\leq$ K}
-      \For{\textbf{cada} Nodo n \textbf{en} adyacentes( actual ) }
-	\If{\textbf{no} visitado[n] }
-	  \State backtrack( n, actual )
+      \For{\textbf{each} Node a \textbf{in} adjacencyList[n] }
+	\If{\textbf{not} visited[a] }
+          \State Edge f = incidencyMatrix[n][a]
+          \State backtrack(f)
 	\EndIf
       \EndFor
-    \EndIf
   \EndIf
-  \State ramaActual.pop( actual )
-  \State visitados[actual] $\leftarrow$ false
+  \EndIf
+  \State currentBranch.path.pop\_back(n)
+  \State currentBranch.totalOmega1 -= e.omega1
+  \State currentBranch.totalOmega2 -= e.omega2
+  \State visited[n] $\leftarrow$ false
 \end{algorithmic}
 \end{algorithm}
 
