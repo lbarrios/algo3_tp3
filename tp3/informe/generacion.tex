@@ -1,0 +1,37 @@
+Se generaron dos familias principales de instancias de CACM:
+
+\begin{itemize}
+    \item Instancia \textit{`aleatoria'}
+El objetivo fue generar una instancia desconocida, de la que no se pueda suponer nada. Se uso esta instancia principalmente para medir complejidad.
+
+Se tomó un valor fijo de cota para todos los parametros, llamado $C$.
+
+\begin{itemize}
+    \item $n$ se eligió uniformemente entre $\left\{{1, ..., C}\right\}$.
+    \item $k$ se eligió uniformemente entre $\left\{{1, ..., C}\right\}$.
+    \item $u$ se eligió uniformemente entre $\left\{{1, ..., n}\right\}$.
+    \item $v$ se eligió uniformemente entre $\left\{{1, ..., n}\right\}$.
+    \item $m$ se eligió uniformemente entre $\left\{{0, ..., \frac{n(n-1)}{2}}\right\}$.
+    \item Para cada arista se eligieron como extremos dos enteros uniformente entre $\left\{{1, ..., n}\right\}$ (si los nodos correspondientes ya eran adyacentes, se vuelve a elegir). Los pesos según $\omega_1$ y $\omega_2$ se eligieron como valores de punto flotante uniformemente en el intervalo $(0, C]$.
+\end{itemize}
+Observación: $C$ depende del algoritmo para el que haya sido generada la instancia. Por ejemplo, para el \textit{backtracking} no tiene sentido usar $C > 30$, pues el tiempo de ejecución puede llegar a ser demasiado grande.
+
+    \item Instancia \textit{`mágica'}
+
+Estas instancias fueron generadas para la medición de calidad de las heurísticas. Se conoce de antemano el valor de la solución óptima, lo que en instancias generales solo se podría saber corriendo un algoritmo exacto, que puede tardar mucho en grafos grandes. Además se pretende que el peso de las aristas esté \textit{balanceado}, es decir, a pesos bajos por $\omega_1$ correspondan pesos altos por $\omega_2$, y al revés.
+\end{itemize}
+
+Para cada familia de instancias, se consideraron tres subfamilias:
+
+\begin{itemize}
+    \item \textit{Densidad baja}
+
+    La cantidad de aristas se definió de antemano como $3n$, es decir, $O(n)$.
+    \item \textit{Densidad media}
+
+    La cantidad de aristas se definió de antemano como $n\sqrt{n}$, es decir, $O(n\sqrt{n})$.
+    \item \textit{Densidad alta}
+
+    La cantidad de aristas se definió de antemano como la máxima: $\frac{n(n-1)}{2}$ es decir, $O(n^2)$.
+\end{itemize}
+

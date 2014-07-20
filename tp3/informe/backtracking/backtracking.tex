@@ -18,7 +18,7 @@ entonces se abandona la rama, es decir, no se recorren los caminos que empiezan 
 entonces se abandona la rama, es decir, no se recorren los caminos que empiezan en $P$, ya que cualquiera de éstos no va a proporcionar una solución mejor que la ya encontrada.
 \end{itemize}
 
-A continuaci\'on, detallamos el pseudoc\'odigo de la funci\'on \texttt{backtrack}.
+A continuaci\'on, el pseudoc\'odigo de la funci\'on \texttt{backtrack}.
 
 \begin{algorithm}[H]
     \caption{\texttt{backtrack}(Edge e)}
@@ -50,18 +50,19 @@ A continuaci\'on, detallamos el pseudoc\'odigo de la funci\'on \texttt{backtrack
 
 \subsubsection{Complejidad}
 
-Analicemos cuantas llamadas se hacen a $backtrack$. Se exploran caminos de a los sumo $n$ nodos. El primer nodo está fijo en $u$. El segundo nodo
-pertenece a la adyacencia del primero, que en peor caso tiene tamaño $n - 1$. El tercero pertenece a la adyacencia del segundo, que no hayan sido
-visitados, cuyo tamaño es a lo sumo $n - 2$. Y asi sucesivamente. En peor caso se llama a $backtrack$ $n!$ veces.
-
-Analicemos el cómputo que se realiza en cada llamada a $backtrack$. Preguntar si un nodo está visitado es acceder a un arreglo en forma constante.
-El costo de una función de peso asociada a un camino se va acumulando a medida que se agregan nodos. El costo se guarda y se puede acceder en
-forma constante. Lo queda por estudiar es la complejidad del ciclo $for$ que recorre la adyacencia del nodo visitado. Guardamos una lista de
-adyacencia por lo que podemos recorrer la adyacencia de cualquier nodo con complejidad lineal en relación a su tamaño. El tamaño de la adyacencia
-es a lo sumo $m$. Para cada nodo adyacente se efectúan operaciones constantes, a excepción de las llamadas a $backtrack$. El costo de estas
-llamadas lo estamos calculando por separado.
-
-En definitiva hacemos $O(n!)$ llamadas a una función que de por si toma $O(m)$ operaciones. La complejidad del algoritmo es $O(m*n!)$.
+\fixme{hacer, te tiene que dar (n+1)!}
+%Analicemos cuantas llamadas se hacen a $backtrack$. Se exploran caminos de a los sumo $n$ nodos. El primer nodo está fijo en $u$. El segundo nodo
+%pertenece a la adyacencia del primero, que en peor caso tiene tamaño $n - 1$. El tercero pertenece a la adyacencia del segundo, que no hayan sido
+%visitados, cuyo tamaño es a lo sumo $n - 2$. Y asi sucesivamente. En peor caso se llama a $backtrack$ $n!$ veces.
+%
+%Analicemos el cómputo que se realiza en cada llamada a $backtrack$. Preguntar si un nodo está visitado es acceder a un arreglo en forma constante.
+%El costo de una función de peso asociada a un camino se va acumulando a medida que se agregan nodos. El costo se guarda y se puede acceder en
+%forma constante. Lo queda por estudiar es la complejidad del ciclo $for$ que recorre la adyacencia del nodo visitado. Guardamos una lista de
+%adyacencia por lo que podemos recorrer la adyacencia de cualquier nodo con complejidad lineal en relación a su tamaño. El tamaño de la adyacencia
+%es a lo sumo $m$. Para cada nodo adyacente se efectúan operaciones constantes, a excepción de las llamadas a $backtrack$. El costo de estas
+%llamadas lo estamos calculando por separado.
+%
+%En definitiva hacemos $O(n!)$ llamadas a una función que de por si toma $O(m)$ operaciones. La complejidad del algoritmo es $O(m*n!)$.
 
 \subsubsection{Experimentación}
 
