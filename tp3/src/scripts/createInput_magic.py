@@ -11,10 +11,11 @@ if len(sys.argv) < 4:
 instanceCount = int(sys.argv[1])
 N = int(sys.argv[2])
 M = int(sys.argv[3])
+if M < N-1:
+    raise Exception("M debe ser por lo menos N-1 para hacer el camino inicial")
 U = 1
 V = N
 K = (N-1)
-DEVIATION = N*7
 
 print "Se llamo a script con parametros:"
 print "createInput_magic instanceCount: %d n:%d m%d" % (instanceCount, N, M)
@@ -23,13 +24,20 @@ fo = open("../input/magic_x%d_n%d_m%d_k%d.txt" % (instanceCount, N, M, K), "wb")
 header = "%d %d %d %d %d\n" % (N, M, U, V, K)
 print header
 
-adjacent = []
-for i in range(N):
-    adjacent.append([i])  # para que no haya loops
 
-for r in range(0, instanceCount):
+for r in range(instanceCount):
     fo.write(header)
-    addedEdges = 0
+
+    adjacent = []
+    for i in range(N):
+        adjacent.append([i])  # para que no haya loops
+
+    for i in range(N-1):
+        adjacent[i].append(i+1)
+        debugEdge = "%d %d %d %d\n" % (i+1, i+2, 1, 1)
+        fo.write(debugEdge)
+
+    addedEdges = N-1
     while (addedEdges < M):
         fromNode = randint(0, N-1)
         toNode = randint(0, N-1)
@@ -37,6 +45,8 @@ for r in range(0, instanceCount):
         try:
             adjacent[fromNode].index(toNode)
         except:
+            adjacent[fromNode].append(toNode)
+            adjacent[toNode].append(fromNode)
             fromNode += 1  # corrijo para la indexacion empezando en 1 
             toNode += 1
             diff = toNode - fromNode

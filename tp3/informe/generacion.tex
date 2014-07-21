@@ -18,8 +18,24 @@ Observación: $C$ depende del algoritmo para el que haya sido generada la instan
 
     \item Instancia \textit{`mágica'}
 
-Estas instancias fueron generadas para la medición de calidad de las heurísticas. Se conoce de antemano el valor de la solución óptima, lo que en instancias generales solo se podría saber corriendo un algoritmo exacto, que puede tardar mucho en grafos grandes. Además se pretende que el peso de las aristas esté \textit{balanceado}, es decir, a pesos bajos por $\omega_1$ correspondan pesos altos por $\omega_2$, y al revés.
+Estas instancias fueron generadas para la medición de calidad de las heurísticas. Se conoce de antemano el valor de la solución óptima, lo que en instancias generales solo se podría saber corriendo un algoritmo exacto, que puede tardar mucho en grafos grandes. Además se pretende que el peso de las aristas esté \textit{balanceado}, es decir, a pesos bajos por $\omega_1$ correspondan pesos altos por $\omega_2$, y a la inversa.
+
+\begin{itemize}
+    \item $n$ es elegida como parámetro.
+    \item $k$ vale $n-1$.
+    \item $u$ vale 1.
+    \item $v$ vale $n$.
+    \item $m$ se eligió uniformemente entre $\left\{{n-1, ..., \frac{n(n-1)}{2}}\right\}$.
+    \item primero se agregan las siguientes $n-1$ aristas: (1, 2), (2, 3), ..., ($n-1$, $n$) formando un camino hamiltoniano entre $u$ y $v$. Los pesos de estas aristas, según tanto $\omega_1$ como $\omega_2$, van a ser 1. De esta forma generamos un camino $I$ válido, ya que $\omega_1(I)$ vale $n-1 \leq k$.
+    \item Para las aristas que quedan se eligen como extremos dos enteros $a$, $b$ uniformente entre $\left\{{1, ..., n}\right\}$ (si los nodos correspondientes ya eran adyacentes, se vuelve a elegir). El peso va a guardar relación con $|b-a|$, valor que denotaremos \textit{diff}.
 \end{itemize}
+\end{itemize}
+
+El peso según $\omega_1$ va a ser generado de manera uniforme entre $\left\{{0, ..., 2*diff}\right\}$. De esta forma la esperanza del peso va a ser \textit{diff}. El peso según $\omega_2$ va a valer 2*\textit{diff} menos el peso según $\omega_2$. De esta forma la esperanza de este peso también va a valer \textit{diff}. Así quedan balanceados los dos pesos simétricamente alrededor de \textit{diff}. Por ejemplo, si tenemos la arista (1, 9), \textit{diff} vale 8. Si $\omega_1$ resulta 6, entonces $\omega_2$ lo fijamos en 10.
+
+Sea $P$ un camino, entonces la esperanza de su peso - tanto por $\omega_1$ como por $\omega_2$ - es la sumatoria de las esperanzas de las aristas que lo constituyen. Es la sumatoria del \textit{diff} de cada arista. Los caminos que nos interesan van de $u$ a $v$. Cualquier camino de 1 a $n$  va a tener una suma de \textit{diff} mayor o igual a $n-1$, ya que por cada unidad que uno avanza entre 1 y $n$ utilizando una arista, la arista suma 1 a su \textit{diff}. Como se deben avanzar $n-1$ unidades, entonces la sumatoria de los \textit{diff} va a ser mayor o igual a $n-1$.
+
+Lo importante es que el centro de simetría de los pesos de $P$ - la sumatoria de los \textit{diff} - va a ser mayor o igual que $n-1$. Luego, si $\omega_2(P)$ $<$ $n-1$, entonces $\omega_1(P)$ = 2 * sumatoria(\textit{diff}) - $\omega_2(P)$ $>$ $n-1$. Por lo tanto no sería un camino válido pues se excedería del valor de $k$. Entonces el camino óptimo tiene $\omega_2$ $\geq$ $n-1$. El camino $I$ (válido) definido previamente es, entonces, uno de los caminos óptimos. En la familia de grafos \textit{magica} sabemos luego que el camino óptimo tiene $\omega_1$ = $n-1$.
 
 Para cada familia de instancias, se consideraron tres subfamilias:
 
@@ -34,4 +50,3 @@ Para cada familia de instancias, se consideraron tres subfamilias:
 
     La cantidad de aristas se definió de antemano como la máxima: $\frac{n(n-1)}{2}$ es decir, $O(n^2)$.
 \end{itemize}
-
