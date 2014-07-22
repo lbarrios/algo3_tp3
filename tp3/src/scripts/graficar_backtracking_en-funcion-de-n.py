@@ -21,13 +21,14 @@ for f in files:
   filename = f.split("/")[-1]
   testname = filename.split("_")[0]
   (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
-  testsize = n+m
+  #testsize = n+m
+  testsize = m
   print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
   for line in file:
     testtype = line.split()[0]
     value = line.split()[1]
     x = int(testsize)
-    if x < 40: continue  # esto es muy arbitrario 
+    #if x < 40: continue  # esto es muy arbitrario 
     y = int(value)
     tests[testname][testtype][x].append(y)
   file.close()
@@ -69,8 +70,8 @@ subplot.yaxis.set_major_formatter(formatter)
 # Aplico formato
 plt.grid(True)
 plt.title("Backtracking")
-plt.ylabel(u'Tiempo de ejecución')
-plt.xlabel(u'Tamaño de entrada (n + m)')
+plt.ylabel(u'Tiempo de ejecución (s)')
+plt.xlabel('m')
 
 """
 linestyle or ls [ ‘-‘ | ‘--’ | '.' | ‘-.’ | ‘:’ | ‘steps’ | ...]
@@ -91,6 +92,7 @@ for test_number in range(0,t_names):
 # ploteo cota teórica
 #subplot.plot(x, ((x*x)*22)/float(1e9),    '--', color='black', linewidth=2, label="$c.x^2$")
 plt.legend(loc=2)
+plt.yscale('log')
 plt.tight_layout()  # para que entren las labels
 
 #plt.show()

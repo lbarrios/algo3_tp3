@@ -18,20 +18,17 @@ if len(sys.argv) > 1:
             if len(sys.argv) > 4:
                 K = int(sys.argv[4])
 
-print "Se llamo a script con parametros:"
-print "createInput_random instanceCount: %d n:%d m:%d k:%d" % (instanceCount, N, M, K)
 
 if instanceCount == -1:
     instanceCount = 1
 if N == -1:
     N = 20
 if M == -1:
-    M = randint(N-1, N*(N-1)/2)  # vamos a hacerlo conexo
-elif M < N - 1:
-    raise Exception("M debe ser al menos N-1, para que sea conexo")
+    M = randint(0, N*(N-1)/2)
 if K == -1:
     K = randint(N, N * M)  # pensar
 
+#print "createInput_random instanceCount: %d n:%d m:%d k:%d" % (instanceCount, N, M, K)
 fo = open("../input/random_x%d_n%d_m%d_k%d.txt" % (instanceCount, N, M, K), "wb")
 
 for r in range(0, instanceCount):
@@ -41,18 +38,23 @@ for r in range(0, instanceCount):
         V = randint(1, N)
     
     header = "%d %d %d %d %d\n" % (N, M, U, V, K)
-    print header
+    #print header
     fo.write(header)
 
     # escribo los ejes
     neighbours = []
-    # voy a armar el circuito c_n
-    for i in range(N-1):
-        fo.write("%d %d %d %d\n" % (i+1, i+2, K/N, K/N))
-        neighbours.append([i+1])
-    neighbours.append([])
+    for i in range(N):
+        neighbours.append([])
 
-    added = N - 1
+
+    ## voy a armar el circuito c_n
+    #for i in range(N-1):
+    #    fo.write("%d %d %d %d\n" % (i+1, i+2, K/N, K/N))
+    #    neighbours.append([i+1])
+    #neighbours.append([])
+
+    #added = N - 1
+    added = 0
     while added < M:
         i = randint(1, N)
         j = i
@@ -64,7 +66,7 @@ for r in range(0, instanceCount):
             w1 = randint(K/(N*2), 2*K/N)  # la media es K/N
             w2 = randint(1, 2*K/N)
             debugEdge = "%d %d %d %d\n" % (i, j, w1, w2)
-            print debugEdge
+            #print debugEdge
             fo.write(debugEdge)
             neighbours[i-1].append(j-1)
             neighbours[j-1].append(i-1)

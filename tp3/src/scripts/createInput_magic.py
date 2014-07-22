@@ -5,24 +5,24 @@ import sys
 from random import randint
 import math
 
-if len(sys.argv) < 4:
-    raise Exception("parametros obligatorios: instanceCount, N, M")
+#if len(sys.argv) < 4:
+    #raise Exception("parametros obligatorios: instanceCount, N, M")
 
 instanceCount = int(sys.argv[1])
 N = int(sys.argv[2])
-M = int(sys.argv[3])
+#M = int(sys.argv[3])
+M = randint(N-1, (N*(N-1)/2))
 if M < N-1:
     raise Exception("M debe ser por lo menos N-1 para hacer el camino inicial")
 U = 1
 V = N
 K = (N-1)
 
-print "Se llamo a script con parametros:"
-print "createInput_magic instanceCount: %d n:%d m%d" % (instanceCount, N, M)
+#print "createInput_magic instanceCount: %d n:%d m%d" % (instanceCount, N, M)
 fo = open("../input/magic_x%d_n%d_m%d_k%d.txt" % (instanceCount, N, M, K), "wb")
 
 header = "%d %d %d %d %d\n" % (N, M, U, V, K)
-print header
+#print header
 
 
 for r in range(instanceCount):
