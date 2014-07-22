@@ -5,15 +5,16 @@ Un algoritmo goloso usa una heur\'istica que consiste en elegir, en cada paso, u
 De acuerdo a la definici\'on de Brassard\footnote{\label{Brassard}Brassard G., Bratley P., {\it Fundamental of Algorithmics}, Prentice Hall, 1996. (c)}, un algoritmo goloso se compone de los siguientes elementos: 
 
 \begin{enumerate}
+ \item Un concepto de candidato, y una estructura de solución a partir de candidatos.
  \item Un conjunto de candidatos que ya han sido considerados y seleccionados. 
- \item Un conjunto de candidatos considerado y rechazados. 
+ \item Un conjunto de candidatos considerados y rechazados. 
  \item Una funci\'on que comprueba si cierto conjunto de candidatos constituye una soluci\'on a nuestro problema, ignorando si es o no \'optima por el momento. 
- \item Una funci\'on de factibilidad, que me dice si es posible o no completar el conjunto a\~nadiendo otros candidatos para obtener al menos una soluci\'on de nuestro problema. 
+ \item Una funci\'on de factibilidad, que determina si es o no posible completar el conjunto a\~nadiendo otros candidatos para obtener al menos una soluci\'on de nuestro problema. 
  \item Una funci\'on selecci\'on que indica en cualquier momento cu\'al es el m\'as prometedor de los candidatos restantes, que no han sido seleccionados ni rechazados. 
  \item Una funci\'on objetivo, que da el valor de la soluci\'on que hemos hallado. 
 \end{enumerate}
 
-Lo que busca el algoritmo goloso es encontrar el conjunto de candidatos que constituya una soluci\'on, y que optimice el valor de la funci\'on objetivo. Este algoritmo avanza paso a paso. Inicialmente, el conjunto de elementos seleccionados est\'a vac\'io. Entonces, en cada paso se considera a\~nadir a este conjunto el mejor candidato sin coniderar los restantes, de acuerdo a nuestra funci\'on selecci\'on. Si el conjunto ampliado de candidato seleccionados ya no fuera factible, rechazamo el candidato que estamos considerando en ese momento. Sin embargo, si el conjunto aumentado sigue siendo factible, entonces a\~nadimos el candidato actual al conjunto de candidatos selecccionados, en donde pasar\'a a estar desde ahora en adelante. Cada vez que se ampl\'ia el conjunto de candidatos seleccionados, comprobamos si \'este constituye ahora una soluci\'on para nuestro problema. A partir de este esquema, al agregar siempre subsoluciones \'optimas a mi conjunto, al finalizar lo que se espera encontrar es la soluci\'
+Lo que busca el algoritmo goloso es encontrar la secuencia de candidatos que constituya una soluci\'on, y que optimice el valor de la funci\'on objetivo. Este algoritmo avanza paso a paso. Inicialmente, el conjunto de elementos seleccionados est\'a vac\'io. Entonces, en cada paso se considera a\~nadir a este conjunto el mejor candidato sin coniderar los restantes, de acuerdo a nuestra funci\'on selecci\'on. Si el conjunto ampliado de candidato seleccionados ya no fuera factible, rechazamo el candidato que estamos considerando en ese momento. Sin embargo, si el conjunto aumentado sigue siendo factible, entonces a\~nadimos el candidato actual al conjunto de candidatos selecccionados, en donde pasar\'a a estar desde ahora en adelante. Cada vez que se ampl\'ia el conjunto de candidatos seleccionados, comprobamos si \'este constituye ahora una soluci\'on para nuestro problema. A partir de este esquema, al agregar siempre subsoluciones \'optimas a mi conjunto, al finalizar lo que se espera encontrar es la soluci\'
 on \'optima. 
 
 El algoritmo de Dijsktra para encontrar caminos m\'inimos en un grafo pesado es un algoritmo goloso, que funciona y es correcto, como lo fue demostrado por Bassard en el libro mencionado.
