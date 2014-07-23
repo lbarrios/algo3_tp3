@@ -2,7 +2,7 @@ Se generaron dos familias principales de instancias de CACM:
 
 \begin{itemize}
     \item Instancia \textit{`aleatoria'}
-El objetivo fue generar una instancia desconocida, de la que no se pueda suponer nada. Se uso esta instancia principalmente para medir complejidad.
+El objetivo fue generar una instancia de la que no se pueda suponer nada, para evitar cualquier tipo de sesgo.
 
 Se tomó un valor fijo de cota para todos los parametros, llamado $C$.
 
@@ -37,6 +37,18 @@ Sea $P$ un camino, entonces la esperanza de su peso - tanto por $\omega_1$ como 
 
 Lo importante es que el centro de simetría de los pesos de $P$ - la sumatoria de los \textit{diff} - va a ser mayor o igual que $n-1$. Luego, si $\omega_2(P)$ $<$ $n-1$, entonces $\omega_1(P)$ = 2 * sumatoria(\textit{diff}) - $\omega_2(P)$ $>$ $n-1$. Por lo tanto no sería un camino válido pues se excedería del valor de $k$. Entonces el camino óptimo tiene $\omega_2$ $\geq$ $n-1$. El camino $I$ (válido) definido previamente es, entonces, uno de los caminos óptimos. En la familia de grafos \textit{magica} sabemos luego que el camino óptimo tiene $\omega_1$ = $n-1$.
 
+Otra ventaja de generar grafos de esta forma es que permite una gran cantidad de caminos alternativos para llegar de $u$ a $v$. Se espera que estos nodos sean los más alejados entre si en todo el grafo, ya que para llegar de 1 a $n$ las aristas del camino van a tener una sumatoria de \textit{diff} - que es la esperanza de la longitud del camino - de por lo menos $n-1$. La esperanza de distancia para cualquier camino entre el nodo 1 y el nodo $n/2$, por ejemplo, es mayor a $n/2 - 1$.
+
+Si uno forma un camino entre 1 y $n$ como secuencia creciente de vértices, éste tiene esperanza de peso $n-1$. Por ejemplo:
+\begin{itemize}
+    \item 1 $\rightarrow$ n     \hspace{2cm}La esperanza de peso es $n-1$
+    \item 1 $\rightarrow$ n/2 $\rightarrow$ n   \hspace{0.5cm}     La esperanza de peso es $(n/2 -1) + (n/2) = n-1$
+    \item 1 $\rightarrow$ 7 $\rightarrow$ n    \hspace{1cm}    La esperanza de peso es $(6 + (n - 7) = n-1$
+\end{itemize}
+
+Entonces todos las secuencias crecientes de vertices que empiezan en 1 y terminan en $n$ van a ser candidatos a ser el camino óptimo, ya que todos tienen la esperanza de peso - tanto por $\omega_1$ como por $\omega_2$ - alrededor de $n-1$, que es el valor de $k$. Esto permite un análisis más interesante de la calidad de las distintas heurísticas.
+
+\newpage
 Para cada familia de instancias, se consideraron tres subfamilias:
 
 \begin{itemize}
