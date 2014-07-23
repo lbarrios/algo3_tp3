@@ -18,6 +18,8 @@ entonces se abandona la rama, es decir, no se recorren los caminos que empiezan 
 entonces se abandona la rama, es decir, no se recorren los caminos que empiezan en $P$, ya que cualquiera de éstos no va a proporcionar una solución mejor que la ya encontrada.
 \end{itemize}
 
+Para saber las distancias entre todos los vértices y $v$, al principio se corre dos veces Dijkstra, utilizando como peso primero $\omega_1$ y luego $\omega_2$.
+
 A continuaci\'on, el pseudoc\'odigo de la funci\'on \texttt{backtrack}.
 
 \begin{algorithm}[H]
@@ -64,19 +66,14 @@ A continuaci\'on, el pseudoc\'odigo de la funci\'on \texttt{backtrack}.
 %
 %En definitiva hacemos $O(n!)$ llamadas a una función que de por si toma $O(m)$ operaciones. La complejidad del algoritmo es $O(m*n!)$.
 
+\newpage
 \subsubsection{Experimentación}
 
-\fixme{hacer}
-%Generamos en primera instancia grafos con una cantidad de nodos pequeña - entre 3 y 15. La cantidad de aristas, es decir, la densidad del grafo,
-%se eligió aleatoriamente entre 0 y (n * (n - 1)) / 2, la cantidad máxima posible. La distribución de las aristas, sus pesos, y el valor de $k$
-%también se eligieron de forma aleatoria.
-%
-%A continuación presentamos los tiempos de ejecución de nuestro algoritmo frente a estas instancias. 
-%
-%\includepdf[pages={1}]{imagenes/backtracking-aleatorio.pdf}
-%
-%Para tamaños de grafo menores que 40, los tiempos de ejecución fueron despreciables. Se puede apreciar el carácter exponencial del tiempo de
-%ejecución de nuestro algoritmo en función del tamaño de entrada.
+Se efectuó una experimentación sobre el tiempo de ejecución del algoritmo. Primero se evaluó sobre instancias \textit{aleatorias}, de distinto tamaño de entrada. Se obtuvieron dos conclusiones importantes.
+
+Primero, la curva que se puede observar representa una función que crece cada vez más rápido, es decir que no es lineal. Al mismo tiempo, no parece crecer tan rápido como la función factorial que expresa la complejidad teórica del algoritmo.
+
+Segundo, hay mucha amplitud de valores para tamaños de entrada similares. Esto puede deberse a la naturaleza aleatoria de la instancia. Los nodos de origen y destino pueden estar muy cerca o muy lejos, puede haber muchos o pocos caminos entre ellos.
 
 \begin{figure}[H]
     \begin{center}
@@ -85,29 +82,42 @@ A continuaci\'on, el pseudoc\'odigo de la funci\'on \texttt{backtrack}.
     \end{center}
 \end{figure}
 
+\newpage
+A continuación evaluamos el comportamiento del algoritmo frente a instancias \textit{mágicas}. Se notaron grandes diferencias con la experimentación anterior.
+
+Como primera impresión, se puede observar una curva que parece ser la característica de las funciones factoriales. Los tiempos de ejecución fueron mucho mayores que frente a instancias \textit{aleatorias}. Para los mismos tamaños de entrada, en las últimas no se llegó a tiempos de 1 milisegundo, mientras que en las primeras se superó ampliamente el segundo.
+
+La explicación que se encuentra, según lo desarrollado en la sección de \textit{Generación de instancias}, es que las instancias \textit{mágicas} proveen una gran cantidad de caminos entre $u$ y $v$ que son candidatos a ser el óptimo. Mientras que las instancias \textit{aleatorias} no garantizan ni la lejanía de $u$ y $v$ ni una gran cantidad de caminos candidatos a ser el óptimo. Probablemente una vez que se encuentre el camino las otras ramas de solución se puedan descartar rápidamete.
+
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=\textwidth]{imagenes/backtracking-complejidad-general.pdf}
-        \caption{Tiempo de ejecución de \texttt{backtracking} en instancias \textit{magicas}}
+        \caption{Tiempo de ejecución de \texttt{backtracking} en instancias \textit{mágicas}}
     \end{center}
 \end{figure}
+
+\newpage
+Se quiso investigar la performance del algoritmo en relación a $n$, la cantidad de nodos.
+
+Para ello se generaron instancias \textit{mágicas} de distintos valores de $n$, y con $m$ fijo en la mitad de las aristas posibles, es decir $\frac{n(n-1)}{4}$.
+
+Para ver la magnitud de los valores fue apropiada una escala logarítmica. Se puede percibir una muy ligera concavidad positiva de la curva, lo que vendría a indicar que la función crece más rápido que una exponencial(en escala logarítmica toda recta con pendiente $m$ representa la función $m^x$). Con estos resultados se añade evidencia al cálculo de complejidad efectuado, que indica una complejidad factorial en función de $n$.
 
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=\textwidth]{imagenes/backtracking-complejidad-funcion-de-n.pdf}
-        \caption{Tiempo de ejecución de \texttt{backtracking} en instancias \textit{magicas}, en función de \textit{n}}
+        \caption{Tiempo de ejecución de \texttt{backtracking} en instancias \textit{mágicas}, en función de \textit{n}}
     \end{center}
 \end{figure}
 
-aca m valio siempre la mitad del maximo, o sea n(n-1)/4
+\newpage
+A continuación se exploró el comportamiento del algoritmo en función de $m$, la cantidad de aristas. El valor de $n$ estuvo fijo en 25 y la cantidad de aristas se varió entre $n-1$ y la máxima cantidad para un grafo de 25 vertices.
+
+Nuevamente con escala logarítmica, se observó un gran crecimiento en el tiempo de ejecución a medida que se aumenta $m$. Ésto era predecible ya que se aumenta el tamaño de la adyacencia de los vértices y por lo tanto la cantidad de iteraciones del ciclo en el algoritmo. A más alto nivel, la cantidad de caminos entre $u$ y $v$ tiende a aumentar. Sin embargo, la curva observada tiene concavidad negativa, por lo que representa a una función que crece más lento que una exponencial.
 
 \begin{figure}[H]
     \begin{center}
         \includegraphics[width=\textwidth]{imagenes/backtracking-complejidad-funcion-de-m.pdf}
-        \caption{Tiempo de ejecución de \texttt{backtracking} en instancias \textit{magicas}, en función de \textit{m}}
+        \caption{Tiempo de ejecución de \texttt{backtracking} en instancias \textit{mágicas}, en función de \textit{m}}
     \end{center}
 \end{figure}
-
-\includepdf[pages={1}]{imagenes/backtracking-complejidad-funcion-de-m.pdf}
-
-se tomo n = 25, y se varió desde el mínimo de este grafo (n-1) hasta el completo
