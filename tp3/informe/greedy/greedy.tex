@@ -1,6 +1,7 @@
 \subsubsection{Descripción}
 
-Un algoritmo goloso usa una heur\'istica que consiste en elegir, en cada paso, una soluci\'on \'optima local entre un conjunto de opciones, esperando encontrar al final la soluci\'on \'optima global. En general estos algoritmos son eficientes y simples de dise\~nar e implementar, pero puede ser que nunca lleguen a la soluci\'on \'optima del problema. 
+Frente a un problema, un algoritmo goloso va armando la solución global usando la heurística de eligir a cada paso la solución óptima local.
+En general estos algoritmos son eficientes y simples de dise\~nar e implementar, pero puede ser que nunca lleguen a la soluci\'on \'optima global del problema. 
 
 De acuerdo a la definici\'on de Brassard\footnote{\label{Brassard}Brassard G., Bratley P., {\it Fundamental of Algorithmics}, Prentice Hall, 1996. (c)}, un algoritmo goloso se compone de los siguientes elementos: 
 
@@ -10,18 +11,19 @@ De acuerdo a la definici\'on de Brassard\footnote{\label{Brassard}Brassard G., B
  \item Un conjunto de candidatos considerados y rechazados. 
  \item Una funci\'on que comprueba si cierto conjunto de candidatos constituye una soluci\'on a nuestro problema, ignorando si es o no \'optima por el momento. 
  \item Una funci\'on de factibilidad, que determina si es o no posible completar el conjunto a\~nadiendo otros candidatos para obtener al menos una soluci\'on de nuestro problema. 
- \item Una funci\'on selecci\'on que indica en cualquier momento cu\'al es el m\'as prometedor de los candidatos restantes, que no han sido seleccionados ni rechazados. 
+ \item Una funci\'on de selecci\'on que indica en cualquier momento cu\'al es el m\'as prometedor de los candidatos restantes, que no han sido seleccionados ni rechazados. 
  \item Una funci\'on objetivo, que da el valor de la soluci\'on que hemos hallado. 
 \end{enumerate}
 
-Lo que busca el algoritmo goloso es encontrar la secuencia de candidatos que constituya una soluci\'on, y que optimice el valor de la funci\'on objetivo. Este algoritmo avanza paso a paso. Inicialmente, el conjunto de elementos seleccionados est\'a vac\'io. Entonces, en cada paso se considera a\~nadir a este conjunto el mejor candidato sin coniderar los restantes, de acuerdo a nuestra funci\'on selecci\'on. Si el conjunto ampliado de candidato seleccionados ya no fuera factible, rechazamo el candidato que estamos considerando en ese momento. Sin embargo, si el conjunto aumentado sigue siendo factible, entonces a\~nadimos el candidato actual al conjunto de candidatos selecccionados, en donde pasar\'a a estar desde ahora en adelante. Cada vez que se ampl\'ia el conjunto de candidatos seleccionados, comprobamos si \'este constituye ahora una soluci\'on para nuestro problema. A partir de este esquema, al agregar siempre subsoluciones \'optimas a mi conjunto, al finalizar lo que se espera encontrar es la soluci\'
-on \'optima. 
+\fixme{ver la correccion de estatico/dinamico}
 
-El algoritmo de Dijsktra para encontrar caminos m\'inimos en un grafo pesado es un algoritmo goloso, que funciona y es correcto, como lo fue demostrado por Bassard en el libro mencionado.
+Lo que busca el algoritmo goloso es encontrar la secuencia de candidatos que constituya una soluci\'on, y que optimice el valor de la funci\'on objetivo. Este algoritmo avanza paso a paso. Inicialmente, el conjunto de elementos seleccionados est\'a vac\'io. Entonces, en cada paso se considera a\~nadir a este conjunto el mejor candidato sin coniderar los restantes, de acuerdo a nuestra funci\'on selecci\'on. Si el conjunto ampliado de candidato seleccionados ya no fuera factible, rechazamo el candidato que estamos considerando en ese momento. Sin embargo, si el conjunto aumentado sigue siendo factible, entonces a\~nadimos el candidato actual al conjunto de candidatos selecccionados, en donde pasar\'a a estar desde ahora en adelante. Cada vez que se ampl\'ia el conjunto de candidatos seleccionados, comprobamos si \'este constituye ahora una soluci\'on para nuestro problema. A partir de este esquema, al agregar siempre soluciones \'optimas locales a mi conjunto, al finalizar lo que se espera encontrar es la soluci\'on \'optima global. 
 
-Dado un grafo $G=(V,X)$, Dijkstra guarda un conjunto $S$ de nodos que ya fueron recorridos y un vector $\pi$ con la distancia m\'inima de un nodo $u$ a todos los de $S$. En cada fase de Dijkstra, se selecciona un nuevo nodo de $V\backslash S$ cuyo valor en $\pi$ sea m\'inima y lo a\~nadimo a $S$, actualizando si es necesario $\pi$. Al finalizar, $\pi$ es el vector con la m\'inima distancia a todos los nodos. 
+El algoritmo de Dijsktra para encontrar caminos m\'inimos en un grafo pesado es un algoritmo goloso, que funciona y es correcto, como lo fue demostrado por Bassard et al. en el libro mencionado.
 
-Entonces, nosotros para resolver el problema vamos implementar Dijkstra con tres funciones objetivo diferentes, que toman una arista y devuelven un peso para ella: 
+Dado un grafo $G=(V,X)$, Dijkstra guarda un conjunto $S$ de nodos que ya fueron recorridos y un vector $\pi$ con la distancia m\'inima encontrada de un nodo $u$ a todo el resto. Como invariante, el valor de $\pi$ de los nodos en $S$ ya es su distancia a $u$. En cada fase de Dijkstra, se selecciona un nuevo nodo de $V\backslash S$ cuyo valor en $\pi$ sea m\'inimo y se añade a $S$, actualizando si es necesario $\pi$. Al finalizar, $\pi$ es el vector con la m\'inima distancia a todos los nodos. 
+
+Para resolver el problema se va a implementar Dijkstra con tres funciones objetivo diferentes, que toman una arista y devuelven un peso para ella: 
 
 \begin{enumerate}
   \item $f_A(e) = \omega_1(e)$
@@ -29,33 +31,49 @@ Entonces, nosotros para resolver el problema vamos implementar Dijkstra con tres
   \item $f_C(e) = \omega_1(e)\omega_2(e)$
 \end{enumerate}
 
-Luego el pseudoc\'odigo de Dijkstra modificado con la nueva definici\'on de distancia queda dado por: 
+A continuación detallamos el pseudoc\'odigo de Dijkstra parametrizado para ejecutarse con distintas funciones de peso. La implementación utililza un heap para mantener la lista de nodos no visitados.
 
 \begin{algorithm}
+    \caption{\texttt{Dijkstra}}
 In: Grafo $G = (V,X)$, nodo inicial $v_0$, ObjectiveFunction $f$ \newline
-Out: Arreglo $\pi$ con camino m\'inimo en funci\'on de $f$ a cada nodo. 
+Out: Arreglo $\pi$ con camino m\'inimo en funci\'on de $f$ a cada nodo
+\\Arreglo $previo$ con nodo anterior en el camino mínimo, para cada nodo
 \begin{algorithmic}[1]
 \State $\pi(v) = \infty$ \quad $\forall v \in V$
+\State $previo(v) = null$ \quad $\forall v \in V$
 \State $\pi(v_0) = 0$
 \State $S = \emptyset$
 \For{$i = 1 \dots n-1$}
     \State $v \leftarrow $ nodo de $V\backslash S$ de m\'inimo $\pi$. 
     \For{{\bf each} $w \in V\backslash S$ adyacente a $v$}
-      \State $\pi(w) = \min( \pi(w), \pi(v) + f((v,w)))$
+      \If{$\pi(v) + f((v,w))) < \pi(w)$}
+        \State $\pi(w) = \pi(v) + f((v,w)))$
+        \State $previo[w] \leftarrow v$
+      \EndIf
     \EndFor
     \State $S = S \cup \{v\}$
 \EndFor
-\State \textbf{retornar} $\pi$
+\State \textbf{retornar} $\pi$, $previo$
 \end{algorithmic}
 \end{algorithm}
 
-La modificaci\'on est\'a la l\'inea 7, que en vez de sumar a $\pi(v)$ el peso de la arista, como es en el algoritmo original, le suma el valor de una funci\'on que define el peso de la arista. Esto nos permite mucha flexibilidad a la hora de cambiar la ``decisi\'on golosa''.
+\begin{algorithm}
+    \caption{\texttt{Reconstrucción del camino mínimo}}
+\begin{algorithmic}[1]
+    \State $path = []$
+    \State actual = $v$
+    \While{$previo[actual] != null$}
+        \State $path.push\_front(actual)$
+        \State $actual \leftarrow previo[actual]$
+    \EndWhile
+    \State \textbf{retornar} path
+\end{algorithmic}
+\end{algorithm}
 
+\newpage
 \subsubsection{Complejidad}
 
-Veamos que nuestro algoritmo es el mismo que el de Dijkstra salvo por que ejecuta la funci\'on $f((v,w))$, que al hacer operaciones que son constantes en el tiempo no altera la complejidad de final del algoritmo. 
-
-De acuerdo al libro de Brassard antes mencionado, demuestran que la complejidad de Dijkstra implementada sobre un heap es $O(m \log n)$, y como esta es la mejor complejidad que se puede conseguir, nosotros lo implementamos sobre un \texttt{priority\_queue} de $C++$ que nos garantiza las mismas complejidades de un heap\footnote{http://www.cplusplus.com/reference/queue/priority\_queue/priority\_queue/}. 
+De acuerdo al libro de Brassard antes mencionado, la complejidad de Dijkstra implementada sobre un heap es $O(m \log n)$. Se utilizó la implementación \texttt{priority\_queue} de la \textit{Standard Template Library} de $C++$ que garantiza la complejidad de heap\footnote{http://www.cplusplus.com/reference/queue/priority\_queue/priority\_queue/}. 
 
 %-- Goloso A --
 \clearpage
