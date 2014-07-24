@@ -60,7 +60,7 @@ Out: Arreglo $\pi$ con camino m\'inimo en funci\'on de $f$ a cada nodo
 \begin{algorithm}
     \caption{\texttt{Reconstrucción del camino mínimo}}
 \begin{algorithmic}[1]
-    \State $path = []$
+    \State $path \leftarrow []$
     \State actual = $v$
     \While{$previo[actual] != null$}
         \State $path.push\_front(actual)$
@@ -77,11 +77,18 @@ De acuerdo al libro de Brassard antes mencionado, la complejidad de Dijkstra imp
 
 %-- Goloso A --
 \clearpage
-\subsubsection{Familias Malas: Greedy A}\label{subsubsec:greedy-a}
+\subsubsection{Familias Malas - Greedy A: utiliza la función de peso $f_{A}$}\label{subsubsec:greedy-a}
 Dado un grafo $G = (V,E)$, obtenemos el camino m\'inimo entre $u$ y $v$ seg\'un $\omega_1$. 
 
 A continuación definimos una familia de grafos en los cuales nuestro algoritmo puede devolver resultados muy malos.
-\ponerGrafico{imagenes/maloGreedyA.png}{}{0.5}{malo-para-greedy-a}
+%\ponerGrafico{imagenes/maloGreedyA.png}{}{0.5}{malo-para-greedy-a}
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.5]{imagenes/maloGreedyA.png}
+        \caption{Familia de grafos malos para el Greedy A. En adelante, con un apóstrofe haremos referencia al peso por $\omega_1$ y con dos al peso por $\omega_2$}
+    \end{center}
+\end{figure}
 
 Para ir de 1 a 4 hay dos caminos posibles: ($C_1$) $1 \rightarrow 2 \rightarrow 4$; ($C_2$) $1 \rightarrow 3 \rightarrow 4$
 
@@ -97,9 +104,11 @@ $\frac{\omega_2(C_1)}{\omega_2(C_2)} = x$.
 Como x lo podemos variar, este cociente puede ser tan grande como queramos. Es decir que el algoritmo goloso puede devolver una solución
 arbitrariamente alejada de la óptima.
 
+El algoritmo puede encontrar una solución no factible. En ese caso, sa sabe que no existe una solución posible, ya que la solución encontrada tiene un valor por $\omega_1$ menor o igual al de cualquier otro camino.
+
 %-- Goloso B --
 \clearpage
-\subsubsection{Familias Malas: Greedy B}\label{subsubsec:greedy-b}
+\subsubsection{Familias Malas - Greedy B: utiliza la función de peso $f_{B}$}\label{subsubsec:greedy-b}
 Dado un grafo $G = (V,E)$, obtenemos el camino m\'inimo entre $u$ y $v$ seg\'un $\omega_2$. 
 
 A continuación definimos una familia de grafos en los cuales nuestro algoritmo puede devolver resultados muy malos.
@@ -117,14 +126,43 @@ Para ir de 1 a 4 hay dos caminos posibles: ($C_1$) $1 \rightarrow 2 \rightarrow 
 Supongamos que K vale 2. Nuestro algoritmo elige $C_1$, pero al no ser válido, se ve obligado a devolver ``no". Pero $C_2$ era una solución
 válida. Ésto se cumple para cualquier valor de x.
 
+Esta heurística, si devuelve una solución válida, entonces devuelve la solución óptima. Sin embargo, en cualquier instancia interesante de $CACM$ - que no se reduzca a encontrar el camino mínimo por $\omega_2$ - la heurística devolvería un camino inválido.
+
 \clearpage
 %-- Goloso C --
-\subsubsection{Familias Malas: Greedy C}\label{subsubsec:greedy-c}
+\subsubsection{Familias Malas - Greedy C: utiliza la función de peso $f_{C}$}\label{subsubsec:greedy-c}
 Dado un grafo $G = (V,E)$, obtenemos el camino m\'inimo entre $u$ y $v$ seg\'un $\omega_1\omega_2$. 
 
 Esta heurística se puede comportar de la misma forma que el Greedy B, si consideramos la familia mala de grafos desarrollada para el Greedy B,
 restringiendonos a valores de x mayores a 2. Se eligiría $C_1$  para minimizar el producto de las funciones de peso. Como no es válido,
 se deberá devolver ``no", a pesar de que $C_2$ era válido. 
+
+\subsubsection{Conclusión: unificación de las tres heurísticas}
+Las tres heurísticas \textit{GreedyA}, \textit{GreedyB} y \textit{GreedyC} no son muy útiles por separado. Se considerara la heurística \textit{Greedy} como:
+
+\begin{algorithm}
+    \caption{\texttt{Greedy}}
+\begin{algorithmic}[1]
+    \State $pathB \leftarrow GreedyB()$
+    \If{$valido?(pathB)$}
+        \State \textbf{retornar} pathB
+    \EndIf
+    \State $pathA \leftarrow GreedyA()$
+    \State $pathC \leftarrow GreedyC()$
+    \If{$valido?(pathC)$}
+        \If{$\omega_2(pathA) < \omega_2(pathC$}
+            \State \textbf{retornar} pathA
+        \Else
+            \State \textbf{retornar} pathC
+        \EndIf
+    \EndIf
+    \If{$valido?(pathA)$}
+        \State \textbf{retornar} pathA
+    \Else
+        \State \textbf{retornar} \texttt{no}
+    \EndIf
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Experimentación}
 Resulta importante destacar las decisiones que tomamos para la generación de grafos. Nos cercioramos primero de que exista un camino entre $u$ y
