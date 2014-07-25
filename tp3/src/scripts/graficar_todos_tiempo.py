@@ -22,7 +22,7 @@ cota_teorica_y = list()
 
 cota_teorica = list()
 
-files = sorted(glob("../output/greedy_heuristic_All/*.txt.calidad"))
+files = sorted(glob("../output/greedy_heuristic_All/*.txt"))
 for f in files:
   file = open(f)
   filename = f.split("/")[-1]
@@ -42,11 +42,11 @@ for f in files:
     value = line.split()[1]
     x = int(testsize)
     #if x < 40: continue  # esto es muy arbitrario 
-    y = float( int(value) - k + (k/MMM) )
+    y = float( int(value) )
     tests[testname][testtype][x].append(y)
   file.close()
 
-files = sorted(glob("../output/local_search/*.txt.calidad"))
+files = sorted(glob("../output/local_search/*.txt"))
 for f in files:
   file = open(f)
   filename = f.split("/")[-1]
@@ -60,12 +60,12 @@ for f in files:
       continue
     value = line.split()[1]
     x = int(testsize)
-    y = float( int(value) - k + (k/MMM) )
+    y = float( int(value) )
     tests[testname][testtype][x].append(y)
   file.close()
 
 print("GRASP:")
-files = sorted(glob("../output/grasp/*.txt.calidad"))
+files = sorted(glob("../output/grasp/*.txt"))
 for f in files:
   file = open(f)
   filename = f.split("/")[-1]
@@ -79,12 +79,12 @@ for f in files:
       continue
     value = line.split()[1]
     x = int(testsize)
-    y = float( int(value) - k + (k/MMM) )
+    y = float( int(value) )
     tests[testname][testtype][x].append(y)
   file.close()
 
 print("BACKTRACKING:")
-files = sorted(glob("../output/backtracking/*.txt.calidad"))
+files = sorted(glob("../output/backtracking/*.txt"))
 for f in files:
   file = open(f)
   filename = f.split("/")[-1]
@@ -98,7 +98,7 @@ for f in files:
       continue
     value = line.split()[1]
     x = int(testsize)
-    y = float( int(value) - k + (k/MMM) )
+    y = float( int(value) )
     tests[testname][testtype][x].append(y)
   file.close()
 
@@ -112,14 +112,14 @@ for testname in tests:
       #print("Recorriendo {} de {} (x={})".format(testtype,testname,testsize))
       y_values = tests[testname][testtype][testsize]
       #print "\ty =",y_values
-      #y_p_values = [yp for yp in y_values if yp < np.percentile(y_values,75) and yp > np.percentile(y_values,25) ]
-      y_p_values = [yp for yp in y_values ]
+      y_p_values = [yp for yp in y_values if yp <= np.percentile(y_values,75) and yp >= np.percentile(y_values,25) ]
+      #y_p_values = [yp for yp in y_values ]
       #y_p_values_min = [yp for yp in y_values if yp == np.min(y_values) ]
       #y_p_values_max = [yp for yp in y_values if yp == np.max(y_values) ]
       # -
       x = testsize
-      y = float( np.mean( y_values ) )
-      y_p = float( np.mean( y_p_values ) )
+      y = float( np.mean( y_values )  / float(1e9) )
+      y_p = float( np.mean( y_p_values )  / float(1e9) )
       #y_p_min = float( np.mean( y_p_values_min ) )
       #y_p_max = float( np.mean( y_p_values_max ) )
       # -
@@ -189,6 +189,7 @@ for test_number in range(0,t_names):
 #print t_y
 #subplot.plot(t_x, t_y,    '--', color='black', linewidth=2, label="Optima")
 plt.legend(loc=2)
+plt.yscale('log')
 plt.tight_layout()  # para que entren las labels
 #plt.xlim(xmax=3000)
 #plt.ylim(ymin=15,ymax=500)

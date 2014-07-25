@@ -27,7 +27,7 @@ for f in files:
     testtype = line.split()[0]
     value = line.split()[1]
     x = int(testsize)
-    if x < 40: continue  # esto es muy arbitrario 
+    #if x < 40: continue  # esto es muy arbitrario 
     y = int(value)
     tests[testname][testtype][x].append(y)
   file.close()

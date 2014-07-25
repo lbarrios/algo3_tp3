@@ -24,9 +24,10 @@ if instanceCount == -1:
 if N == -1:
     N = 20
 if M == -1:
-    M = randint(0, N*(N-1)/2)
+    M = randint(N-1, N*(N-1)/2)
+    #M = randint(0, N*(N-1)/2)
 if K == -1:
-    K = randint(N, N * M)  # pensar
+    K = randint(N, 10*N)  # pensar
 
 #print "createInput_random instanceCount: %d n:%d m:%d k:%d" % (instanceCount, N, M, K)
 fo = open("../input/random_x%d_n%d_m%d_k%d.txt" % (instanceCount, N, M, K), "wb")

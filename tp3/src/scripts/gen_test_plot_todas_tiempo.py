@@ -16,14 +16,14 @@ while n<30:
     #m = int(math.sqrt(n))*n
     #m = 10*n
     print n
-    os.system("python createInput_magic.py 40 %d %d" % (n, m))
+    os.system("python createInput_magic.py 10 %d %d" % (n, m))
 
-os.system("./correrTestCalidad.py backtracking magic")
-os.system("./correrTestCalidad.py greedy_heuristic_All magic")
-os.system("./correrTestCalidad.py grasp magic")
-os.system("./correrTestCalidad.py local_search magic")
+os.system("./correrTestTiempo.py backtracking magic")
+os.system("./correrTestTiempo.py greedy_heuristic_All magic")
+os.system("./correrTestTiempo.py grasp magic")
+os.system("./correrTestTiempo.py local_search magic")
 
-subprocess.call(["python", "graficar_todos.py"])
+subprocess.call(["python", "graficar_todos_tiempo.py"])
 
 
 #os.system("epdfview `ls -t ../graficos | head -n 1`")
