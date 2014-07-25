@@ -44,7 +44,6 @@ int main( int argc, char const* argv[] )
     Solution* solution = initialSolution->getInitialSolution( instance );    
     //cout << "Initial solution: ";
 
-    unsigned int iteraciones = 0;
 
     // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica    
     // si solution no es valida entonces, entonces es NULL
@@ -65,7 +64,6 @@ int main( int argc, char const* argv[] )
           delete solution;
           solution = newSolution;          
           huboMejora = true;  
-          iteraciones++;
         } else {                      
           huboMejora = false;
         }
@@ -80,11 +78,8 @@ int main( int argc, char const* argv[] )
     ****************/
     // print the solution
     //cout << "Final solution: ";
-    cout << iteraciones << " ";
     if(solution) {
-      if(iteraciones) cout << (initialSolutionOmega2 - solution->totalOmega2) / iteraciones << endl;
-      else cout << 0 << endl;
-      //solution->print();
+      solution->print();
       delete solution;
     }
     else
