@@ -168,7 +168,7 @@ En general, la heurística falla cuando los caminos mínimos por $\omega_2$ entr
 
 \subsubsection{Experimentación}
 
-Pudimos analizar el tiempo de ejecución frente a grafos de un tamaño considerable. A continuación presentamos un gráfico.
+Pudimos analizar el tiempo de ejecución corriendo el algoritmo en grafos de un tamaño considerable. Utilizamos instancias del tipo \textit{mágico}, variando el valor de $n$ y eligiendo $m$ al azar entre todos los posibles valores dado $n$.  A continuación presentamos un gráfico.
 
 \begin{figure}[H]
 \begin{center}
@@ -182,13 +182,17 @@ Se puede percibir el carácter no lineal de la complejidad. Sin embargo no se ev
 previamente. Puede ser necesario un tamaño mayor para poder apreciar esa complejidad, o quizás la cota teórica no se alcanza en la práctica.
 Probablemente haya un factor que se amortice, habiendo escapado de nuestro escrutinio.
 
+La conclusión que se obtuvo tras haber terminado todas las experimentaciones es que \texttt{local\_searc} hace generalmente pocas iteraciones, por lo que el tiempo de ejecución se asemeja al de \texttt{Greedy}, cuya complejidad teórica es $O(m*log(n)$.
+
+\newpage
+Luego se propuso analizar la calidad de la solución encontrada.
 Experimentamos con distintas densidades de grafos. Primero con grafos densos, es decir con una cantidad de aristas del orden de $n^2$. Luego con
 grafos de densidad media, con una cantidad de aristas del orden de $\sqrt{n} \times n$. Finalmente probamos con grafos ralos, con una cantidad de aristas
 del orden de la cantidad de nodos. Para cada grupo de grafos, analizamos diferentes rangos de tamaños de entrada, con el objetivo de demostrar
 que el algoritmo mantiene ciertas propiedades, más allá del tamaño.
 
 Se generan cien instancias para cada tamaño de entrada. En los siguientes gráficos se pueden observar comparados el mejor resultado, el peor
-resultado, y el resultado promedio para cada tamaño de entrada.
+resultado, y el resultado promedio para cada tamaño de entrada. Al ser instancias del tipo \textit{mágico}, podemos saber el valor de la solución óptima - $n-1$ - y graficarla.
 
 \begin{figure}[H]
 \begin{center}
