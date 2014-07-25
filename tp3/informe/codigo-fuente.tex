@@ -543,6 +543,35 @@ Solution* NeighbourhoodSelectorA::getBestNeighbour(const Solution* origSolution)
   return bestSolution;  
 }
 \end{lstlisting}
+\begin{lstlisting}[caption=NeighbourhoodSelector::initialize()]
+void NeighbourhoodSelector::initialize(ProblemInstance* instance)
+{	
+	deleteMatrix();
+	nodeCount = instance->graph->nodeCount;
+	pathMatrix = new Solution*[nodeCount*nodeCount];     
+  K = instance->K;   
+
+  // Como los paths entre j y k son iguales a los paths entre k y j, pero al reves
+  // primero encuentro los paths entre j y k y luego los doy vuelta
+	for(int j=1; j<=nodeCount; j++) {
+  	Dijkstra<ObjectiveFunctionOmega2> dijsktra;          
+    DijkstraSolution dijkstraSolution( instance->graph->nodeCount, j );                
+    dijsktra.findPath( instance->graph, &dijkstraSolution );                      
+    for(int k=1; k<=nodeCount; k++) {                    
+      if(j==k) continue;
+    	  Solution* solution = new Solution();        
+    	  dijkstraSolution.getPath(k, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2);          
+        // si no hay ninun path entre los nodos j y k entonces, cargo NULL en la matrix             
+        pathMatrix[j-1 + (k-1) * nodeCount] = solution->path.size() > 0 ? solution : NULL;                                  
+    }
+	}
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=NeighbourhoodSelector::getSolvedPathBetween()]
+Solution* NeighbourhoodSelector::getSolvedPathBetween(int node1, int node2) {  
+  return pathMatrix[node1-1 + (node2-1) * nodeCount];
+}
+\end{lstlisting}
 \subsubsection{Grasp}
 
 
