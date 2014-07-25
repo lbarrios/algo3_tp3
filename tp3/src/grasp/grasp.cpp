@@ -45,10 +45,10 @@ int main( int argc, char const* argv[] )
         // valores arbitrarios basados en n para criterio de terminaciones
         int n = instance->graph->nodeCount;
         int iteracionesSinMejorarCount = 0;
-        int iteracionesSinMejorarMax = n*n;//n;
-        int iteracionesMax = n*n; //n * log(n);
+        int iteracionesSinMejorarMax = n*n/4;
+        int iteracionesMax = n*n/2;
         int iteracionesSinInitialPathCount = 0;
-        int iteracionesSinInitialPathMax = n*n;//n;
+        int iteracionesSinInitialPathMax = n*n/4;
         
         Solution* bestSolution = NULL;            
 
@@ -75,10 +75,14 @@ int main( int argc, char const* argv[] )
                     break; // me rindo, dejo de buscar soluciones
                 }            
             }                        
+
+            iteracionesSinInitialPathCount = 0;
+
             //cout << "Initial solution: ";
             //solution->print();
 
             // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica            
+            //cout << solution->totalOmega1 << " " << solution->path.size() << endl;
             if(solution->totalOmega1 <= instance->K) {                               
                 // run the heuristic
                 Solution* newSolution = NULL;    
@@ -104,6 +108,7 @@ int main( int argc, char const* argv[] )
                     //return 0;
                     delete bestSolution;
                     bestSolution = solution;
+                    iteracionesSinMejorarCount = 0;
                 } else {
                     delete solution;
                     iteracionesSinMejorarCount++;      
