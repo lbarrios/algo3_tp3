@@ -574,7 +574,6 @@ Solution* NeighbourhoodSelector::getSolvedPathBetween(int node1, int node2) {
 \end{lstlisting}
 \subsubsection{Grasp}
 
-
 \begin{lstlisting}[caption=grasp.cpp]
 #include "../common/Graph.h"
 #include "../common/Parser.h"
@@ -715,4 +714,80 @@ Solution* InitialSolution::getInitialSolution(ProblemInstance* instance)
     dijkstraSolution.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
     return solution;
 }
+\end{lstlisting}
+
+\begin{lstlisting}[caption=DijkstraRandomized::findPath()]
+ void DijkstraRandomized<ObjectiveFunction>::findPath(Graph* graph, DijkstraSolution* solution) {
+    int* prevNodes = solution->prevNodes;
+    double* dist = new double[graph->nodeCount];
+    for (int i=0; i<graph->nodeCount; i++) {
+        dist[i] = INF;
+        prevNodes[i] = -1;
+    }
+    dist[solution->fromNode-1] = 0;
+
+    ObjectiveFunction objFunc;
+
+    unvisited.push(new UnvisitedNode(solution->fromNode, 0, 0));
+    
+    while (unvisited.size() > 0) {
+        int rcl_size = min(RCL_SIZE, int(unvisited.size()));
+        int chosen = rand()%rcl_size + 1; // genera un int entre 1 y rcl_size         
+        list<UnvisitedNode*> stack;
+        for (int i = 0; i < chosen; i++) {
+            stack.push_front(unvisited.top());
+            unvisited.pop();
+        }
+        UnvisitedNode* currNode = stack.front();        
+        stack.pop_front();
+        for (list<UnvisitedNode*>::iterator it = stack.begin(); it != stack.end(); it++)
+            unvisited.push(*it);
+                
+        vector<Node> adjNodes = graph->getAdjacent(currNode->node);        
+        for (int i=0; i<adjNodes.size(); i++) {            
+            Node toNode = adjNodes[i];
+            if(prevNodes[toNode-1] != -1) continue;
+            Edge* edge = graph->getEdge(currNode->node, adjNodes[i]);
+            double weight = objFunc.weight(edge->omega1, edge->omega2);
+            if(dist[currNode->node-1] + weight < dist[toNode-1]) {
+                prevNodes[toNode-1] = currNode->node;
+                dist[toNode-1] = dist[currNode->node-1] + weight;                
+                unvisited.push(new UnvisitedNode(toNode, edge->omega1, edge->omega2));
+            }
+        }
+    }    
+}
+\end{lstlisting}
+
+\begin{lstlisting}[caption=DijkstraSolution::getPath()]
+void DijkstraSolution::getPath(int toNode, Graph* graph, vector<Edge*> &path, double &totalOmega1, double &totalOmega2) {	
+    int prevNode = prevNodes[toNode-1];
+    totalOmega1 = 0;
+    totalOmega2 = 0;        
+    list<Edge*> pathList;
+    while (prevNode != -1) {
+    	Edge* edge = graph->getEdge(prevNode, toNode);
+        pathList.push_front(new Edge(prevNode, toNode, edge->omega1, edge->omega2));
+        totalOmega1 += edge->omega1;
+        totalOmega2 += edge->omega2;
+        toNode = prevNode;
+        prevNode = prevNodes[prevNode-1];
+    }        
+
+    // toNode va cambiando dentro del while
+    // si llegado a este punto, toNode != fromNode, significa que no hay camino entre toNode y fromNode    
+    if(toNode != fromNode) {
+        totalOmega1 = INF;
+        totalOmega2 = INF;
+        // el path que se devuelve en la solucion queda vacio
+    } else {
+        // solo devuelvo un camino si existe un camino posible entre fromNode y toNode
+        path.resize(pathList.size());
+        int index = 0;
+        for(list<Edge*>::iterator it = pathList.begin(); it != pathList.end(); it++) {
+            path[index] = *it;
+            index++;
+        }
+    }
+} 
 \end{lstlisting}
