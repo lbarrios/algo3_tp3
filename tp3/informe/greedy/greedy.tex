@@ -15,7 +15,7 @@ De acuerdo a la definici\'on de Brassard\footnote{\label{Brassard}Brassard G., B
  \item Una funci\'on objetivo, que da el valor de la soluci\'on que hemos hallado. 
 \end{enumerate}
 
-\fixme{ver la correccion de estatico/dinamico}
+%\fixme{ver la correccion de estatico/dinamico}
 
 Lo que busca el algoritmo goloso es encontrar la secuencia de candidatos que constituya una soluci\'on, y que optimice el valor de la funci\'on objetivo. Este algoritmo avanza paso a paso. Inicialmente, el conjunto de elementos seleccionados est\'a vac\'io. Entonces, en cada paso se considera a\~nadir a este conjunto el mejor candidato sin coniderar los restantes, de acuerdo a nuestra funci\'on selecci\'on. Si el conjunto ampliado de candidato seleccionados ya no fuera factible, rechazamo el candidato que estamos considerando en ese momento. Sin embargo, si el conjunto aumentado sigue siendo factible, entonces a\~nadimos el candidato actual al conjunto de candidatos selecccionados, en donde pasar\'a a estar desde ahora en adelante. Cada vez que se ampl\'ia el conjunto de candidatos seleccionados, comprobamos si \'este constituye ahora una soluci\'on para nuestro problema. A partir de este esquema, al agregar siempre soluciones \'optimas locales a mi conjunto, al finalizar lo que se espera encontrar es la soluci\'on \'optima global. 
 
@@ -165,7 +165,7 @@ Las tres heurísticas \textit{GreedyA}, \textit{GreedyB} y \textit{GreedyC} no s
 \end{algorithm}
 
 \subsubsection{Experimentación}
-Resulta importante destacar las decisiones que tomamos para la generación de grafos. Nos cercioramos primero de que exista un camino entre $u$ y
+Utilizar instancias \texttt{mágicas} resultó muy importante. Nos cercioramos primero de que exista un camino entre $u$ y
 $v$ que cumpla con la restricción de $k$. Luego fuimos agregando caminos, como para dar varias opciones a los algoritmos, con la particularidad
 de que eran $balanceados$. Ésto significa que si el peso según $\omega_1$ del camino era bajo, entonces le asignábamos un $\omega_2$ alto.
 Más aún, para todo camino $C$ entre $u$ y $v$, $\omega_1(C)$ y $\omega_2(C)$ estaban distribuidos simetricamente con respecto a $k$.
@@ -182,7 +182,7 @@ facilitar evaluar la calidad de una solución cuando la instancia es muy grande 
 \end{figure}
 
 Se puede interpretar la curva de tiempo de ejecución vs. tamaño de entrada como una función cercana a la lineal, aunque se puede percibir
-que está ligeramente por encima de ésta.
+que está ligeramente por encima de ésta, lo que puede se puede interpretar como el peso del factor logarítmico de la expresión de la complejidad teórica.
 
 \begin{figure}[H]
 \begin{center}
@@ -197,4 +197,4 @@ $\omega_1$ es mayor que el de la óptima, es decir, que $k$. Por lo tanto no son
 Ésto era de esperar - la heurística B sólo va construyendo su solución sin reparar siquiera en $\omega_1$.
 
 Por otro lado tenemos la heurística A, que sólo mira $\omega_1$ y por lo tanto termina bastante alejada de la solución óptima. La heurística
-C resultó ser un acierto, se acerca bastante a la solución válida, pero no descuida el mantenerse dentro de la cota de $k$.
+C resultó ser un acierto, se acerca bastante a la solución óptima, pero no descuida el mantenerse dentro de la cota de $k$.
