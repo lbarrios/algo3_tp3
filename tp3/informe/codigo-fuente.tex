@@ -1,217 +1,455 @@
 
 \subsubsection{Backtracking}
 
-\small
-\begin{verbatim}
-int N, M, U, V, K;
-Graph *G;
-vector<bool> visitados;
-Solucion mejorSolucion;
-Solucion ramaActual;
+\definecolor{gris}{rgb}{0.3,0.3,0.3}
+\definecolor{rojito}{rgb}{1,0,0}
+\lstset{language=C++,tabsize=2,basicstyle=\footnotesize,commentstyle=\color{gris},stringstyle=\color{rojito}}
 
-void backtrack(Node actual, Node padre) {
-  // primero agrego el nodo
-  ramaActual.camino.push_back(actual);
+\begin{lstlisting}[caption=backtracking.cpp]
+Timer timer( cerr );
 
-  Edge *e = G->getEdge(padre, actual);
-
-  if (actual != padre) {  // me cubro del nodo inicial
-    ramaActual.sumaOmega1 += e->omega1;
-    ramaActual.sumaOmega2 += e->omega2;
-  }
-  ramaActual.cantAristas++;
-  visitados[actual] = true;
-  
-  if (ramaActual.sumaOmega1 > K) {
-    // no haces nada
-  } else if (actual == V) { 
-    if (ramaActual.sumaOmega2 < mejorSolucion.sumaOmega2)
-      mejorSolucion = ramaActual;
-  } else { // llamas a la recursion
-    vector<Node> vecinos = G->getAdjacent(actual);
-    for (int i = 0; i < vecinos.size(); i++) {
-      Node vecino = vecinos[i];
-      if (! visitados[vecino]) {
-        backtrack(vecino, actual);
-      }
+int main() {
+    int N;
+    while (cin >> N && N) {
+        BacktrackingHeuristic b;
+        b.parseInput(N);
+        timer.setInitialTime( "todo_el_codigo" );
+        
+        if (b.U != b.V) {
+            b.initialize();
+            vector<Node> adjacent = b.G->getAdjacent(b.U); // se devuelve por referencia
+            for (int i = 0; i < adjacent.size(); i++) {
+                Node n = adjacent[i];
+                Edge *f = b.G->getEdge(b.U, n);
+                b.backtrack(f);
+            }
+        }
+        
+        timer.setFinalTime( "todo_el_codigo" );
+        timer.saveAllTimes();
+        b.printSolution();
     }
-  }
-  // dejas todo como estaba, antes de retornar
-  ramaActual.camino.pop_back();
-  if (actual != padre) {
-    ramaActual.sumaOmega1 -= e->omega1;
-    ramaActual.sumaOmega2 -= e->omega2;
-  }
-  ramaActual.cantAristas--;
-  visitados[actual] = false;
+    return 0;
 }
-\end{verbatim}
-\normalsize
+\end{lstlisting}
+\begin{lstlisting}[caption=BacktrackingHeuristic::parseInput()]
+void BacktrackingHeuristic::parseInput(int N) {
+    this->N = N;
+    cin >> this->M >> this->U >> this->V >> this->K;
+    this->G = new Graph(N);
+    this->visited = vector<bool>(N, false);
+    int v1, v2;
+    double w1, w2;
+    for(int i = 0; i < M; i++) {
+        cin >> v1 >> v2 >> w1 >> w2;
+        this->G->addEdge(v1, v2, w1, w2);
+    }
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=BacktrackingHeuristic::initialize()]
+void BacktrackingHeuristic::initialize() {
+    this->currentBranch.path.push_back(this->U);
+    this->bestSolutionFound.totalOmega2 = INFINITE;
+    
+    DijkstraSolution byOmega1(N, V);
+    DijkstraSolution byOmega2(N, V);
+    Dijkstra<ObjectiveFunctionA> dijsktra1; 
+    Dijkstra<ObjectiveFunctionB> dijsktra2; 
+    dijsktra1.findPath(this->G, &byOmega1);
+    dijsktra2.findPath(this->G, &byOmega2);
+    this->distancesOmega1 = byOmega1.distances;
+    this->distancesOmega2 = byOmega2.distances;
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=BacktrackingHeuristic::backtrack()]
+void BacktrackingHeuristic::backtrack(Edge *e) {
+    Node toNode = e->toNode;
+    this->currentBranch.path.push_back(toNode);
+    this->currentBranch.totalOmega1 += e->omega1;
+    this->currentBranch.totalOmega2 += e->omega2;
+    this->visited[toNode] = true;
+    
+    bool podar = ((this->currentBranch.totalOmega1 + this->distancesOmega1[toNode]) > this->K) ||
+        ((this->currentBranch.totalOmega2 + this->distancesOmega2[toNode]) >= this->bestSolutionFound.totalOmega2);
 
+    if (!podar) {
+        if (toNode == this->V) {
+            this->bestSolutionFound = currentBranch;
+        } else {
+            vector<Node> adjacent = G->getAdjacent(toNode); // se devuelve por referencia
+            for (int i = 0; i < adjacent.size(); i++) {
+                Node n = adjacent[i];
+                if (!visited[n]) {
+                    Edge *f = this->G->getEdge(toNode, n);
+                    backtrack(f);
+                }
+            }
+        }
+    }
+
+    this->currentBranch.path.pop_back();
+    this->currentBranch.totalOmega1 -= e->omega1;
+    this->currentBranch.totalOmega2 -= e->omega2;
+    this->visited[toNode] = false;
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=BacktrackingHeuristic::printSolution()]
+void BacktrackingHeuristic::printSolution() {
+    Solution *s = &(this->bestSolutionFound);
+    if (s->totalOmega2 == INFINITE) {
+        cout << "no" << endl;
+        return;
+    }
+
+    cout << s->totalOmega1 << " " << s->totalOmega2 << " " << (s->path.size()+1);
+    for (int i = 0; i < s->path.size(); i++)
+        cout << " " << s->path[i];
+    cout << endl;
+    return;
+}
+\end{lstlisting}
 \subsubsection{Greedy}
 
-\small
-\begin{verbatim}
-void DijkstraSolution::getPath(int toNode, Graph* graph, vector<Edge*> &path, 
-                                            double &totalOmega1, double &totalOmega2) {           
-  int prevNode = prevNodes[toNode-1];
-  totalOmega1 = 0;
-  totalOmega2 = 0;    
-  list<Edge*> pathList;
-  while (prevNode != -1) {
-             Edge* edge = graph->getEdge(prevNode, toNode);
-    pathList.push_front(new Edge(prevNode, toNode, edge->omega1, edge->omega2));
-    totalOmega1 += edge->omega1;
-    totalOmega2 += edge->omega2;
-    toNode = prevNode;
-    prevNode = prevNodes[prevNode-1];
-  }    
+\begin{lstlisting}[caption=greedy\_heuristic\_All.cpp]
+#include <iostream>
+#include "../common/Timer.h"
+#include "GreedyHeuristicAll.h"
 
-  // toNode va cambiando dentro del while
-  // si llegado a este punto, toNode != fromNode, significa que no hay camino 
-  // entre toNode y fromNode  
-  if(toNode != fromNode) {
-    totalOmega1 = INF;
-    totalOmega2 = INF;
-    // el path que se devuelve en la solucion queda vacio
-  } else {
-    // solo devuelvo un camino si existe un camino posible entre fromNode y toNode
-    path.resize(pathList.size());
-    int index = 0;
-    for(list<Edge*>::iterator it = pathList.begin(); it != pathList.end(); it++) {
-      path[index] = *it;
-      index++;
+using namespace std;
+
+int main(int argc, char* argv[])
+{
+  Timer timer(cerr);
+  GreedyHeuristicAll greedy(&timer);
+  greedy.run(); 
+    
+    return 0;
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=GreedyHeuristicAll.cpp]
+#include "GreedyHeuristicAll.h"
+#include "../common/Dijkstra.h"
+#include "../common/ObjectiveFunctions.h"
+
+GreedyHeuristicAll::GreedyHeuristicAll()
+{
+  solution = new Solution();
+}
+
+GreedyHeuristicAll::GreedyHeuristicAll(Timer* t)
+{
+  solution = new Solution();
+  timer = t;
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=createSolutionA()]
+Solution* createSolutionA(ProblemInstance* instance) 
+{    
+    // creo el dijkstra
+    Dijkstra<ObjectiveFunctionA> dijsktra;
+    // creo la solucion
+    DijkstraSolution dijkstraSolution( instance->graph->nodeCount, instance->u);
+    // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
+    dijsktra.findPath( instance->graph, &dijkstraSolution );
+    // obtengo el path que me interesa
+    Solution* solution = new Solution();    
+    dijkstraSolution.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
+    return solution;
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=createSolutionB()]
+Solution* createSolutionB(ProblemInstance* instance) 
+{
+    // creo el dijkstra    
+    Dijkstra<ObjectiveFunctionB> dijsktra;
+    // creo la solucion
+    DijkstraSolution dijkstraSolution( instance->graph->nodeCount, instance->u);
+    // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
+    dijsktra.findPath( instance->graph, &dijkstraSolution );
+    // obtengo el path que me interesa
+    Solution* solution = new Solution();    
+    dijkstraSolution.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
+    return solution;
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=createSolutionC()]
+Solution* createSolutionC(ProblemInstance* instance) 
+{
+    // creo el dijkstra    
+    Dijkstra<ObjectiveFunctionC> dijsktra;
+    // creo la solucion
+    DijkstraSolution dijkstraSolution( instance->graph->nodeCount, instance->u);
+    // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
+    dijsktra.findPath( instance->graph, &dijkstraSolution );
+    // obtengo el path que me interesa
+    Solution* solution = new Solution();    
+    dijkstraSolution.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
+    return solution;
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=getBestSolution()]
+Solution* getBestSolution(ProblemInstance* instance) 
+{
+    Solution* solutionB = createSolutionB(instance);    
+    if(solutionB->totalOmega1 <= instance->K) {
+        return solutionB;
     }
+    //cout << "K " << instance->K << endl;
+    //cout << "solutionB omega1 " << solutionB->totalOmega1 << endl;
+    // si la solucion no es factible probamos con otras funciones objetivo    
+    Solution* solutionA = createSolutionA(instance);
+    Solution* solutionC = createSolutionC(instance);
+    if(solutionC->totalOmega1 <= instance->K) {
+        if(solutionA->totalOmega2 < solutionC->totalOmega2) {            
+            return solutionA;
+        }         
+        return solutionC;
+    }    
+
+    //cout << "solutionC omega1 " << solutionC->totalOmega1 << endl;
+
+    if(solutionA->totalOmega1 <= instance->K) {
+        return solutionA;
+    }
+    //cout << "solutionA omega2 " << solutionA->totalOmega2 << endl;
+    return NULL;   
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=GreedyHeuristicAll::resolveInstance()]
+void GreedyHeuristicAll::resolveInstance( ProblemInstance* instance ){
+  solution = getBestSolution(instance);
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=GreedyHeuristicAll::run()]
+void GreedyHeuristicAll::run()
+{
+  Parser parser;
+  parser.parseInput();
+
+  for ( int i = 0; i < parser.problemInstances.size(); i++ )
+  {
+    ProblemInstance* instance = parser.problemInstances[i];
+    
+    timer->setInitialTime("todo_el_codigo");
+    resolveInstance( instance );       
+    timer->setFinalTime("todo_el_codigo");
+    timer->saveAllTimes();
+    
+    if(!solution) {
+      cout << "no" << endl;
+    } else{
+      solution->print();
+    }    
   }
 }
-
-template<class ObjectiveFunction>
-void GreedyHeuristic<ObjectiveFunction>::resolveInstance( ProblemInstance* instance ){
-  // creo el dijkstra
-  Dijkstra<ObjectiveFunction> dijsktra;
-  // creo la solucion
-  DijkstraSolution sol( instance->graph->nodeCount, instance->u );
-  // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
-  dijsktra.findPath( instance->graph, &sol );
-  // obtengo el path que me interesa
-  sol.getPath( instance->v, instance->graph, solution->path, 
-                      solution->totalOmega1, solution->totalOmega2 );
-}
-
-\end{verbatim}
-\normalsize
+\end{lstlisting}
 
 \subsubsection{Local Search}
-\small
-\hangindent=0.7cm\begin{verbatim}
+
+\begin{lstlisting}[caption=local\_search.cpp]
+#include "../common/Graph.h"
+#include "../common/Parser.h"
+#include "../common/DijkstraSolution.h"
+#include "../common/Dijkstra.h"
+#include "../common/GreedyHeuristic.h"
+#include "../common/Solution.h"
+#include "../common/Parser.h"
+#include "../common/Timer.h"
+#include "NeighbourhoodSelectorA.h"
+#include "InitialSolution.h"
+
+Parser parser;
+Timer timer( cerr );
+
 
 int main( int argc, char const* argv[] )
 {
-  ....
-  InitialSolution* initialSolution =  
-    heuristicFactory.createInitialSolution( initialSolutionParameter );
-  InitialSolution* initialSolutionBestOmega1 =  
-    heuristicFactory.createInitialSolution( INITIAL_SOLUTION_A );
-  NeighbourhoodSelector* selector = 
-    heuristicFactory.createNeighborhoodSelector( neighborhoodSelectorParameter );
-  
+  /*****************
+    Initialization
+  ******************/
+  // instantiate the initial solution using the initial solution parameter
+  InitialSolution* initialSolution = new InitialSolution();
+  // instantiate the neighborhood selector using the neighborhood selector parameter
+  NeighbourhoodSelector* selector = new NeighbourhoodSelectorA();
   // parse the input
-  parser.parseInput();  
+  parser.parseInput();
 
+  /*************************
+    Iterate over instances
+  *******************'*******/
   for(auto instance:parser.problemInstances)
   {
-  Solution* solution = initialSolution->getInitialSolution( instance );
-  // si no encuentro el path que cumpla con K, pruebo usando dijkstra con omega1.
-  // Tambien puede pasar que no encuentre ningun path, 
-  // por lo que totalOmega1 = INF, y en ese 
-  // caso tambien pruebo buscar otro path
-  if( initialSolution->type != initialSolutionBestOmega1->type && 
-    solution->totalOmega1 > instance->K) {
-    delete solution;
-    solution = initialSolutionBestOmega1->getInitialSolution(instance);
-  }
-  
-  // El dijkstra de omega1 debe cumplir con el K, sino no 
-  // tiene sentido correr la heuristica
-  if(solution->totalOmega1 <= instance->K) {
-    // run the heuristic
-    Solution* newSolution = NULL;  
-    bool huboMejora = false;
-    do
+    /*************
+      Resolution
+    **************/
+    selector->initialize(instance);
+
+    // obtain the initial time
+    timer.setInitialTime( "todo_el_codigo" );
+    // obtain the initial solution
+
+    int initialSolutionOmega2;
+
+    Solution* solution = initialSolution->getInitialSolution( instance );
+    //cout << "Initial solution: ";
+
+
+    // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica
+    // si solution no es valida entonces, entonces es NULL
+    if(solution != NULL) {
+      initialSolutionOmega2 = solution->totalOmega2;
+
+      // run the heuristic
+      Solution* newSolution = NULL;
+      bool huboMejora = false;
+      do
+      {
+        newSolution = selector->getBestNeighbour( solution );
+        // Si no logro mejorar la solucion, termino
+        if(newSolution != NULL) {
+          //cout << "Mejore omega2!" << endl;
+          //cout << "new solution: ";
+          //newSolution->print();
+          delete solution;
+          solution = newSolution;          
+          huboMejora = true;  
+        } else {                      
+          huboMejora = false;
+        }
+      } while(huboMejora);
+    } 
+
+    // obtain the final time
+    timer.setFinalTime( "todo_el_codigo" );
+
+    /***************
+      Output Print
+    ****************/
+    // print the solution
+    //cout << "Final solution: ";
+    if(solution) {
+      solution->print();
+      delete solution;
+    }
+    else
     {
-      newSolution = selector->getBestNeighbour( solution );
-      // Si no logro mejorar la solucion, termino    
-      if(newSolution != NULL) {
-           delete solution;
-           solution = newSolution;      
-           huboMejora = true;  
-      } else {            
-           huboMejora = false;
-      }    
-    } while(huboMejora);
-  } 
-  solution->print();
-  delete solution;
+      cout << 0 << endl;
+    }
+    //solution->printTP();
+
+    // save all obtained times to output
+    timer.saveAllTimes();
   }
   return 0;
 }
-
-Solution* NeighbourhoodSelectorA::getBestNeighbour(const Solution* origSolution)
-{ 
-  // Itero sobre la matriz de soluciones
-  // Por cada par de nodos, tengo que buscar si existe un path en la matriz, 
-  // tal que sustituyendolo pot path entre el par de nodos de la solucion original 
-  // se obtenga una nueva solucion tal que se su totalOmega2 sea menor
-  
-  // El path de una solution es un vector de ejes   
-  // En cada iteracion que encuentro una solucion mejor, voy a cambiar algunos 
-  // de los nodos, por lo que tengo que recalcular los nodos de la mejor solucion       
-  int edgesCount = origSolution->path.size();
-  int nodesCount = edgesCount+1;
-  vector<int> nodes(nodesCount); 
-  for(int i=0; i<edgesCount; i++) {
-    Edge* edge = origSolution->path[i];
-    nodes[i] = edge->fromNode;
-  }
-  // ultimo nodo del path
-  nodes[nodesCount-1] = origSolution->path[edgesCount-1]->toNode; 
-    
-  Solution* bestSolution = NULL;
-  for(int i=0; i<nodes.size() - 1; i++) {  
-  for(int j=i+1; j<nodes.size(); j++) {       
-    // solution con sub path entre los nodos
-    Solution* subSolution = origSolution->createSubSolutionBetween(nodes[i], nodes[j]); 
-    if(subSolution == NULL) continue; 
-    // dijkstra por omega2 entre los nodos
-    Solution* solution_ij = getSolvedPathBetween(nodes[i], nodes[j]); 
-    if(solution_ij == NULL) continue;
-    
-    
-    // Si el path creado con dijkstra usando omega2, tiene menos omega2 total, 
-    // que el path actual entre los nodos i y j, entonces chequeo si al 
-    // crear una nueva solucion tendra menos omega2 que la mejor solucion.
-    // En ese caso me guardo esta nueva solucion como la mejor hasta ahora.
-    // Ademas chequeo que se cumpla con el K requerido.              
-    double bestSolutionOmega2 = bestSolution == NULL ? 
-                  origSolution->totalOmega2 : 
-                  bestSolution->totalOmega2;
-    double newSolutionOmega2 = origSolution->totalOmega2 - subSolution->totalOmega2
-                   + solution_ij->totalOmega2;
-    double newSolutionOmega1 = origSolution->totalOmega1 - subSolution->totalOmega1
-                   + solution_ij->totalOmega1;    
-    if(newSolutionOmega2 < bestSolutionOmega2 && newSolutionOmega1 <= K) {       
-    if(bestSolution != NULL) {
-      delete bestSolution;   
-    }     
-    // creo la nueva mejor solucion
-    bestSolution = createNewSolutionReplacingPath(origSolution, solution_ij);      
-    }    
-    delete subSolution;
-  }
-  }
-  return bestSolution;  
+\end{lstlisting}
+\begin{lstlisting}[caption=createSolutionA()]
+Solution* createSolutionA(ProblemInstance* instance) 
+{    
+    // creo el dijkstra
+    Dijkstra<ObjectiveFunctionA> dijsktra;
+    // creo la solucion
+    DijkstraSolution dijkstraSolution( instance->graph->nodeCount, instance->u);
+    // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
+    dijsktra.findPath( instance->graph, &dijkstraSolution );
+    // obtengo el path que me interesa
+    Solution* solution = new Solution();    
+    dijkstraSolution.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
+    return solution;
 }
+\end{lstlisting}
+\begin{lstlisting}[caption=createSolutionB()]
+Solution* createSolutionB(ProblemInstance* instance) 
+{
+    // creo el dijkstra    
+    Dijkstra<ObjectiveFunctionB> dijsktra;
+    // creo la solucion
+    DijkstraSolution dijkstraSolution( instance->graph->nodeCount, instance->u);
+    // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
+    dijsktra.findPath( instance->graph, &dijkstraSolution );
+    // obtengo el path que me interesa
+    Solution* solution = new Solution();    
+    dijkstraSolution.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
+    return solution;
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=createSolutionC()]
+Solution* createSolutionC(ProblemInstance* instance) 
+{
+    // creo el dijkstra    
+    Dijkstra<ObjectiveFunctionC> dijsktra;
+    // creo la solucion
+    DijkstraSolution dijkstraSolution( instance->graph->nodeCount, instance->u);
+    // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
+    dijsktra.findPath( instance->graph, &dijkstraSolution );
+    // obtengo el path que me interesa
+    Solution* solution = new Solution();    
+    dijkstraSolution.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
+    return solution;
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=InitialSolution::getInitialSolution()]
+Solution* InitialSolution::getInitialSolution(ProblemInstance* instance)
+{   
+    Solution* solutionB = createSolutionB(instance);    
+    if(solutionB->totalOmega1 <= instance->K) {
+        return solutionB;
+    }
+    // si la solucion no es factible probamos con otras funciones objetivo    
+    Solution* solutionA = createSolutionA(instance);
+    Solution* solutionC = createSolutionC(instance);
+    if(solutionC->totalOmega1 <= instance->K) {
+        if(solutionA->totalOmega2 < solutionC->totalOmega2) {
+            return solutionA;
+        } 
+        return solutionC;
+    }
+    if(solutionA->totalOmega1 <= instance->K) {
+        return solutionA;
+    }
+    return NULL;    
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=NeighbourhoodSelectorA::removeCycles()]
+Solution* NeighbourhoodSelectorA::removeCycles(Solution* solution) 
+{
+  int* nextNodes = new int[nodeCount];
+  for(int i=0; i<nodeCount; i++) {
+    nextNodes[i] = 0;
+  }  
+  for(unsigned int i=0; i<solution->path.size(); i++) {
+    Edge* edge = solution->path[i];    
+    nextNodes[edge->fromNode] = edge->toNode;        
+  }        
 
+  vector<int> newPath;
+  int firstNode = solution->path[0]->fromNode;
+  int lastNode = solution->path[solution->path.size()-1]->toNode;  
+  int next = firstNode;
+  newPath.push_back(firstNode);     
+  int a = 0;
+  while(nextNodes[next] != lastNode)
+  {    
+    next = nextNodes[next];        
+    newPath.push_back(next);    
+  }
+
+  newPath.push_back(lastNode);
+  //cout << lastNode << endl;
+  
+  Solution* newSolution = new Solution();
+  for(int i=0; i<newPath.size()-1; i++){    
+    Edge* edge = solution->getEdgeBetween(newPath[i], newPath[i+1]);    
+    Edge* newEdge = new Edge(edge->fromNode, edge->toNode, edge->omega1, edge->omega2);
+    newSolution->path.push_back(newEdge);
+    newSolution->totalOmega1 += newEdge->omega1;
+    newSolution->totalOmega2 += newEdge->omega2;
+  }
+
+  return newSolution;
+}
+\end{lstlisting}
+\begin{lstlisting}[caption=createNewSolutionReplacingPath()]
 Solution* createNewSolutionReplacingPath(const Solution* orig, const Solution* sub) {
   int node1 = sub->path[0]->fromNode;
   int node2 = sub->path[sub->path.size()-1]->toNode;
@@ -219,9 +457,7 @@ Solution* createNewSolutionReplacingPath(const Solution* orig, const Solution* s
   vector<Edge*> edgesToRemove;
   bool subPathStartsAtNode1 = false;
   int subPathStartsAtEdgeIndex = 0;
-  
-  // primero agrego todos los edges del path original hasta encontrar 
-  // alguno de los nodos del subpath
+  // primero agrego todos los edges del path original hasta encontrar alguno de los nodos del subpath
   for(int i=0; i<orig->path.size(); i++) {
     Edge* edge = orig->path[i];
     if(edge->fromNode == node1 || edge->fromNode == node2) {
@@ -250,7 +486,7 @@ Solution* createNewSolutionReplacingPath(const Solution* orig, const Solution* s
   for(int i=subPathStartsAtEdgeIndex+1; i<orig->path.size(); i++) {
     Edge* edge = orig->path[i];
     if(edge->fromNode == fromNode) {
-      addEdges = true; // encontre el nodo, asi que comienzo a añadir los nodos desde aca
+      addEdges = true; // encontre el nodo, asi que comienzo a aniadir los nodos desde aca
     }
     if(addEdges) {
       res->path.push_back(edge);
@@ -261,99 +497,244 @@ Solution* createNewSolutionReplacingPath(const Solution* orig, const Solution* s
 
   return res;
 }
+\end{lstlisting}
+\begin{lstlisting}[caption=NeighbourhoodSelectorA::getBestNeighbour()]
+Solution* NeighbourhoodSelectorA::getBestNeighbour(const Solution* origSolution)
+{ 
+  // Itero sobre la matriz de soluciones
+  // Por cada par de nodos, tengo que buscar si existe un path en la matriz, 
+  // tal que sustituyendolo pot path entre el par de nodos de la solucion original 
+  // se obtenga una nueva solucion tal que se su totalOmega2 sea menor
+  
+  // Nota: Habiamos pensado en usar DeltaOmega2, pero si K es muy grande,
+  // nos sobraria mucho K que podriamos haber usado para sustituir en cada paso
+  // por un path con minimo omega2                
+  
+  // El path de una solution es un vector de ejes   
+  // En cada iteracion que encuentro una solucion mejor, voy a cambiar algunos de los nodos, 
+  // por lo que tengo que recalcular los nodos de la mejor solucion             
+  int edgesCount = origSolution->path.size();
+  int nodesCount = edgesCount+1;
+  vector<int> nodes(nodesCount); 
+  for(int i=0; i<edgesCount; i++) {
+    Edge* edge = origSolution->path[i];
+    nodes[i] = edge->fromNode;
+  }
+  nodes[nodesCount-1] = origSolution->path[edgesCount-1]->toNode; // ultimo nodo del path
+  //cout << endl;
+      
+  Solution* bestSolution = NULL;  
+  for(int i=0; i<nodes.size() - 1; i++) {    
+    for(int j=i+1; j<nodes.size(); j++) {           
+      Solution* subSolution = origSolution->createSubSolutionBetween(nodes[i], nodes[j]); // solution con sub path entre los nodos            
+      Solution* solution_ij = getSolvedPathBetween(nodes[i], nodes[j]); // dijkstra por omega2 entre los nodos
+      if(solution_ij == NULL) {
+        continue;
+      }      
+      /*cout << "Between (" << nodes[i] << ", " << nodes[j] << "):" << endl;
+      cout << "subSolution: ";
+      subSolution->print();
+      cout << "solution_ij: ";
+      solution_ij->print();*/
+      
+      // Si el path creado con dijkstra usando omega2, tiene menos omega2 total, que el path actual entre
+      // los nodos i y j, entonces chequeo si al crear una nueva solucion tendra menos omega2 que la mejor solucion.
+      // En ese caso me guardo esta nueva solucion como la mejor hasta ahora.
+      // Ademas chequeo que se cumpla con el K requerido.                          
+      double bestSolutionOmega2 = bestSolution == NULL ? origSolution->totalOmega2 : bestSolution->totalOmega2;
+      double newSolutionOmega2 = origSolution->totalOmega2 - subSolution->totalOmega2 + solution_ij->totalOmega2;
+      double newSolutionOmega1 = origSolution->totalOmega1 - subSolution->totalOmega1 + solution_ij->totalOmega1;            
+      if(newSolutionOmega2 < bestSolutionOmega2 && newSolutionOmega1 <= K) {                     
+        if(bestSolution != NULL) {
+          delete bestSolution;   
+        }       
+        /*cout << "origSolution ";
+        origSolution->print();
+        cout << "subSolution ";
+        subSolution->print();
+        cout << "solution_ij ";
+        solution_ij->print();*/
+        // creo la nueva mejor solucion        
+        bestSolution = createNewSolutionReplacingPath(origSolution, solution_ij);           
+        /*cout << "bestSolution ";
+        bestSolution->print();*/
+        Solution* bestSolutionWithoutCycles = removeCycles(bestSolution);                         
+        delete bestSolution;
+        bestSolution = bestSolutionWithoutCycles;        
+        //cout << "hubo mejora!" << endl;
+        //cout << "bestSolution: ";
+        //bestSolution->print();
+      }      
+      delete subSolution;
 
-\end{verbatim}
-\normalsize
-
+      //cout << endl;      
+    }
+  }
+    
+  return bestSolution;  
+}
+\end{lstlisting}
 \subsubsection{Grasp}
 
-\small
-\begin{verbatim}
+
+\begin{lstlisting}[caption=grasp.cpp]
+#include "../common/Graph.h"
+#include "../common/Parser.h"
+#include "../common/DijkstraSolution.h"
+#include "../common/Dijkstra.h"
+#include "../common/DijkstraRandomized.h"
+#include "../common/GreedyHeuristic.h"
+#include "../common/Solution.h"
+#include "../common/Parser.h"
+#include "../common/Timer.h"
+#include "NeighbourhoodSelectorA.h"
+#include "InitialSolution.h"
+#include <math.h>
+
+Parser parser;
+Timer timer( cerr );
+
 
 int main( int argc, char const* argv[] ) 
 {
-  // instantiate the neighborhood selector using the neighborhood selector parameter
-  NeighbourhoodSelector* selector = 
-          heuristicFactory.createNeighborhoodSelector( neighborhoodSelectorParameter );
-  // parse the input
-  parser.parseInput();  
+    /* Semilla random */
+    srand (time(NULL));
 
-  for(auto instance:parser.problemInstances)
-  {
-    selector->initialize(instance);    
+    /*****************
+      Initialization
+    ******************/
+            
+    // parse the input
+    parser.parseInput();  
 
-    // valores arbitrarios basados en n para criterio de terminaciones
-    int n = instance->graph->nodeCount;
-    int iteracionesSinMejorarCount = 0;
-    int iteracionesSinMejorarMax = n;
-    int iteracionesMax = n * log(n);
-    int iteracionesSinInitialPathCount = 0;
-    int iteracionesSinInitialPathMax = n;
+    // obtain the initial time
+    timer.setInitialTime( "todo_el_codigo" );
+    // obtain the initial solution
+
+    /*************************
+      Iterate over instances
+    **************************/
+    for(auto instance:parser.problemInstances)
+    {        
+        /*************
+         Resolution
+        **************/           
+        NeighbourhoodSelector* selector = new NeighbourhoodSelectorA();
+        selector->initialize(instance);                        
+
+        // valores arbitrarios basados en n para criterio de terminaciones
+        int n = instance->graph->nodeCount;
+        int iteracionesSinMejorarCount = 0;
+        int iteracionesSinMejorarMax = n*n;//n;
+        int iteracionesMax = n*n; //n * log(n);
+        int iteracionesSinInitialPathCount = 0;
+        int iteracionesSinInitialPathMax = n*n;//n;
+        
+        Solution* bestSolution = NULL;            
+
+        for(int i = 0; i<iteracionesMax; i++) {  
+            if(bestSolution) {
+                cout << i << "\t" << bestSolution->totalOmega2 << endl;
+            } else {
+                cout << "0" << endl;
+            }
+            //cout <<  iteracionesSinMejorarCount << "/" << iteracionesSinMejorarMax << ", " <<
+            //    i << "/" << iteracionesMax << ", " << 
+            //    iteracionesSinInitialPathCount << "/" << iteracionesSinInitialPathMax << endl;
+            // instantiate the initial solution using the initial solution parameter
+            InitialSolution* initialSolution = new InitialSolution();              
+            Solution* solution = initialSolution->getInitialSolution( instance );                     
+            //solution->print();                  
+            if(solution->path.size() == 0) {
+                // no encontre un path entre u y v
+                iteracionesSinInitialPathCount++;
+                delete solution;            
+                if(iteracionesSinInitialPathCount < iteracionesSinInitialPathMax) {
+                    continue; // sigo intentando buscar soluciones
+                } else {
+                    break; // me rindo, dejo de buscar soluciones
+                }            
+            }                        
+            //cout << "Initial solution: ";
+            //solution->print();
+
+            // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica            
+            if(solution->totalOmega1 <= instance->K) {                               
+                // run the heuristic
+                Solution* newSolution = NULL;    
+                bool huboMejora = false;
+                do
+                {                                        
+                    newSolution = selector->getBestNeighbour( solution );                                                            
+                    // Si no logro mejorar la solucion, termino      
+                    if(newSolution != NULL) {                        
+                        //cout << newSolution->totalOmega2 << endl; 
+                        delete solution;
+                        solution = newSolution;          
+                        huboMejora = true;                          
+                    } else {                      
+                        huboMejora = false;
+                    }        
+                } while(huboMejora);
+
+                if(bestSolution == NULL) {
+                    bestSolution = solution;
+                } else if(solution->totalOmega2 < bestSolution->totalOmega2) {
+                    //cout << "mejore la solucion! " << solution->totalOmega2 << endl;
+                    //return 0;
+                    delete bestSolution;
+                    bestSolution = solution;
+                } else {
+                    delete solution;
+                    iteracionesSinMejorarCount++;      
+                }            
+            }       
+
+            if(iteracionesSinMejorarCount > iteracionesSinMejorarMax) {      
+                break;
+            }
+        }  
+
+        if(bestSolution) {
+            //cout << bestSolution->totalOmega2 << endl;
+        }
+
+        // obtain the final time
+        timer.setFinalTime( "todo_el_codigo" );
+
+        /***************
+          Output Print
+        ****************/
+        // print the solution
+        if(bestSolution != NULL) {
+            //cout << "Final solution: ";
+            bestSolution->print();
+            delete bestSolution;
+        } else {
+            cout << "no" << endl;
+        }    
+        
+        // save all obtained times to output
+        timer.saveAllTimes();
+
+        //delete selector;
+    }    
     
-    Solution* bestSolution = NULL; 
-    // aca faltaria hacer un dijkstra por omega1, para ver que al 
-    // menos existe una solucion factible
-
-    for(int i = 0; i<iteracionesMax; i++) {  
-      // instantiate the initial solution using the initial solution parameter
-      InitialSolution* initialSolution =  
-              heuristicFactory.createInitialSolution( initialSolutionParameter );    
-      Solution* solution = initialSolution->getInitialSolution( instance );
-      if(solution->path.size() == 0) {
-        // no encontre un path entre u y v
-        iteracionesSinInitialPathCount++;
-        delete solution;      
-        if(iteracionesSinInitialPathCount < iteracionesSinInitialPathMax) {
-          continue; // sigo intentando buscar soluciones
-        } else {
-          break; // me rindo, dejo de buscar soluciones
-        }      
-      }
-
-      // El dijkstra de omega1 debe cumplir con el K, sino no tiene 
-      // sentido correr la heuristica
-      if(solution->totalOmega1 <= instance->K) {
-        // run the heuristic
-        Solution* newSolution = NULL;  
-        bool huboMejora = false;
-        do
-        {
-          newSolution = selector->getBestNeighbour( solution );
-          // Si no logro mejorar la solucion, termino    
-          if(newSolution != NULL) {
-            delete solution;
-            solution = newSolution;      
-            huboMejora = true;  
-          } else {            
-            huboMejora = false;
-          }    
-        } while(huboMejora);
-
-        if(bestSolution == NULL) {
-          bestSolution = solution;
-        } else if(solution->totalOmega2 < bestSolution->totalOmega2) {
-          delete bestSolution;
-          bestSolution = solution;
-        } else {
-          delete solution;
-          iteracionesSinMejorarCount++;    
-        }      
-      }     
-
-      if(iteracionesSinMejorarCount > iteracionesSinMejorarMax) {    
-        break;
-      }    
-    }  
-
-    if(bestSolution != NULL) {
-      bestSolution->print();
-      delete bestSolution;
-    } else {
-      cout << "no" << endl;
-    }  
-  }
-  
-  return 0;
+    return 0;
 }
-\end{verbatim}
-\normalsize
+\end{lstlisting}
+\begin{lstlisting}[caption=InitialSolution::getInitialSolution()]
+Solution* InitialSolution::getInitialSolution(ProblemInstance* instance)
+{    
+  // creo el dijkstra
+    DijkstraRandomized<ObjectiveFunctionA> dijsktraRandom;
+    // creo la solucion
+    DijkstraSolution dijkstraSolution( instance->graph->nodeCount, instance->u);
+    // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
+    dijsktraRandom.findPath( instance->graph, &dijkstraSolution );
+    // obtengo el path que me interesa
+    Solution* solution = new Solution();    
+    dijkstraSolution.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
+    return solution;
+}
+\end{lstlisting}
