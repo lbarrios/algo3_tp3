@@ -89,16 +89,17 @@ El algoritmo está implementado en la función \texttt{main}:
 \end{algorithmic}
 \end{algorithm}
 
+\fixme{poner la parte de remover caminos en el pseudo del main, y capaz agregar el pseudo de la funcion}
 % Complejidad
 \subsubsection{Complejidad}
 
 Implementamos el algoritmo en la función $main$. La complejidad del algoritmo resulta la suma de obtener la solución inicial y el ciclo que se usa para mejorarla buscando un mejor vecino en cada iteración. 
-Además, en $main$, inicialmente, se llama a una función crearMatrizCaminosMinimos que abordaremos más adelante.
+Además, en $main$, inicialmente, se llama a una función crearMatrizCaminosMinimos, que abordaremos más adelante.
 
-Para obtener la solución inicial, usamos obtenerSolucionInicial. Esta función devuelve un camino mínimo entre 2 nodos llamando a resolverConDijkstra con alguna función objetivo(Greedy\_A o Greedy\_C). La función resolverConDijkstra primero ejecuta Dijkstra para encontrar todos los caminos mínimos entre n1 y los demás nodos y después hace un traceback desde n2 hasta n1 para dar con el camino mínimo entre ellos. Como se comprobó en el apartado anterior, la complejidad de Dijkstra es $O(m log(n))$ y el traceback es $O(n)$, por lo que en total la complejidad de obtenerSolucionInicial es $O(m log(n))$. Cabe notar que la función objetivo usada en Dijkstra no influye en la complejidad, ya que solo comparara los valores de $\omega_1$ y $\omega_2$ y por lo que tiene complejidad $O(1)$.
+Para obtener la solución inicial, usamos obtenerSolucionInicial. Esta función devuelve un camino mínimo entre 2 nodos llamando a resolverConDijkstra con alguna función objetivo(Greedy\_A o Greedy\_C). La función resolverConDijkstra primero ejecuta Dijkstra para encontrar todos los caminos mínimos entre n1 y los demás nodos y después hace un recorrido inverso  desde n2 hasta n1 para dar con el camino mínimo entre ellos. Como se comprobó en el apartado anterior, la complejidad de Dijkstra es $O(m log(n))$ y el recorrido inverso es $O(n)$, por lo que en total la complejidad de obtenerSolucionInicial es $O(m log(n))$. Cabe notar que la función objetivo usada en Dijkstra no influye en la complejidad, ya que solo compara los valores de $\omega_1$ y $\omega_2$, por lo que tiene complejidad $O(1)$.
 
-Para mejorar la solución usamos un ciclo y en cada iteración obtenemos el mejor vecino del camino actual usando dameMejorVecino. Ejecutamos el ciclo mientras que hayamos encontrado una mejora al camino actual en la última iteración. 
-Dado que un vecino consiste en reemplazar la porción del camino actual que une 2 nodos $n_1$ y $n_2$ por el camino mínimo entre ellos, y que cada vez que se hace el reemplazo se disminuye $\omega_2$ del camino actual, se pueden hacer a lo sumo tantos reemplazos como caminos mínimos entre todo par de nodos del grafo existan. 
+Para mejorar la solución usamos un ciclo y en cada iteración obtenemos el mejor vecino del camino actual usando dameMejorVecino. Ejecutamos el ciclo mientras en la última iteración hayamos encontrado una mejora al camino actual. 
+Dado que un vecino consiste en reemplazar la porción del camino actual que une 2 nodos $n_1$ y $n_2$ por el camino mínimo según $\omega_2$ entre ellos, y que cada vez que se hace el reemplazo se disminuye $\omega_2$ del camino actual, se pueden hacer a lo sumo tantos reemplazos como caminos mínimos entre todo par de nodos del grafo existan. 
 La cantidad de caminos mínimos entre todo par de nodos de un grafo es $n * (n-1) / 2$, ya que cada nodo tiene un camino mínimo hacia todos los demás y no a sí mismo. Esto es, si hay n nodos, el nodo $n_1$, tiene un camino mínimo hacia los nodos $n_2$, ..., $n_n$, el nodo $n_2$ tiene un camino hacia $n_3$, ..., $n_n$ ya que no se vuelve a contar el camino entre $n_1$ y $n_2$ y así hasta $n_{n-1}$ que tiene un camino hasta $n_n$.
 Luego, la cantidad máxima de iteraciones es $n * (n-1) / 2$.
 
