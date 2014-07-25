@@ -28,7 +28,7 @@ heuristic_path = "../{}/".format(heuristic)
 if not os.path.exists(heuristic_path) or not os.path.isdir(heuristic_path):
     print("Error: El parámetro ingresado '{}' no se reconoce como una heurística válida.".format(heuristic))
     quit()
-heuristic_bin = "{}{}.time".format(heuristic_path,heuristic)
+heuristic_bin = "{}{}".format(heuristic_path,heuristic)
 if not os.path.exists(heuristic_bin) or not os.path.isfile(heuristic_bin):
     print("Error: Se encontró la carpeta '{}' pero no se encuentra el ejecutable '{}', por favor asegurarse de que esté compilado".format(heuristic_path,heuristic_bin))
     quit()

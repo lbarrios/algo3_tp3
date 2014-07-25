@@ -10,8 +10,8 @@ import math
 
 instanceCount = int(sys.argv[1])
 N = int(sys.argv[2])
-#M = int(sys.argv[3])
-M = randint(N-1, (N*(N-1)/2))
+M = int(sys.argv[3])
+#M = randint(N-1, (N*(N-1)/2))
 if M < N-1:
     raise Exception("M debe ser por lo menos N-1 para hacer el camino inicial")
 U = 1

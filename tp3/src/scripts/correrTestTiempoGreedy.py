@@ -4,7 +4,7 @@
 from glob import glob
 import os
 import sys
-
+ 
 # redefino la señal de interrupción
 import signal
 import sys

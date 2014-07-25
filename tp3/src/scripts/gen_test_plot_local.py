@@ -5,24 +5,20 @@ import os
 import math
 from datetime import datetime
 
-os.system("tar czf ../backup/local_search_%s.tar.gz ../input ../output/local_search" % datetime.now().strftime("%Y-%m-%d_%H_%M_%S"))
+#os.system("tar czf ../backup/local_search_%s.tar.gz ../input ../output/local_search" % datetime.now().strftime("%Y-%m-%d_%H_%M_%S"))
 os.system("rm ../input/*")
 os.system("rm ../output/local_search/*")
 
-n = 6
-while n<200:
-    if n<50:
-       n += 1
-    elif n<80:
-       n += 2
-    elif n<110:
-       n += 4
-    else:
-       n += 10
-    m = (n*(n-1))/2
-    #m = int(math.sqrt(n))*n
-    #m = 10*n
-    subprocess.call(["python", "createInput_magic.py", "20", str(n), str(m)])
+for n in range(10, 500, 10):
+  m = int(n*math.sqrt(n))
+  subprocess.call(["python", "createInput_magic.py", "15", str(n), str(m)])
 
-subprocess.call(["python3", "correrTestCalidad.py", "local_search", "magic"])
-subprocess.call(["python", "graficar_local_search_calidad.py"])
+#n = 50
+#m = 50-1
+#while m<(n*(n-1))/2:
+    #m += n
+    #m = 10*n
+    #subprocess.call(["python", "createInput_magic.py", "100", str(n), str(m)])
+
+subprocess.call(["python", "correrTestCalidad.py", "local_search", "magic"])
+subprocess.call(["python", "graficar_local_search_iteraciones.py"])
