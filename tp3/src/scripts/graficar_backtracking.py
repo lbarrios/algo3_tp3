@@ -50,7 +50,7 @@ for testname in tests:
     tests_mean_p_xy[testname][testtype].sort()
 
 t_names = len(tests_mean_xy)
-t_types = len(tests_mean_xy[testname])
+# t_types = len(tests_mean_xy[testname])
 
 colors = ['blue','green','red','cyan','magenta','yellow','black','grey','white']
 

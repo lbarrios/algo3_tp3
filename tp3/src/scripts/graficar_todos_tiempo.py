@@ -13,94 +13,128 @@ def make_listdict():
 def make_listdictdict():
   return defaultdict(make_listdict)
 
-tests = defaultdict(make_listdictdict)
 
-MMM = 1
+def get_results(heuristic_name, heuristic_folder):
+  MMM = 1
+  cota_teorica_x = list()
+  cota_teorica_y = list()
+  cota_teorica = list()
 
-cota_teorica_x = list()
-cota_teorica_y = list()
+  tests = defaultdict(make_listdictdict)
+  
+  files = sorted(glob("../output/{}/*.txt".format(heuristic_folder)))
+  for f in files:
+    file = open(f)
+    filename = f.split("/")[-1]
+    testtype = filename.split("_")[0]
+    testname = heuristic_name
+    (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
+    testsize = n+m
+    #print testsize
 
-cota_teorica = list()
+    if heuristic_name == "Greedy": 
+      cota_teorica_x.append(testsize)
+      cota_teorica_y.append(k)
+      cota_teorica.append( (testsize, float( k/MMM ) ) )
 
-files = sorted(glob("../output/greedy_heuristic_All/*.txt"))
-for f in files:
-  file = open(f)
-  filename = f.split("/")[-1]
-  testtype = filename.split("_")[0]
-  testname = "Greedy"
-  (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
-  testsize = n+m
-  #print testsize
-  cota_teorica_x.append(testsize)
-  cota_teorica_y.append(k)
-  cota_teorica.append( (testsize, float( k/MMM ) ) )
-  print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
-  for line in file:
-    if len(line.split())<2:
-      continue
-    #testtype = line.split()[0]
-    value = line.split()[1]
-    x = int(testsize)
-    #if x < 40: continue  # esto es muy arbitrario 
-    y = float( int(value) )
-    tests[testname][testtype][x].append(y)
-  file.close()
+    print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
+    for line in file:
+      if len(line.split())<2:
+        continue
+      #testtype = line.split()[0]
+      value = line.split()[1]
+      x = int(testsize)
+      #if x < 40: continue  # esto es muy arbitrario 
+      y = float( int(value) )
+      tests[testname][testtype][x].append(y)
+    file.close()
 
-files = sorted(glob("../output/local_search/*.txt"))
-for f in files:
-  file = open(f)
-  filename = f.split("/")[-1]
-  testtype = filename.split("_")[0]
-  testname = "Local"
-  (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
-  testsize = n+m
-  print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
-  for line in file:
-    if len(line.split())<2:
-      continue
-    value = line.split()[1]
-    x = int(testsize)
-    y = float( int(value) )
-    tests[testname][testtype][x].append(y)
-  file.close()
+  return (tests, cota_teorica)
 
-print("GRASP:")
-files = sorted(glob("../output/grasp/*.txt"))
-for f in files:
-  file = open(f)
-  filename = f.split("/")[-1]
-  testtype = filename.split("_")[0]
-  testname = "Grasp"
-  (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
-  testsize = n+m
-  #print "\tx={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
-  for line in file:
-    if len(line.split())<2:
-      continue
-    value = line.split()[1]
-    x = int(testsize)
-    y = float( int(value) )
-    tests[testname][testtype][x].append(y)
-  file.close()
+#tests_backt = get_results = get_results("Backtracking", "backtracking")
+tests_greedy, cota_teorica = get_results("Greedy", "greedy_heuristic_All")
+tests_local = get_results("Local", "local_search")
+tests_grasp = get_results("Greedy", "grasp")
 
-print("BACKTRACKING:")
-files = sorted(glob("../output/backtracking/*.txt"))
-for f in files:
-  file = open(f)
-  filename = f.split("/")[-1]
-  testtype = filename.split("_")[0]
-  testname = "Backtracking"
-  (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
-  testsize = n+m
-  #print "\tx={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
-  for line in file:
-    if len(line.split())<2:
-      continue
-    value = line.split()[1]
-    x = int(testsize)
-    y = float( int(value) )
-    tests[testname][testtype][x].append(y)
-  file.close()
+# files = sorted(glob("../output/greedy_heuristic_All/*.txt"))
+# for f in files:
+#   file = open(f)
+#   filename = f.split("/")[-1]
+#   testtype = filename.split("_")[0]
+#   testname = "Greedy"
+#   (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
+#   testsize = n+m
+#   #print testsize
+#   cota_teorica_x.append(testsize)
+#   cota_teorica_y.append(k)
+#   cota_teorica.append( (testsize, float( k/MMM ) ) )
+#   print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
+#   for line in file:
+#     if len(line.split())<2:
+#       continue
+#     #testtype = line.split()[0]
+#     value = line.split()[1]
+#     x = int(testsize)
+#     #if x < 40: continue  # esto es muy arbitrario 
+#     y = float( int(value) )
+#     tests[testname][testtype][x].append(y)
+#   file.close()
+
+# files = sorted(glob("../output/local_search/*.txt"))
+# for f in files:
+#   file = open(f)
+#   filename = f.split("/")[-1]
+#   testtype = filename.split("_")[0]
+#   testname = "Local"
+#   (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
+#   testsize = n+m
+#   print "x={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
+#   for line in file:
+#     if len(line.split())<2:
+#       continue
+#     value = line.split()[1]
+#     x = int(testsize)
+#     y = float( int(value) )
+#     tests[testname][testtype][x].append(y)
+#   file.close()
+
+# print("GRASP:")
+# files = sorted(glob("../output/grasp/*.txt"))
+# for f in files:
+#   file = open(f)
+#   filename = f.split("/")[-1]
+#   testtype = filename.split("_")[0]
+#   testname = "Grasp"
+#   (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
+#   testsize = n+m
+#   #print "\tx={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
+#   for line in file:
+#     if len(line.split())<2:
+#       continue
+#     value = line.split()[1]
+#     x = int(testsize)
+#     y = float( int(value) )
+#     tests[testname][testtype][x].append(y)
+#   file.close()
+
+# print("BACKTRACKING:")
+# files = sorted(glob("../output/backtracking/*.txt"))
+# for f in files:
+#   file = open(f)
+#   filename = f.split("/")[-1]
+#   testtype = filename.split("_")[0]
+#   testname = "Backtracking"
+#   (x, n, m, k) = [int(s[1:]) for s in filename.split(".")[0].split("_")[1:] ]
+#   testsize = n+m
+#   #print "\tx={}, n={}, m={}, k={}; tam_entrada={}".format(x,n,m,k,testsize)
+#   for line in file:
+#     if len(line.split())<2:
+#       continue
+#     value = line.split()[1]
+#     x = int(testsize)
+#     y = float( int(value) )
+#     tests[testname][testtype][x].append(y)
+#   file.close()
 
 tests_mean_xy = defaultdict(make_listdict)
 tests_mean_p_xy = defaultdict(make_listdict)

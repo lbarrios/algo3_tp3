@@ -32,7 +32,7 @@ elif M < N - 1:
 if K == -1:
     K = randint(N, N * M)  # pensar
 
-fo = open("../input/greedy/random_x%d_n%d_m%d_k%d.txt" % (instanceCount, N, M, K), "wb")
+fo = open("../input/greedy_heuristic_A/random_x%d_n%d_m%d_k%d.txt" % (instanceCount, N, M, K), "wb")
 
 for r in range(0, instanceCount):
     U = randint(1, N) # Nodo inicial

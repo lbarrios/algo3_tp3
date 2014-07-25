@@ -9,19 +9,19 @@ from datetime import datetime
 #os.system("rm ../input/*")
 #os.system("rm ../output/*/*")
 
-n = 5
-while n<30:
-    n += 1
-    m = (n*(n-1))/4 # notar que hay un 4, no un 2
-    #m = int(math.sqrt(n))*n
-    #m = 10*n
-    print n
-    os.system("python createInput_magic.py 10 %d %d" % (n, m))
+# n = 1
+# while n<1000:
+#     n += 50
+#     m = (n*(n-1))/4 # notar que hay un 4, no un 2
+#     #m = int(math.sqrt(n))*n
+#     #m = 10*n
+#     print n
+#     os.system("python createInput_magic.py 10 %d %d" % (n, m))
 
-os.system("./correrTestTiempo.py backtracking magic")
-os.system("./correrTestTiempo.py greedy_heuristic_All magic")
-os.system("./correrTestTiempo.py grasp magic")
-os.system("./correrTestTiempo.py local_search magic")
+#os.system("python ./correrTestTiempo.py backtracking magic")
+os.system("python ./correrTestTiempo.py greedy_heuristic_All magic")
+os.system("python ./correrTestTiempo.py grasp magic")
+os.system("python ./correrTestTiempo.py local_search magic")
 
 subprocess.call(["python", "graficar_todos_tiempo.py"])
 

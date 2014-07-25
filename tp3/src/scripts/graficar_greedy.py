@@ -19,7 +19,8 @@ def make_listdictdict():
 
 tests = defaultdict(make_listdictdict)
 
-files = sorted(glob("../output/greedy_heuristic_{}/*.txt".format(greedy)))
+files = sorted(glob("../output/greedy_heuristic_{}/*.txt.calidad".format(greedy)))
+
 for f in files:
   file = open(f)
   filename = f.split("/")[-1]
@@ -56,10 +57,11 @@ for testname in tests:
     tests_mean_p_xy[testname][testtype].sort()
 
 t_names = len(tests_mean_xy)
-t_types = len(tests_mean_xy[testname])
+# t_types = len(tests_mean_xy[testname])
 
 colors = ['blue','green','red','cyan','magenta','yellow','black','grey','white']
 
+#print tests_mean_xy
 
 import matplotlib.pyplot as plt
 import matplotlib.ticker as tck
@@ -74,7 +76,7 @@ subplot.yaxis.set_major_formatter(formatter)
 
 # Aplico formato
 plt.grid(True)
-plt.title(u"Heurística Greedy")
+plt.title(u"Heurística Grasp")
 plt.ylabel('Tiempo (segundos)')
 plt.xlabel(u'Tamaño de entrada (n + m)')
 
@@ -82,6 +84,8 @@ plt.xlabel(u'Tamaño de entrada (n + m)')
 linestyle or ls [ ‘-‘ | ‘--’ | '.' | ‘-.’ | ‘:’ | ‘steps’ | ...]
 marker  [ ‘+’ | ‘,’ | ‘.’ | ‘1’ | ‘2’ | ‘3’ | ‘4’ ]
 """
+
+#print "tnames = " + str(t_names)
 
 # ploteo datos
 for test_number in range(0,t_names):
@@ -96,7 +100,7 @@ for test_number in range(0,t_names):
 
 # ploteo cota teórica
 #subplot.plot(x, ((x*x)*22)/float(1e9),    '--', color='black', linewidth=2, label="$c.x^2$")
-plt.legend(loc=2)
+#plt.legend(loc=2)
 plt.tight_layout()  # para que entren las labels
 #plt.xlim(xmax=12800)
 #plt.ylim(ymax=0.0076)
