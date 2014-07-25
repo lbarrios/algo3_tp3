@@ -7,10 +7,10 @@
 #include "../common/Solution.h"
 #include "../common/Parser.h"
 #include "../common/Timer.h"
-#include "HeuristicFactoryG.h"
+#include "NeighbourhoodSelectorA.h"
+#include "InitialSolution.h"
 #include <math.h>
 
-HeuristicFactoryG heuristicFactory;
 Parser parser;
 Timer timer( cerr );
 
@@ -23,13 +23,9 @@ int main( int argc, char const* argv[] )
     /*****************
       Initialization
     ******************/
-    // get console parameters
-    int initialSolutionParameter = ( argc >= 2 ? atoi(argv[1]) : 0 );
-    int neighborhoodSelectorParameter = ( argc >= 3 ? atoi(argv[2]) : 0 );  
+    
     // instantiate the neighborhood selector using the neighborhood selector parameter
-    NeighbourhoodSelector* selector = heuristicFactory.createNeighborhoodSelector( neighborhoodSelectorParameter );
-    // instantiate the heuristic using the initial solution and the neighborhood selector
-    //std::unique_ptr<LocalHeuristic> heuristic = heuristicFactory.createHeuristic( std::move( solution ), std::move( selector ) );
+    NeighbourhoodSelector* selector = new NeighbourhoodSelectorA();
     // parse the input
     parser.parseInput();  
 
@@ -44,8 +40,9 @@ int main( int argc, char const* argv[] )
     {
         /*************
          Resolution
-        **************/           
+        **************/                    
         selector->initialize(instance);        
+
 
         // valores arbitrarios basados en n para criterio de terminaciones
         int n = instance->graph->nodeCount;
@@ -55,12 +52,14 @@ int main( int argc, char const* argv[] )
         int iteracionesSinInitialPathCount = 0;
         int iteracionesSinInitialPathMax = n;
         
-        Solution* bestSolution = NULL; 
-        // aca faltaria hacer un dijkstra por omega1, para ver que al menos existe una solucion factible
+        Solution* bestSolution = NULL;        
 
-        for(int i = 0; i<iteracionesMax; i++) {    
+        for(int i = 0; i<iteracionesMax; i++) {  
+            cout <<  iteracionesSinMejorarCount << "/" << iteracionesSinMejorarMax << ", " <<
+                i << "/" << iteracionesMax << ", " << 
+                iteracionesSinInitialPathCount << "/" << iteracionesSinInitialPathMax << endl;
             // instantiate the initial solution using the initial solution parameter
-            InitialSolution* initialSolution =  heuristicFactory.createInitialSolution( initialSolutionParameter );        
+            InitialSolution* initialSolution = new InitialSolution();
             Solution* solution = initialSolution->getInitialSolution( instance );
             if(solution->path.size() == 0) {
                 // no encontre un path entre u y v
@@ -71,19 +70,18 @@ int main( int argc, char const* argv[] )
                 } else {
                     break; // me rindo, dejo de buscar soluciones
                 }            
-            }
-
+            }                        
             //cout << "Initial solution: ";
             //solution->print();
 
             // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica
-            if(solution->totalOmega1 <= instance->K) {
+            if(solution->totalOmega1 <= instance->K) {                
                 // run the heuristic
                 Solution* newSolution = NULL;    
                 bool huboMejora = false;
                 do
-                {
-                    newSolution = selector->getBestNeighbour( solution );
+                {                    
+                    newSolution = selector->getBestNeighbour( solution );                    
                     // Si no logro mejorar la solucion, termino      
                     if(newSolution != NULL) {
                         //cout << "Mejore omega2!" << endl;
