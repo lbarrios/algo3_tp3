@@ -1,3 +1,3 @@
-COMMON_OBJS := Node Graph Edge Parser ProblemInstance DijkstraSolution Dijkstra UnvisitedNode HeuristicFactory InitialSolution Timer Solution ObjectiveFunctions
-OBJS := local_search NeighbourhoodSelector LocalHeuristic NeighbourhoodSelectorA NeighbourhoodSelectorB NeighbourhoodSelectorC InitialSolutionL_A InitialSolutionL_B InitialSolutionL_C HeuristicFactoryL
+COMMON_OBJS := Node Graph Edge Parser ProblemInstance DijkstraSolution Dijkstra UnvisitedNode Timer Solution ObjectiveFunctions
+OBJS := local_search NeighbourhoodSelector NeighbourhoodSelectorA InitialSolution
 include ../Makefile.common

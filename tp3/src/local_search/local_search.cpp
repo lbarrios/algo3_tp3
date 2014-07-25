@@ -6,9 +6,9 @@
 #include "../common/Solution.h"
 #include "../common/Parser.h"
 #include "../common/Timer.h"
-#include "HeuristicFactoryL.h"
+#include "NeighbourhoodSelectorA.h"
+#include "InitialSolution.h"
 
-HeuristicFactoryL heuristicFactory;
 Parser parser;
 Timer timer( cerr );
 
@@ -18,16 +18,10 @@ int main( int argc, char const* argv[] )
   /*****************
     Initialization
   ******************/
-  // get console parameters
-  int initialSolutionParameter = ( argc >= 2 ? atoi(argv[1]) : 0 );
-  int neighborhoodSelectorParameter = ( argc >= 3 ? atoi(argv[2]) : 0 );
   // instantiate the initial solution using the initial solution parameter
-  InitialSolution* initialSolution =  heuristicFactory.createInitialSolution( initialSolutionParameter );
-  InitialSolution* initialSolutionBestOmega1 =  heuristicFactory.createInitialSolution( INITIAL_SOLUTION_A );
+  InitialSolution* initialSolution = new InitialSolution();
   // instantiate the neighborhood selector using the neighborhood selector parameter
-  NeighbourhoodSelector* selector = heuristicFactory.createNeighborhoodSelector( neighborhoodSelectorParameter );
-  // instantiate the heuristic using the initial solution and the neighborhood selector
-  //std::unique_ptr<LocalHeuristic> heuristic = heuristicFactory.createHeuristic( std::move( solution ), std::move( selector ) );
+  NeighbourhoodSelector* selector = new NeighbourhoodSelectorA();
   // parse the input
   parser.parseInput();  
 
@@ -45,20 +39,11 @@ int main( int argc, char const* argv[] )
     timer.setInitialTime( "todo_el_codigo" );
     // obtain the initial solution
     
-    Solution* solution = initialSolution->getInitialSolution( instance );
-    // si no encuentro el path que cumpla con K, pruebo usando dijkstra con omega1.
-    // Tambien puede pasar que no encuentre ningun path, por lo que totalOmega1 = INF, y en ese 
-    // caso tambien pruebo buscar otro path
-    if(initialSolution->type != initialSolutionBestOmega1->type && solution->totalOmega1 > instance->K) {
-      delete solution;
-      solution = initialSolutionBestOmega1->getInitialSolution(instance);
-    }
-
+    Solution* solution = initialSolution->getInitialSolution( instance );    
     //cout << "Initial solution: ";
-    //solution->print();
-
-    // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica
-    if(solution->totalOmega1 <= instance->K) {
+    //solution->print();    
+    // si solution no es valida entonces, entonces es NULL
+    if(solution != NULL) {
       // run the heuristic
       Solution* newSolution = NULL;    
       bool huboMejora = false;
@@ -87,10 +72,11 @@ int main( int argc, char const* argv[] )
     ****************/
     // print the solution
     //cout << "Final solution: ";
-    solution->print();
+    if(solution) {
+      solution->print();
+      delete solution;
+    }    
     //solution->printTP();
-
-    delete solution;
     
     // save all obtained times to output
     timer.saveAllTimes();
