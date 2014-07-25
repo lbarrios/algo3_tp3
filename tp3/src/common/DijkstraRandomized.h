@@ -47,12 +47,14 @@ void DijkstraRandomized<ObjectiveFunction>::findPath(Graph* graph, DijkstraSolut
     while (unvisited.size() > 0) {
         int rcl_size = min(RCL_SIZE, int(unvisited.size()));
         int chosen = rand()%rcl_size + 1; // genera un int entre 1 y rcl_size 
+        //cout << "chosen " << chosen <<  " rclsize " << rcl_size << endl;
         list<UnvisitedNode*> stack;
         for (int i = 0; i < chosen; i++) {
             stack.push_front(unvisited.top());
             unvisited.pop();
         }
         UnvisitedNode* currNode = stack.front();
+        //cout << "first node " << currNode->node << endl;
         stack.pop_front();
         for (list<UnvisitedNode*>::iterator it = stack.begin(); it != stack.end(); it++)
             unvisited.push(*it);
@@ -60,6 +62,7 @@ void DijkstraRandomized<ObjectiveFunction>::findPath(Graph* graph, DijkstraSolut
         vector<Node> adjNodes = graph->getAdjacent(currNode->node);        
         for (int i=0; i<adjNodes.size(); i++) {            
             Node toNode = adjNodes[i];
+            if(prevNodes[toNode-1] != -1) continue;
             Edge* edge = graph->getEdge(currNode->node, adjNodes[i]);
             double weight = objFunc.weight(edge->omega1, edge->omega2);
             if(dist[currNode->node-1] + weight < dist[toNode-1]) {

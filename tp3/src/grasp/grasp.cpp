@@ -23,8 +23,7 @@ int main( int argc, char const* argv[] )
     /*****************
       Initialization
     ******************/
-        
-    
+            
     // parse the input
     parser.parseInput();  
 
@@ -54,13 +53,18 @@ int main( int argc, char const* argv[] )
         Solution* bestSolution = NULL;            
 
         for(int i = 0; i<iteracionesMax; i++) {  
+            if(bestSolution) {
+                cout << i << "\t" << bestSolution->totalOmega2 << endl;
+            } else {
+                cout << "0" << endl;
+            }
             //cout <<  iteracionesSinMejorarCount << "/" << iteracionesSinMejorarMax << ", " <<
             //    i << "/" << iteracionesMax << ", " << 
             //    iteracionesSinInitialPathCount << "/" << iteracionesSinInitialPathMax << endl;
             // instantiate the initial solution using the initial solution parameter
-            InitialSolution* initialSolution = new InitialSolution();        
-            //cout << "aca3" << endl;    
-            Solution* solution = initialSolution->getInitialSolution( instance );            
+            InitialSolution* initialSolution = new InitialSolution();              
+            Solution* solution = initialSolution->getInitialSolution( instance );                     
+            //solution->print();                  
             if(solution->path.size() == 0) {
                 // no encontre un path entre u y v
                 iteracionesSinInitialPathCount++;
@@ -74,24 +78,20 @@ int main( int argc, char const* argv[] )
             //cout << "Initial solution: ";
             //solution->print();
 
-            // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica
-            if(solution->totalOmega1 <= instance->K) {                
+            // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica            
+            if(solution->totalOmega1 <= instance->K) {                               
                 // run the heuristic
                 Solution* newSolution = NULL;    
                 bool huboMejora = false;
                 do
-                {                    
-                    //cout << "aca" << endl;
-                    newSolution = selector->getBestNeighbour( solution );                    
-                    //cout << "aca2" << endl;
+                {                                        
+                    newSolution = selector->getBestNeighbour( solution );                                                            
                     // Si no logro mejorar la solucion, termino      
-                    if(newSolution != NULL) {
-                        //cout << "Mejore omega2!" << endl;
-                        //cout << "new solution: ";
-                        //newSolution->print();
+                    if(newSolution != NULL) {                        
+                        //cout << newSolution->totalOmega2 << endl; 
                         delete solution;
                         solution = newSolution;          
-                        huboMejora = true;  
+                        huboMejora = true;                          
                     } else {                      
                         huboMejora = false;
                     }        
@@ -100,6 +100,8 @@ int main( int argc, char const* argv[] )
                 if(bestSolution == NULL) {
                     bestSolution = solution;
                 } else if(solution->totalOmega2 < bestSolution->totalOmega2) {
+                    //cout << "mejore la solucion! " << solution->totalOmega2 << endl;
+                    //return 0;
                     delete bestSolution;
                     bestSolution = solution;
                 } else {
@@ -113,6 +115,10 @@ int main( int argc, char const* argv[] )
             }
         }  
 
+        if(bestSolution) {
+            //cout << bestSolution->totalOmega2 << endl;
+        }
+
         // obtain the final time
         timer.setFinalTime( "todo_el_codigo" );
 
@@ -125,7 +131,7 @@ int main( int argc, char const* argv[] )
             bestSolution->print();
             delete bestSolution;
         } else {
-            cout << "No" << endl;
+            cout << "no" << endl;
         }    
         
         // save all obtained times to output

@@ -69,11 +69,9 @@ Solution* getBestSolution(ProblemInstance* instance)
     if(solutionC->totalOmega1 <= instance->K) {
         if(solutionA->totalOmega2 < solutionC->totalOmega2) {            
             return solutionA;
-        } 
-        cout << "solutionA omega2 " << solutionA->totalOmega2 << endl;
-        cout << "solutionC omega2 " << solutionC->totalOmega2 << endl;
+        }         
         return solutionC;
-    }
+    }    
 
     //cout << "solutionC omega1 " << solutionC->totalOmega1 << endl;
 
