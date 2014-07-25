@@ -34,7 +34,7 @@ time: $(EXE).time
 $(EXE): $(OBJS) $(COMMON_OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(COMMON_OBJS) -o $@
 $(EXE).time: $(OBJS_TIME) $(COMMON_OBJS_TIME)
-	$(CC) $(CFLAGS_TIME) $(OBJS_TIME) $(COMMON_OBJS_TIME) -o $@ -lrt
+	$(CC) $(CFLAGS_TIME) $(OBJS_TIME) $(COMMON_OBJS_TIME) -o $@
 
 
 

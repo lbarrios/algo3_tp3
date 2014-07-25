@@ -18,5 +18,5 @@ public:
 
     Solution* createSubSolutionBetween(int node1, int node2) const;
     Edge* getEdgeBetween(int node1, int node2);
-    void print() const;
+    void print();
 };

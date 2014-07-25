@@ -23,9 +23,8 @@ int main( int argc, char const* argv[] )
     /*****************
       Initialization
     ******************/
+        
     
-    // instantiate the neighborhood selector using the neighborhood selector parameter
-    NeighbourhoodSelector* selector = new NeighbourhoodSelectorA();
     // parse the input
     parser.parseInput();  
 
@@ -37,12 +36,12 @@ int main( int argc, char const* argv[] )
       Iterate over instances
     **************************/
     for(auto instance:parser.problemInstances)
-    {
+    {        
         /*************
          Resolution
-        **************/                    
-        selector->initialize(instance);        
-
+        **************/           
+        NeighbourhoodSelector* selector = new NeighbourhoodSelectorA();
+        selector->initialize(instance);                        
 
         // valores arbitrarios basados en n para criterio de terminaciones
         int n = instance->graph->nodeCount;
@@ -52,15 +51,16 @@ int main( int argc, char const* argv[] )
         int iteracionesSinInitialPathCount = 0;
         int iteracionesSinInitialPathMax = n;
         
-        Solution* bestSolution = NULL;        
+        Solution* bestSolution = NULL;            
 
         for(int i = 0; i<iteracionesMax; i++) {  
             //cout <<  iteracionesSinMejorarCount << "/" << iteracionesSinMejorarMax << ", " <<
             //    i << "/" << iteracionesMax << ", " << 
             //    iteracionesSinInitialPathCount << "/" << iteracionesSinInitialPathMax << endl;
             // instantiate the initial solution using the initial solution parameter
-            InitialSolution* initialSolution = new InitialSolution();
-            Solution* solution = initialSolution->getInitialSolution( instance );
+            InitialSolution* initialSolution = new InitialSolution();        
+            //cout << "aca3" << endl;    
+            Solution* solution = initialSolution->getInitialSolution( instance );            
             if(solution->path.size() == 0) {
                 // no encontre un path entre u y v
                 iteracionesSinInitialPathCount++;
@@ -81,7 +81,9 @@ int main( int argc, char const* argv[] )
                 bool huboMejora = false;
                 do
                 {                    
+                    //cout << "aca" << endl;
                     newSolution = selector->getBestNeighbour( solution );                    
+                    //cout << "aca2" << endl;
                     // Si no logro mejorar la solucion, termino      
                     if(newSolution != NULL) {
                         //cout << "Mejore omega2!" << endl;
@@ -128,7 +130,9 @@ int main( int argc, char const* argv[] )
         
         // save all obtained times to output
         timer.saveAllTimes();
-    }
+
+        //delete selector;
+    }    
     
     return 0;
 }

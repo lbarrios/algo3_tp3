@@ -55,7 +55,7 @@ Solution* Solution::createSubSolutionBetween(int node1, int node2) const {
 	return res;
 }
 
-void Solution::print() const
+void Solution::print()
 {
   if (totalOmega1==INF || totalOmega2==INF)
   {
