@@ -27,7 +27,7 @@ int main( int argc, char const* argv[] )
 
   /*************************
     Iterate over instances
-  **************************/
+  *******************'*******/
   for(auto instance:parser.problemInstances)
   {
     /*************
@@ -39,11 +39,18 @@ int main( int argc, char const* argv[] )
     timer.setInitialTime( "todo_el_codigo" );
     // obtain the initial solution
     
+    int initialSolutionOmega2;
+
     Solution* solution = initialSolution->getInitialSolution( instance );    
     //cout << "Initial solution: ";
-    //solution->print();    
+
+    unsigned int iteraciones = 0;
+
+    // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica    
     // si solution no es valida entonces, entonces es NULL
     if(solution != NULL) {
+      initialSolutionOmega2 = solution->totalOmega2;
+
       // run the heuristic
       Solution* newSolution = NULL;    
       bool huboMejora = false;
@@ -58,12 +65,13 @@ int main( int argc, char const* argv[] )
           delete solution;
           solution = newSolution;          
           huboMejora = true;  
+          iteraciones++;
         } else {                      
           huboMejora = false;
-        }      
+        }
       } while(huboMejora);
     } 
-    
+
     // obtain the final time
     timer.setFinalTime( "todo_el_codigo" );
 
@@ -72,10 +80,17 @@ int main( int argc, char const* argv[] )
     ****************/
     // print the solution
     //cout << "Final solution: ";
+    cout << iteraciones << " ";
     if(solution) {
-      solution->print();
+      if(iteraciones) cout << (initialSolutionOmega2 - solution->totalOmega2) / iteraciones << endl;
+      else cout << 0 << endl;
+      //solution->print();
       delete solution;
-    }    
+    }
+    else
+    {
+      cout << 0 << endl;
+    }
     //solution->printTP();
     
     // save all obtained times to output
