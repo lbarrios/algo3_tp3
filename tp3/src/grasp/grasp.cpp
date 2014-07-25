@@ -55,9 +55,9 @@ int main( int argc, char const* argv[] )
         Solution* bestSolution = NULL;        
 
         for(int i = 0; i<iteracionesMax; i++) {  
-            cout <<  iteracionesSinMejorarCount << "/" << iteracionesSinMejorarMax << ", " <<
-                i << "/" << iteracionesMax << ", " << 
-                iteracionesSinInitialPathCount << "/" << iteracionesSinInitialPathMax << endl;
+            //cout <<  iteracionesSinMejorarCount << "/" << iteracionesSinMejorarMax << ", " <<
+            //    i << "/" << iteracionesMax << ", " << 
+            //    iteracionesSinInitialPathCount << "/" << iteracionesSinInitialPathMax << endl;
             // instantiate the initial solution using the initial solution parameter
             InitialSolution* initialSolution = new InitialSolution();
             Solution* solution = initialSolution->getInitialSolution( instance );
