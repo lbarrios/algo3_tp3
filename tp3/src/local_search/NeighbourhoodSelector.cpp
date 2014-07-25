@@ -63,25 +63,6 @@ void NeighbourhoodSelector::initialize(ProblemInstance* instance)
         pathMatrix[j-1 + (k-1) * nodeCount] = solution->path.size() > 0 ? solution : NULL;                                  
     }
 	}
-  
-  /*for(int j=1; j<=nodeCount; j++) {
-    for(int k=1; k<j; k++) {      
-      Solution* invSolution = pathMatrix[j-1 + (k-1) * nodeCount];
-      if(invSolution) {
-        Solution* solution = new Solution();
-        for(int i = 0; i<invSolution->path.size(); i++) {
-          Edge* invEdge = invSolution->path[i];
-          solution->path.push_back(new Edge(invEdge->fromNode, invEdge->toNode, invEdge->omega1, invEdge->omega2));
-          //cout << "meto" << invSolution->path[i] << endl;
-        }
-        solution->totalOmega1 = invSolution->totalOmega1;
-        solution->totalOmega2 = invSolution->totalOmega2;         
-        pathMatrix[k-1 + (j-1) * nodeCount] = solution;        
-      } else {        
-        pathMatrix[k-1 + (j-1) * nodeCount] = NULL;        
-      }            
-    }
-  }*/
 }
 
 Solution* NeighbourhoodSelector::getSolvedPathBetween(int node1, int node2) {  

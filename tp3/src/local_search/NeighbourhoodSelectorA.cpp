@@ -16,7 +16,6 @@ Solution* NeighbourhoodSelectorA::removeCycles(Solution* solution)
   int lastNode = solution->path[solution->path.size()-1]->toNode;  
   int next = firstNode;
   newPath.push_back(firstNode);     
-  int a = 0;
   while(nextNodes[next] != lastNode)
   {    
     next = nextNodes[next];        

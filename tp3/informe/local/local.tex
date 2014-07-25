@@ -93,14 +93,44 @@ El algoritmo está implementado en la función \texttt{main}:
 \end{algorithmic}
 \end{algorithm}
 
-\fixme{poner la parte de remover caminos en el pseudo del main, y capaz agregar el pseudo de la funcion}
+\begin{algorithm}[H]
+\caption{$removerCiclos$(Solution solution)}
+\begin{algorithmic}[1]	
+	 \State int nextNodes[nodeCount]
+	 \For{i=0; i $<$ nodeCount; i++}
+	 	\State nextNodes[i] = 0
+	\EndFor
+	 \For{i=0; i $<$ solution.path.size(); i++}
+		 \State edge = solution.path[i]
+	 	\State nextNodes[edge.fromNode] = edge.toNode
+	\EndFor	
+	 \State vector$<int>$ newPath
+	 \State firstNode = solution.path[0].fromNode
+	 \State lastNode = solution.path[solution.path-1].toNode
+	 \State next = firstNode
+	 \State newPath.push(firstNode)
+	 \While{nextNodes[next] != lastNode}
+	 	\State next = nextNodes[next]
+		\State newPath.push(next)
+	\EndWhile
+	\State newPath.push(lastNode)
+	\State Solution newSolution
+	\For{i=0; i $<$ newPath.size()-1; i++}	
+		\State edge = solution.getEdgeBetween(newPath[i], newPath[i+1]
+		\State newEdge = Edge(edge)
+		\State newSolution.addEdge(edge)
+	\EndFor
+	\State return newSolution
+\end{algorithmic}
+\end{algorithm}
+
 % Complejidad
 \subsubsection{Complejidad}
 
 Implementamos el algoritmo en la función $main$. La complejidad del algoritmo resulta la suma de obtener la solución inicial y el ciclo que se usa para mejorarla buscando un mejor vecino en cada iteración. 
-Además, en $main$, inicialmente, se llama a una función crearMatrizCaminosMinimos, que abordaremos más adelante.
+Además, en $main$, inicialmente, se llama a una función crearMatrizCaminosMinimos\footnote{\label{$crearMatrixCaminosMinimos$}: Estamos haciendo uso de esta función que no se encuentra en el código fuente como tal, pero es para facilitar la legibilidad del pseudocódigo. En el código fuente se crea la matriz de camino mínimos cuando se inicializa NeighbourhoodSelector en la función main en localsearch.cpp.}, que abordaremos más adelante.
 
-Para obtener la solución inicial, usamos obtenerSolucionInicial. Esta función devuelve un camino mínimo entre 2 nodos llamando a resolverConDijkstra con alguna función objetivo(Greedy\_A o Greedy\_C). La función resolverConDijkstra primero ejecuta Dijkstra para encontrar todos los caminos mínimos entre n1 y los demás nodos y después hace un recorrido inverso desde n2 hasta n1 para dar con el camino mínimo entre ellos. Como se comprobó en el apartado anterior, la complejidad de Dijkstra es $O(m log(n))$ y el recorrido inverso es $O(n)$, por lo que en total la complejidad de obtenerSolucionInicial es $O(m log(n))$. Cabe notar que la función objetivo usada en Dijkstra no influye en la complejidad, ya que solo compara los valores de $\omega_1$ y $\omega_2$, por lo que tiene complejidad $O(1)$.
+Creamos la solucion inicial usando Greedy. Esta función como explicamos en el apartado anterior, devuelve un camino mínimo entre 2 nodos usando Greedy A, B y C. Cada una de las 3 funciones Greedy usan la función resolverConDijkstra que ejecuta Dijkstra para encontrar todos los caminos mínimos entre n1 y los demás nodos y después hace un recorrido inverso desde n2 hasta n1 para dar con el camino mínimo entre ellos. Como se comprobó en el apartado anterior, la complejidad de Dijkstra es $O(m log(n))$ y el recorrido inverso es $O(n)$, por lo que en total la complejidad de obtenerSolucionInicial es $O(m log(n))$. Cabe notar que la función objetivo usada en Dijkstra no influye en la complejidad, ya que solo compara los valores de $\omega_1$ y $\omega_2$, por lo que tiene complejidad $O(1)$.
 
 Para mejorar la solución usamos un ciclo y en cada iteración obtenemos el mejor vecino del camino actual usando dameMejorVecino. Ejecutamos el ciclo mientras en la última iteración hayamos encontrado una mejora al camino actual. 
 Dado que un vecino consiste en reemplazar la porción del camino actual que une 2 nodos $n_1$ y $n_2$ por el camino mínimo según $\omega_2$ entre ellos, y que cada vez que se hace el reemplazo se disminuye $\omega_2$ del camino actual, se pueden hacer a lo sumo tantos reemplazos como caminos mínimos entre todo par de nodos del grafo existan. 
@@ -126,11 +156,13 @@ Como crearMatrizCaminosMinimos ejecuta un Dijkstra por cada nodo, su complejidad
 Para obtener el nuevo camino reemplazando el subcamino entre $n_1$ y $n_2$ por el camino mínimo entre ellos, usamos crearSolucionReemplazandoCamino.
 Lo que hacemos es generar una nueva solución que es la concatenación de 3 caminos: el camino mínimo entre $n_1$ y $n_2$ y los dos pedazos del camino original sin el subcamino que unía $n_1$ y $n_2$. Para crear el camino, hay que recorrer el solucionOriginal y añadir todos los nodos hasta $n_1$ y luego añadir todos los nodos del camino mínimo y al final añadir todos los nodos desde $n_2$ hasta el final de solucionOriginal. Por ende es como iterar sobre el nuevo camino que a lo sumo puede tener $n$ nodos y por ende la complejidad resulta $O(n)$.
 
-Entonces, resulta ser que encontrar el mejor vecino, consiste en ejecutar el doble $for$ de algo que tiene complejidad $O(n + 1 + n)$, o sea $O(n)$, entonces en total es $O(n^2 \times n) = O(n^3)$.
+Como es posible que la solución creada a partir de unir los caminos contenga ciclos, usamos la función removerCiclos que se encarga de remover cualquier ciclo en la nueva solución. Esta función itera sobre los nodos de la solución y almacena en un arreglo de enteros el nodo siguiente a cada nodo. De modo que cada elemento i corresponde al nodo i y su valor es el nodo siguiente a ese nodo i. En el caso de que exista un ciclo y un nodo i esta al comienzo de un ciclo, primero el nodo i tendrá como siguiente a otro nodo j, pero cuando se itera sobre la solución y se llega nuevamente al nodo i, al asignarle su siguiente, ese nodo ya no será j, sino otro nodo mas adelente en la solución. Con el arreglo creado de esa manera podemos reconstruir la solución sin ciclos. El camino se obtiene recorriendo el arreglo como una lista enlazada, donde cada elemento tiene el índice del siguiente. Usando este arreglo creamos una nueva solución, que es un vector de ejes con $omega_1$ y $omega_2$ asignados. Los ejes los construimos usando los nodos del arreglo y obtenemos los valores de $omega_1$ y $omega_2$ de la solución recibida por parametro. La complejidad de remover los ciclos resulta igual a la suma de construir el arreglo, que es $O(n)$, ya que a lo sumo puede tener n vertices y luego crear la nueva solución que es $O(n^2)$, ya que hay que crear hasta $n-1$ ejes y por cada eje hay que obtener sus valores de $omega_1$ y $omega_2$ de la solución original. Luego en total es $O(n^2)$. 
 
-Como habíamos explicado que dameMejorVecino se ejecuta en un ciclo de hasta $n \times (n-1) / 2$ iteraciones, o sea $O(n^2)$, y entonces resulta que la complejidad de encontrar el mejor vecino es $O(n^2 \times n^3) = O(n^5)$. 
+Entonces, resulta ser que encontrar el mejor vecino, consiste en ejecutar el doble $for$ de algo que tiene complejidad $O(n + 1 + n + n^2)$, o sea $O(n^2)$, entonces en total es $O(n^2 \times n^2) = O(n^4)$.
 
-Finalmente la complejidad total resulta ser la suma de las complejidades de crearMatrizCaminosMinimos, 2 veces obtenerSolucionInicial y $n^2$ veces dameMejorVecino. Es decir, $O(n \times (m log n) + 2 \times (m log n) + n^5) = O(n^5)$.
+Como habíamos explicado que dameMejorVecino se ejecuta en un ciclo de hasta $n \times (n-1) / 2$ iteraciones, o sea $O(n^2)$, y entonces resulta que la complejidad de encontrar el mejor vecino es $O(n^2 \times n^4) = O(n^6)$. 
+
+Finalmente la complejidad total resulta ser la suma de las complejidades de crearMatrizCaminosMinimos, 2 veces obtenerSolucionInicial y $n^2$ veces dameMejorVecino. Es decir, $O(n \times (m log n) + 2 \times (m log n) + n^6) = O(n^6)$.
 
 % Familias malas
 \subsubsection{Familias malas}
@@ -178,7 +210,7 @@ Pudimos analizar el tiempo de ejecución corriendo el algoritmo en grafos de un 
 \end{figure}
 
 
-Se puede percibir el carácter no lineal de la complejidad. Sin embargo no se evidencia a luces claras la cota teórica de $n^5$ desarrollada
+Se puede percibir el carácter no lineal de la complejidad. Sin embargo no se evidencia a luces claras la cota teórica de $n^6$ desarrollada
 previamente. Puede ser necesario un tamaño mayor para poder apreciar esa complejidad, o quizás la cota teórica no se alcanza en la práctica.
 Probablemente haya un factor que se amortice, habiendo escapado de nuestro escrutinio.
 
