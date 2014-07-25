@@ -194,8 +194,6 @@ Solution* getBestSolution(ProblemInstance* instance)
     if(solutionB->totalOmega1 <= instance->K) {
         return solutionB;
     }
-    //cout << "K " << instance->K << endl;
-    //cout << "solutionB omega1 " << solutionB->totalOmega1 << endl;
     // si la solucion no es factible probamos con otras funciones objetivo    
     Solution* solutionA = createSolutionA(instance);
     Solution* solutionC = createSolutionC(instance);
@@ -205,13 +203,10 @@ Solution* getBestSolution(ProblemInstance* instance)
         }         
         return solutionC;
     }    
-
-    //cout << "solutionC omega1 " << solutionC->totalOmega1 << endl;
-
+        
     if(solutionA->totalOmega1 <= instance->K) {
         return solutionA;
     }
-    //cout << "solutionA omega2 " << solutionA->totalOmega2 << endl;
     return NULL;   
 }
 \end{lstlisting}
@@ -291,8 +286,6 @@ int main( int argc, char const* argv[] )
     int initialSolutionOmega2;
 
     Solution* solution = initialSolution->getInitialSolution( instance );
-    //cout << "Initial solution: ";
-
 
     // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica
     // si solution no es valida entonces, entonces es NULL
@@ -307,9 +300,6 @@ int main( int argc, char const* argv[] )
         newSolution = selector->getBestNeighbour( solution );
         // Si no logro mejorar la solucion, termino
         if(newSolution != NULL) {
-          //cout << "Mejore omega2!" << endl;
-          //cout << "new solution: ";
-          //newSolution->print();
           delete solution;
           solution = newSolution;          
           huboMejora = true;  
@@ -326,7 +316,6 @@ int main( int argc, char const* argv[] )
       Output Print
     ****************/
     // print the solution
-    //cout << "Final solution: ";
     if(solution) {
       solution->print();
       delete solution;
@@ -335,7 +324,6 @@ int main( int argc, char const* argv[] )
     {
       cout << 0 << endl;
     }
-    //solution->printTP();
 
     // save all obtained times to output
     timer.saveAllTimes();
@@ -521,7 +509,6 @@ Solution* NeighbourhoodSelectorA::getBestNeighbour(const Solution* origSolution)
     nodes[i] = edge->fromNode;
   }
   nodes[nodesCount-1] = origSolution->path[edgesCount-1]->toNode; // ultimo nodo del path
-  //cout << endl;
       
   Solution* bestSolution = NULL;  
   for(int i=0; i<nodes.size() - 1; i++) {    
@@ -531,11 +518,6 @@ Solution* NeighbourhoodSelectorA::getBestNeighbour(const Solution* origSolution)
       if(solution_ij == NULL) {
         continue;
       }      
-      /*cout << "Between (" << nodes[i] << ", " << nodes[j] << "):" << endl;
-      cout << "subSolution: ";
-      subSolution->print();
-      cout << "solution_ij: ";
-      solution_ij->print();*/
       
       // Si el path creado con dijkstra usando omega2, tiene menos omega2 total, que el path actual entre
       // los nodos i y j, entonces chequeo si al crear una nueva solucion tendra menos omega2 que la mejor solucion.
@@ -548,26 +530,13 @@ Solution* NeighbourhoodSelectorA::getBestNeighbour(const Solution* origSolution)
         if(bestSolution != NULL) {
           delete bestSolution;   
         }       
-        /*cout << "origSolution ";
-        origSolution->print();
-        cout << "subSolution ";
-        subSolution->print();
-        cout << "solution_ij ";
-        solution_ij->print();*/
         // creo la nueva mejor solucion        
         bestSolution = createNewSolutionReplacingPath(origSolution, solution_ij);           
-        /*cout << "bestSolution ";
-        bestSolution->print();*/
         Solution* bestSolutionWithoutCycles = removeCycles(bestSolution);                         
         delete bestSolution;
         bestSolution = bestSolutionWithoutCycles;        
-        //cout << "hubo mejora!" << endl;
-        //cout << "bestSolution: ";
-        //bestSolution->print();
       }      
       delete subSolution;
-
-      //cout << endl;      
     }
   }
     
@@ -625,26 +594,17 @@ int main( int argc, char const* argv[] )
         // valores arbitrarios basados en n para criterio de terminaciones
         int n = instance->graph->nodeCount;
         int iteracionesSinMejorarCount = 0;
-        int iteracionesSinMejorarMax = n*n;//n;
-        int iteracionesMax = n*n; //n * log(n);
+        int iteracionesSinMejorarMax = n*n/4;
+        int iteracionesMax = n*n/2;
         int iteracionesSinInitialPathCount = 0;
-        int iteracionesSinInitialPathMax = n*n;//n;
+        int iteracionesSinInitialPathMax = n*n/4;
         
         Solution* bestSolution = NULL;            
 
-        for(int i = 0; i<iteracionesMax; i++) {  
-            if(bestSolution) {
-                cout << i << "\t" << bestSolution->totalOmega2 << endl;
-            } else {
-                cout << "0" << endl;
-            }
-            //cout <<  iteracionesSinMejorarCount << "/" << iteracionesSinMejorarMax << ", " <<
-            //    i << "/" << iteracionesMax << ", " << 
-            //    iteracionesSinInitialPathCount << "/" << iteracionesSinInitialPathMax << endl;
+        for(int i = 0; i<iteracionesMax; i++) {              
             // instantiate the initial solution using the initial solution parameter
             InitialSolution* initialSolution = new InitialSolution();              
             Solution* solution = initialSolution->getInitialSolution( instance );                     
-            //solution->print();                  
             if(solution->path.size() == 0) {
                 // no encontre un path entre u y v
                 iteracionesSinInitialPathCount++;
@@ -655,8 +615,6 @@ int main( int argc, char const* argv[] )
                     break; // me rindo, dejo de buscar soluciones
                 }            
             }                        
-            //cout << "Initial solution: ";
-            //solution->print();
 
             // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica            
             if(solution->totalOmega1 <= instance->K) {                               
@@ -680,8 +638,6 @@ int main( int argc, char const* argv[] )
                 if(bestSolution == NULL) {
                     bestSolution = solution;
                 } else if(solution->totalOmega2 < bestSolution->totalOmega2) {
-                    //cout << "mejore la solucion! " << solution->totalOmega2 << endl;
-                    //return 0;
                     delete bestSolution;
                     bestSolution = solution;
                 } else {
@@ -695,10 +651,6 @@ int main( int argc, char const* argv[] )
             }
         }  
 
-        if(bestSolution) {
-            //cout << bestSolution->totalOmega2 << endl;
-        }
-
         // obtain the final time
         timer.setFinalTime( "todo_el_codigo" );
 
@@ -707,7 +659,6 @@ int main( int argc, char const* argv[] )
         ****************/
         // print the solution
         if(bestSolution != NULL) {
-            //cout << "Final solution: ";
             bestSolution->print();
             delete bestSolution;
         } else {
