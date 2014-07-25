@@ -1,28 +1,94 @@
 #include "GreedyHeuristicAll.h"
+#include "../common/Dijkstra.h"
+#include "../common/ObjectiveFunctions.h"
 
-GreedyHeuristicAll::GreedyHeuristic()
+GreedyHeuristicAll::GreedyHeuristicAll()
 {
   solution = new Solution();
 }
 
-GreedyHeuristic::GreedyHeuristic(Timer* t)
+GreedyHeuristicAll::GreedyHeuristicAll(Timer* t)
 {
   solution = new Solution();
   timer = t;
 }
 
-void GreedyHeuristic::resolveInstance( ProblemInstance* instance ){
-  // creo el dijkstra
-  Dijkstra<ObjectiveFunction> dijsktra;
-  // creo la solucion
-  DijkstraSolution sol( instance->graph->nodeCount, instance->u );
-  // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
-  dijsktra.findPath( instance->graph, &sol );
-  // obtengo el path que me interesa
-  sol.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
+Solution* createSolutionA(ProblemInstance* instance) 
+{    
+    // creo el dijkstra
+    Dijkstra<ObjectiveFunctionA> dijsktra;
+    // creo la solucion
+    DijkstraSolution dijkstraSolution( instance->graph->nodeCount, instance->u);
+    // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
+    dijsktra.findPath( instance->graph, &dijkstraSolution );
+    // obtengo el path que me interesa
+    Solution* solution = new Solution();    
+    dijkstraSolution.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
+    return solution;
 }
 
-void GreedyHeuristic::run()
+Solution* createSolutionB(ProblemInstance* instance) 
+{
+    // creo el dijkstra    
+    Dijkstra<ObjectiveFunctionB> dijsktra;
+    // creo la solucion
+    DijkstraSolution dijkstraSolution( instance->graph->nodeCount, instance->u);
+    // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
+    dijsktra.findPath( instance->graph, &dijkstraSolution );
+    // obtengo el path que me interesa
+    Solution* solution = new Solution();    
+    dijkstraSolution.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
+    return solution;
+}
+
+Solution* createSolutionC(ProblemInstance* instance) 
+{
+    // creo el dijkstra    
+    Dijkstra<ObjectiveFunctionC> dijsktra;
+    // creo la solucion
+    DijkstraSolution dijkstraSolution( instance->graph->nodeCount, instance->u);
+    // cargo en la solucion, todos los paths del dijkstra desde el nodo inicial
+    dijsktra.findPath( instance->graph, &dijkstraSolution );
+    // obtengo el path que me interesa
+    Solution* solution = new Solution();    
+    dijkstraSolution.getPath( instance->v, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2 );
+    return solution;
+}
+
+Solution* getBestSolution(ProblemInstance* instance) 
+{
+    Solution* solutionB = createSolutionB(instance);    
+    if(solutionB->totalOmega1 <= instance->K) {
+        return solutionB;
+    }
+    cout << "K " << instance->K << endl;
+    cout << "solutionB omega1 " << solutionB->totalOmega1 << endl;
+    // si la solucion no es factible probamos con otras funciones objetivo    
+    Solution* solutionA = createSolutionA(instance);
+    Solution* solutionC = createSolutionC(instance);
+    if(solutionC->totalOmega1 <= instance->K) {
+        if(solutionA->totalOmega2 < solutionC->totalOmega2) {            
+            return solutionA;
+        } 
+        cout << "solutionA omega2 " << solutionA->totalOmega2 << endl;
+        cout << "solutionC omega2 " << solutionC->totalOmega2 << endl;
+        return solutionC;
+    }
+
+    cout << "solutionC omega1 " << solutionC->totalOmega1 << endl;
+
+    if(solutionA->totalOmega1 <= instance->K) {
+        return solutionA;
+    }
+    cout << "solutionA omega2 " << solutionA->totalOmega2 << endl;
+    return NULL;   
+}
+
+void GreedyHeuristicAll::resolveInstance( ProblemInstance* instance ){
+  solution = getBestSolution(instance);
+}
+
+void GreedyHeuristicAll::run()
 {
   Parser parser;
   parser.parseInput();
@@ -36,6 +102,10 @@ void GreedyHeuristic::run()
     timer->setFinalTime("todo_el_codigo");
     timer->saveAllTimes();
     
-    solution->print();
+    if(!solution) {
+      cout << "no" << endl;
+    } else{
+      solution->print();
+    }    
   }
 }

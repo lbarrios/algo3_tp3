@@ -23,8 +23,8 @@ private:
   Timer* timer;
 
 public:
-  GreedyHeuristic();
-  GreedyHeuristic(Timer*);
+  GreedyHeuristicAll();
+  GreedyHeuristicAll(Timer*);
   void resolveInstance( ProblemInstance* );
   void run();
 };

@@ -1,6 +1,6 @@
 #include <iostream>
-#include "GreedyHeuristicAll.h"
 #include "../common/Timer.h"
+#include "GreedyHeuristicAll.h"
 
 using namespace std;
 

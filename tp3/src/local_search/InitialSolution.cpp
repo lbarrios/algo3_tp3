@@ -62,7 +62,7 @@ Solution* InitialSolution::getInitialSolution(ProblemInstance* instance)
         } 
         return solutionC;
     }
-    if(solutionA->totalOmega2 <= instance->K) {
+    if(solutionA->totalOmega1 <= instance->K) {
         return solutionA;
     }
     return NULL;    
