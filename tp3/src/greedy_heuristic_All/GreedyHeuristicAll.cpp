@@ -61,8 +61,8 @@ Solution* getBestSolution(ProblemInstance* instance)
     if(solutionB->totalOmega1 <= instance->K) {
         return solutionB;
     }
-    cout << "K " << instance->K << endl;
-    cout << "solutionB omega1 " << solutionB->totalOmega1 << endl;
+    //cout << "K " << instance->K << endl;
+    //cout << "solutionB omega1 " << solutionB->totalOmega1 << endl;
     // si la solucion no es factible probamos con otras funciones objetivo    
     Solution* solutionA = createSolutionA(instance);
     Solution* solutionC = createSolutionC(instance);
@@ -75,12 +75,12 @@ Solution* getBestSolution(ProblemInstance* instance)
         return solutionC;
     }
 
-    cout << "solutionC omega1 " << solutionC->totalOmega1 << endl;
+    //cout << "solutionC omega1 " << solutionC->totalOmega1 << endl;
 
     if(solutionA->totalOmega1 <= instance->K) {
         return solutionA;
     }
-    cout << "solutionA omega2 " << solutionA->totalOmega2 << endl;
+    //cout << "solutionA omega2 " << solutionA->totalOmega2 << endl;
     return NULL;   
 }
 
