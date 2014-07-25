@@ -214,17 +214,27 @@ La solución media, no obstante, parece preservar cierta distancia relativa a la
 La mejor solución encontrada siempre está muy cerca de la solución óptima. Ésto se evidencia particularmente en el tercer gráfico, lo que
 atribuímos a la mayor densidad que le permite al algoritmo tener una vecindad amplia para recorrer.
 
+A continuación se procede a estudiar la cantidad de iteraciones efectuadas por la búsqueda local, en relación a la cantidad de nodos del grafo.
+
 \begin{figure}[H]
 \begin{center}
 \includegraphics[angle=0, scale=.70]{imagenes/local-iteraciones.pdf}
 \label{grafico local}
+\caption{Cantidad de iteraciones en instancias \textit{mágicas}, de densidad media}
 \end{center}
 \end{figure}
+
+La cantidad de iteraciones realizadas presenta una gran amplitud, aún para tamaños de grafo similares. Tiene sentido si se considera que diferentes adyacencias de nodos, aún cuando la cantidad de nodos y aristas es la misma, puede permitir o no a la búsqueda local elegir una mejor solución vecina. La cantidad de iteraciones muestra una tendencia lineal a crecer. Sin embargo se considera que es un resultado más bajo de lo esperado, ya  parte importante de una heurística de búsqueda local es que la solución tenga movilidad suficiente y no quedarse estático cerca de la solución inicial. Se notó una gran cantidad de casos en los que la búsqueda local no pudo mejorar la solución inicial.
+
+Nos propusimos mejorar la perspectiva de la búsqueda local implementada, analizando la cantidad de unidades de $\omega_2$ que se disminuyen en cada iteración de la búsqueda local. 
 
 \begin{figure}[H]
 \begin{center}
 \includegraphics[angle=0, scale=.70]{imagenes/local_search-mejora.pdf}
 \label{grafico local}
+\caption{Mejora en cada iteración en instancias \textit{mágicas} de densidad media}
 \end{center}
 \end{figure}
+
+Los resultados fueron sorprendentes. Como quedo expuesto anteriormente, una corrida de búsqueda local no suele hacer muchas iteraciones, pero cuando las hace, disminuye notablemente el valor de $\omega_2$ de la solución. Debe tenerse en cuenta que, siendo éstas instancias de tipo \textit{mágico}, el valor de $\omega_2$ de la solución óptima es $n-1$. De modo que lo que se ve en el gráfico es que el promedio de mejora en una iteración es del 60\% del valor de la solución óptima, proporción que se mantiene en las magnitudes de grafos consideradas.
 
