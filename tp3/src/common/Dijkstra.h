@@ -28,8 +28,7 @@ Dijkstra<ObjectiveFunction>::Dijkstra() {
 
 template<class ObjectiveFunction>
 void Dijkstra<ObjectiveFunction>::findPath(Graph* graph, DijkstraSolution* solution) {
-    int* prevNodes = solution->prevNodes;
-    //double* dist = new double[graph->nodeCount];
+    int* prevNodes = solution->prevNodes;    
     double* dist = solution->distances;
     for (int i=0; i<graph->nodeCount; i++) {
         dist[i] = INF;

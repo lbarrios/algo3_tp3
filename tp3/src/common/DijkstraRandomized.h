@@ -46,15 +46,13 @@ void DijkstraRandomized<ObjectiveFunction>::findPath(Graph* graph, DijkstraSolut
     
     while (unvisited.size() > 0) {
         int rcl_size = min(RCL_SIZE, int(unvisited.size()));
-        int chosen = rand()%rcl_size + 1; // genera un int entre 1 y rcl_size 
-        //cout << "chosen " << chosen <<  " rclsize " << rcl_size << endl;
+        int chosen = rand()%rcl_size + 1; // genera un int entre 1 y rcl_size         
         list<UnvisitedNode*> stack;
         for (int i = 0; i < chosen; i++) {
             stack.push_front(unvisited.top());
             unvisited.pop();
         }
-        UnvisitedNode* currNode = stack.front();
-        //cout << "first node " << currNode->node << endl;
+        UnvisitedNode* currNode = stack.front();        
         stack.pop_front();
         for (list<UnvisitedNode*>::iterator it = stack.begin(); it != stack.end(); it++)
             unvisited.push(*it);

@@ -20,11 +20,8 @@ public:
 
   int countNodes();
   int countEdges();
-
-  //void getEdgesFromNode(Node node, vector<Edge*> *output);
-  //void getAdjacentNodes(Node node, vector<Node> *output);
+  
 private:
-  //vector<Edge *> edges;
   vector< vector< Node > > adjacencyList;
   vector< vector< Edge* > > incidencyMatrix;
 };

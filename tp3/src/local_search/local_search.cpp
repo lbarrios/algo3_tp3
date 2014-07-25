@@ -41,9 +41,7 @@ int main( int argc, char const* argv[] )
     
     int initialSolutionOmega2;
 
-    Solution* solution = initialSolution->getInitialSolution( instance );    
-    //cout << "Initial solution: ";
-
+    Solution* solution = initialSolution->getInitialSolution( instance );        
 
     // El dijkstra de omega1 debe cumplir con el K, sino no tiene sentido correr la heuristica    
     // si solution no es valida entonces, entonces es NULL
@@ -57,10 +55,7 @@ int main( int argc, char const* argv[] )
       {
         newSolution = selector->getBestNeighbour( solution );
         // Si no logro mejorar la solucion, termino      
-        if(newSolution != NULL) {
-          //cout << "Mejore omega2!" << endl;
-          //cout << "new solution: ";
-          //newSolution->print();
+        if(newSolution != NULL) {          
           delete solution;
           solution = newSolution;          
           huboMejora = true;  
@@ -76,8 +71,7 @@ int main( int argc, char const* argv[] )
     /***************
       Output Print
     ****************/
-    // print the solution
-    //cout << "Final solution: ";
+    // print the solution    
     if(solution) {
       solution->print();
       delete solution;
