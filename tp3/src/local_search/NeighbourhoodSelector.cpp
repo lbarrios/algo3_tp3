@@ -30,11 +30,13 @@ NeighbourhoodSelector::~NeighbourhoodSelector() {
 void NeighbourhoodSelector::deleteMatrix() {
   if(pathMatrix) {
     // como los elementos (j, k) son iguales a los (k, j), me aseguro de borrarlos una sola vez
+    /*
     for(int j=1; j<=nodeCount; j++) {
       for(int k=j; k<=nodeCount; k++) {                    
         delete pathMatrix[k-1 + (j-1) * nodeCount];
       }
     }
+    */
     delete pathMatrix;
     pathMatrix = NULL;
   }   
