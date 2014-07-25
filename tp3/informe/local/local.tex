@@ -21,11 +21,14 @@ En cada iteración definimos la vecindad de $s$, $N(s)$, de la siguiente manera:
 \begin{itemize}
 \item $\omega_1(c^*)$ $<=$ $K$
 \item $\omega_2(c^*)$ $<$ $\omega_2(c)$
+\item $c^*$ no contiene ciclos
 \end{itemize}
 
 De la forma descripta, dada una solución formada por un camino $c$ definimos su vecindad como el conjunto $S^*$ de todos los caminos $c^*$ posibles.
 
 Corremos previamente $n$ veces Dijkstra, una vez desde cada nodo. Guardamos los resultados en una matriz tal que en la posición $[i][j]$ guarda el camino mínimo del nodo $i$ al $j$. Cada camino $d_{n_1,n_2}^*$ es el camino mínimo entre $n_1$ y $n_2$ según $\omega_2$, se obtiene de la matriz. Debe además cumplir $\omega_1(c^*) \leq K$. De todos los $c^*$, se elige el que minimice $\omega_2$. Esto se enmarca en la elección de vecinos utilizando el método \textit{Steepest Descent} consistente en elegir al vecino que minimice la función objetivo.
+
+Puede darse el caso de que, al reemplazar un camino $d_{n_1,n_2}$ por $d_{n_1,n_2}^*$, existan nodos en este último que también existan en $c^* = c - d_{n_1,n_2}$, de tal forma que el camino $c^*$ resultante contenga ciclos. Para resolver este inconveniente, luego de efectuar cada reemplazo, se llama al método removeCycles, el cual toma un camino, ya sea con ciclos o sin ciclos, y se encarga de construir una versión del mismo la cual no contenga ciclos.
 
 Ahora, para calcular $\omega_2(c^*)$, lo calculamos como
 
