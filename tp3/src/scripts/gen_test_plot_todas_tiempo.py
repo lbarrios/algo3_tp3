@@ -19,9 +19,9 @@ from datetime import datetime
 #     os.system("python createInput_magic.py 10 %d %d" % (n, m))
 
 #os.system("python ./correrTestTiempo.py backtracking magic")
-os.system("python ./correrTestTiempo.py greedy_heuristic_All magic")
-os.system("python ./correrTestTiempo.py grasp magic")
-os.system("python ./correrTestTiempo.py local_search magic")
+# os.system("python ./correrTestTiempo.py greedy_heuristic_All magic")
+# os.system("python ./correrTestTiempo.py grasp magic")
+# os.system("python ./correrTestTiempo.py local_search magic")
 
 subprocess.call(["python", "graficar_todos_tiempo.py"])
 

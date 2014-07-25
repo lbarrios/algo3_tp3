@@ -54,7 +54,7 @@ def get_results(heuristic_name, heuristic_folder):
 #tests_backt = get_results = get_results("Backtracking", "backtracking")
 tests_greedy, cota_teorica = get_results("Greedy", "greedy_heuristic_All")
 tests_local, trash = get_results("Local", "local_search")
-tests_grasp, trash = get_results("Greedy", "grasp")
+tests_grasp, trash = get_results("Grasp", "grasp")
 
 tests = dict( tests_greedy.items() + tests_local.items() + tests_grasp.items() )
 
