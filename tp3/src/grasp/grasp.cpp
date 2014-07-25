@@ -46,10 +46,10 @@ int main( int argc, char const* argv[] )
         // valores arbitrarios basados en n para criterio de terminaciones
         int n = instance->graph->nodeCount;
         int iteracionesSinMejorarCount = 0;
-        int iteracionesSinMejorarMax = n;
-        int iteracionesMax = n * log(n);
+        int iteracionesSinMejorarMax = n*n;//n;
+        int iteracionesMax = n*n; //n * log(n);
         int iteracionesSinInitialPathCount = 0;
-        int iteracionesSinInitialPathMax = n;
+        int iteracionesSinInitialPathMax = n*n;//n;
         
         Solution* bestSolution = NULL;            
 
@@ -110,7 +110,7 @@ int main( int argc, char const* argv[] )
 
             if(iteracionesSinMejorarCount > iteracionesSinMejorarMax) {      
                 break;
-            }        
+            }
         }  
 
         // obtain the final time
