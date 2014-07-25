@@ -55,7 +55,7 @@ tests_greedy, cota_teorica = get_results("Greedy", "greedy_heuristic_All")
 tests_local, trash = get_results("Local", "local_search")
 tests_grasp, trash = get_results("Grasp", "grasp")
 
-tests = dict( tests_greedy.items() + tests_local.items() + tests_grasp.items() )
+tests = dict( tests_grasp.items() + tests_local.items() + tests_greedy.items() )
   
 tests_mean_xy = defaultdict(make_listdict)
 tests_mean_p_xy = defaultdict(make_listdict)
@@ -137,12 +137,12 @@ for test_number in range(0,t_names):
   else:
     plt.plot(x, y, linestyle='-',  color=colors[test_number], linewidth=1, label=testname, alpha=0.49, marker='o', markersize=4.5)
 
-#t_x = np.array( [x for (x,y) in cota_teorica] )
-#t_y = np.array( [y for (x,y) in cota_teorica] )
+t_x = np.array( [x for (x,y) in cota_teorica] )
+t_y = np.array( [y for (x,y) in cota_teorica] )
 # ploteo cota teórica
 #print t_x
 #print t_y
-#subplot.plot(t_x, t_y,    '--', color='black', linewidth=2, label="Optima")
+subplot.plot(t_x, t_y,    '--', color='black', linewidth=2, label="Optima")
 plt.legend(loc=2)
 plt.tight_layout()  # para que entren las labels
 #plt.xlim(xmax=3000)
