@@ -1,5 +1,5 @@
 %Grasp
-La metaheurística Grasp es una combinación entre una heurística golosa aleatorizada y un procedimiento de búsqueda local.
+La metaheurística Grasp consiste en generar varias soluciones iniciales a partir de una heurística golosa aleatorizada y correr búsqueda local sobre ellas. La solución final es la mejor encontrada tras todas las búsquedas locales.
 Sea $S$ el conjunto de soluciones iniciales, el algoritmo que se usa es el siguiente:\\\\
 \hspace*{1 cm} Mientras no se alcance el criterio de terminación:\\
 \hspace*{2 cm} Obtener $s \in S$ mediante una heurística golosa aleatorizada.\\
@@ -8,11 +8,11 @@ Sea $S$ el conjunto de soluciones iniciales, el algoritmo que se usa es el sigui
 %Solucion inicial
 \subsubsection{Solución inicial}
 
-Usamos Dijkstra como nuestra heurística golosa, pero modificado para agregarle aleatoriedad. El factor aleatorio consiste en que en cada iteración de Dijkstra, en vez de tomar el nodo no visitado que minimiza la función objetivo, tomamos uno de entre los $beta$\footnote{\label{$beta$}: Luego de experimentar con distintos valores, encontramos que $beta$=10 era un valor que presentaba suficiente aleatoriedad.} menores.
+Usamos Dijkstra como nuestra heurística golosa, pero modificado para agregarle aleatoriedad. El factor aleatorio consiste en que en cada iteración de Dijkstra, en vez de tomar el nodo no visitado que minimiza la función objetivo, tomamos uno de entre los $beta$\footnote{\label{$beta$}: Luego de experimentar con distintos valores, encontramos que $beta$=10 era un valor que presentaba suficiente aleatoriedad.} menores, al azar.
 
-Dado la aleatoriedad de la solución inicial, es posible que esta no sea factible. En caso de obtener una solución de ese tipo, no ejecutamos búsqueda local.
+Dada la aleatoriedad de la solución inicial, es posible que ésta no sea factible. En caso de obtener una solución de ese tipo, no ejecutamos búsqueda local.
 
-Para Dijkstra usamos la tres funcion objetivo Greedy, A definida en el apartado Greedy.
+Utilizamos Dijkstra con la función de peso $\omega_1$. De esta forma se intenta dar variedad a las soluciones iniciales, pero al mismo tiempo que éstas sean factibles - es decir, que cumplan con la restricción de $\omega_1 < K$ - en su mayoría.
 
 \subsubsection{Criterio de terminación}
 

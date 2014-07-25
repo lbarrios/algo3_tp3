@@ -131,9 +131,7 @@ Finalmente la complejidad total resulta ser la suma de las complejidades de crea
 % Familias malas
 \subsubsection{Familias malas}
 
-Si elegimos como solución inicial a la heurística Greedy B en la sección previa, se ha expuesto que puede fallar en el intento de dar una solución factible, aún existiendo una. El Greedy A siempre encuentra una solución factible de existir ésta. 
-
-Veamos que tomando nuestra heurística de búsqueda local como solución inicial, puede quedar arbitrariamente lejos de la solución óptima.
+Veamos que nuestra heurística de búsqueda local puede quedar arbitrariamente lejos de la solución óptima.
 
 Presentamos la siguiente familia de grafos:
 
@@ -161,7 +159,9 @@ $\frac{\omega_2(C_2)}{\omega_2(C_1)} = x$.
 Haciendo crecer el valor de $x$ podemos encontrar grafos en los que nuestro algoritmo devuelve una
 solución arbitrariamente lejos de la óptima.
 
+En general, la heurística falla cuando los caminos mínimos por $\omega_2$ entre todo par de nodos tienen un valor de $\omega_1$ demasiado alto, que deja a la solución sin vecinos factibles ya que éstos se sobrepasan de la restricción de $K$.
 \newpage
+
 \subsubsection{Experimentación}
 
 Pudimos analizar el tiempo de ejecución frente a grafos de un tamaño considerable. A continuación presentamos un gráfico.
