@@ -64,7 +64,7 @@ El algoritmo está implementado en la función \texttt{main}:
 \caption{$dameMejorVecino$(Solution solucionOriginal)}
 \begin{algorithmic}[1]	
           \State Solution mejorSolucion = \&solucionOriginal
-	  \State vector<int> nodos = \&nodos(solucionOriginal)
+	  \State vector$<int>$ nodos = \&nodos(solucionOriginal)
 	  \For{i=0; i $<$ size(nodos); i++}
 	  	\For{j=i+1; j $<$ size(nodos); j++}
 			\State Solution subSolucion = crearSubSolucionEntre(solucionOriginal, nodos[i], nodos[j])
@@ -214,7 +214,7 @@ Se puede percibir el carácter no lineal de la complejidad. Sin embargo no se ev
 previamente. Puede ser necesario un tamaño mayor para poder apreciar esa complejidad, o quizás la cota teórica no se alcanza en la práctica.
 Probablemente haya un factor que se amortice, habiendo escapado de nuestro escrutinio.
 
-La conclusión que se obtuvo tras haber terminado todas las experimentaciones es que \texttt{local\_searc} hace generalmente pocas iteraciones, por lo que el tiempo de ejecución se asemeja al de \texttt{Greedy}, cuya complejidad teórica es $O(m*log(n)$.
+La conclusión que se obtuvo tras haber terminado todas las experimentaciones es que \texttt{local\_search} hace generalmente pocas iteraciones, por lo que el tiempo de ejecución se asemeja al de \texttt{Greedy}, cuya complejidad teórica es $O(m*log(n)$.
 
 \newpage
 Luego se propuso analizar la calidad de la solución encontrada.

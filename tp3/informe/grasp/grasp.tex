@@ -14,7 +14,7 @@ Nuestra intención era utilizar Dijkstra con la función de peso $\omega_1$. De 
 
 Luego de diversas experimentaciones, nos dimos cuenta que realizar un Dijkstra con componente aleatorio no nos iba a servir a propósitos de nuestro algoritmo, ya que en cada se agregaba un vértice desde un conjunto reducido de candidatos, pero luego en los pasos subsiguientes los pesos de las aristas que conectaban a este vértice eran relajados por sus vértices aledaños. Tarde o temprano, finalmente, debido a que al elegir las \textbf{``buenas aristas''} se relajaban las \textbf{``malas aristas''} que habían sido elegido en pasos anteriores, se terminaban formando caminos comunes, es decir, un conjunto muy reducido de caminos que, pese a ser diferentes, se repetían constantemente y terminaban conformando un limitado \textbf{``conjunto de soluciones iniciales posibles''}.
 
-Frente a esta problemática, decidimos continuar con nuestra idea, pero evitando relajar los pesos de las aristas en cuanto se encontraran caminos con menos peso. De esta forma, evitamos esta suerte de \textbf{``reducción de caminos iniciales posibles a un conjunto extremadamente limitado''}. Como curiosidad: este nuevo enfoque era más bien digno de apodarse, por su forma de construir el camino inicial, \textbf{``Prim Randomizado''}.
+Frente a esta problemática, decidimos continuar con nuestra idea, pero evitando relajar los pesos de las aristas en cuanto se encontraran caminos con menos peso. De esta forma, evitamos esta suerte de \textbf{``reducción de caminos iniciales posibles a un conjunto limitado elegido aleatoriamente''}. Como curiosidad: este nuevo enfoque era más bien digno de apodarse, por su forma de construir el camino inicial, \textbf{``Prim Randomizado''}.
 
 Dada la aleatoriedad de la solución inicial, es posible que esta no sea factible. En caso de obtener una solución de este tipo, no ejecutamos el ciclo de búsqueda local, y pasamos a la siguiente iteración de GRASP.
 
@@ -146,7 +146,7 @@ Las demás funciones tienen el mismo pseudocódigo que en Búsqueda local.
 El algoritmo se ejecuta en un ciclo hasta cumplir con alguno de los criterios de terminación. Dado que el criterio de mayor valor es la cantidad de iteraciones totales($iteracionesMax$), tomamos ese valor como cota para calcular la complejidad.
 Cada iteración del ciclo es casi idéntica a la ejecución de búsqueda local. La única diferencia es cómo se obtiene la solución inicial. Para encontrar la solución inicial se usa resolverConDijkstraAleatorio. Esta función, en vez de tomar el nodo no visitado con $\omega_2$ mínimo, toma uno entre los $beta$ menores. Pero resulta que la complejidad no se altera con este cambio, ya que Dijkstra itera sobre todos los nodos de cualquier manera y lo único que cambia es el orden en que se toma el nodo no visitado. 
 
-Vale hacer una aclaración que es que como se usa una cola con prioridad para los nodos no visitados en Dijkstra, para sacar uno entre los $beta$ menores, hay que remover los primeros $beta$ nodos de la cola y luego volver a agregar todos menos uno que es con el que nos quedamos. Como remover y agregar de la cola con prioridad toma $O(log(n))$, entonces para remover y agregar los $beta$ nodos se toma $O((beta + beta-1) \times log(n))$, pero como $beta$ es constante entonces la complejidad resulta $O(log(n))$. 
+Vale hacer una aclaración que es que como se usa una cola con prioridad para los nodos no visitados en Dijkstra, para sacar uno entre los $beta$ menores, se remueven los primeros $beta$ nodos de la cola y luego se agregan todos menos uno que es con el que nos quedamos. Como remover y agregar de la cola con prioridad toma $O(log(n))$, entonces para remover y agregar los $beta$ nodos se toma $O((beta + beta-1) \times log(n)) = O(\beta*log(n))$. Nosotros tomamos $\beta$ constante igual a 10.
 
 Por lo tanto la complejidad de resolverConDijkstraAleatorio no resulta diferente resolverConDijkstra, usada en busqueda local y por ende la complejidad de cada iteración resulta igual a la complejidad de una ejecución de búsqueda local, o sea tiene complejidad $O(n^5)$.
 
@@ -154,7 +154,7 @@ Luego la complejidad total es $O(n^5  \times  iteracionesMax)$ = $O(n^5  \times 
 
 \subsubsection{Experimentación}
 
-A continuación presentamos los resultados de la experimentación del tiempo de ejecución de la metaheurística GRASP.
+A continuación presentamos los resultados de la experimentación del tiempo de ejecución de la metaheurística GRASP. Se utilizaron instancias del tipo \textit{mágico}, con una densidad media.
 
 \begin{figure}[H]
 \begin{center}
@@ -163,28 +163,29 @@ A continuación presentamos los resultados de la experimentación del tiempo de 
 \end{center}
 \end{figure}
 
-No se pareciera estar frente a una polinomio de grado 6, sin embargo, es evidente que tiene mucha más concavidad que la gráfica de la búsqueda
-local. Ésto proviene trivialmente del hecho de repetir una cantidad que puede llegar a ser $n \times log(n)$ veces la búsqueda local.
+La curva que describe el tiempo de ejecución no evidencia un polinomio de grado 6, sin embargo, es evidente que tiene mucha más concavidad que la gráfica de la búsqueda
+local. Ésto proviene  del hecho de repetir una cantidad que puede llegar a ser $n \times log(n)$ veces la búsqueda local.
 
-Pasamos a experimentar con la calidad de la solución.
+Se prosigue la experimentación con la calidad de la solución.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[angle=0, scale=.75]{imagenes/calidad_grasp_2014-06-27_08-58-53.pdf}
+\includegraphics[angle=0, scale=.70]{imagenes/calidad_grasp_2014-06-27_08-58-53.pdf}
 \label{grafico local}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[angle=0, scale=.75]{imagenes/calidad_grasp_2014-06-27_08-54-46.pdf}
+\includegraphics[angle=0, scale=.70]{imagenes/calidad_grasp_2014-06-27_08-54-46.pdf}
 \label{grafico local}
 \end{center}
 \end{figure}
 
-Grata fue la sorpresa al ver a GRASP en acción. Al igual que la búsqueda local, el resultado mínimo de nuestro algoritmo está muy cerca del
+\newpage
+La performance de GRASP nos llamó mucho la atención. Al igual que la búsqueda local, el resultado mínimo de nuestro algoritmo está muy cerca del
 óptimo. Pero esta vez hemos logrado reducir la amplitud entre nuestros resultados y de esta forma acercar todo el cuerpo de nuestras soluciones
 a la solución óptima.
 Los buenos resultados obtenidos se deben a la naturaleza de GRASP, que consiste en iterativamente correr una búsqueda local sobre múltiples
-soluciones iniciales generadas con un componente aleatorio. El repetir el experimento disminuye la varianza y garantiza una mejor solución
+soluciones iniciales generadas con un componente aleatorio. El repetir el experimento disminuye la varianza entre las diferentes corridas de GRASP y incrementa la posibilidad de una mejor solución
 final.
