@@ -2,6 +2,16 @@
 #include <limits>
 #define INF (std::numeric_limits<double>::max())
 
+Edge* Solution::getEdgeBetween(int node1, int node2)
+{
+	for(int i=0; i<path.size(); i++) {
+		if(path[i]->fromNode == node1 && path[i]->toNode == node2) {			
+			return path[i];
+		}
+	}
+	return NULL;
+}
+
 Solution* Solution::createSubSolutionBetween(int node1, int node2) const {
 	Solution* res = new Solution();
 	res->totalOmega1 = 0;
@@ -45,7 +55,7 @@ Solution* Solution::createSubSolutionBetween(int node1, int node2) const {
 	return res;
 }
 
-void Solution::print()
+void Solution::print() const
 {
   if (totalOmega1==INF || totalOmega2==INF)
   {
@@ -56,6 +66,7 @@ void Solution::print()
     cout << totalOmega1 << " " << totalOmega2 << " ";
     for ( auto it = begin( path ); it != end( path ); ++it )
       cout << ( *it )->fromNode << " ";
+  	cout << path.back()->toNode;
     cout << endl;
   }
 }

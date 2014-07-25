@@ -47,26 +47,39 @@ void NeighbourhoodSelector::initialize(ProblemInstance* instance)
 	pathMatrix = new Solution*[nodeCount*nodeCount];     
   K = instance->K;   
 
-  // Como los paths entre j y k son iguales a los paths entre k y j,
-  // los calculo una sola vez. Luego copio los punteros.
+  // Como los paths entre j y k son iguales a los paths entre k y j, pero al reves
+  // primero encuentro los paths entre j y k y luego los doy vuelta
 	for(int j=1; j<=nodeCount; j++) {
   	Dijkstra<ObjectiveFunctionOmega2> dijsktra;          
     DijkstraSolution dijkstraSolution( instance->graph->nodeCount, j );                
     dijsktra.findPath( instance->graph, &dijkstraSolution );                      
-    for(int k=j; k<=nodeCount; k++) {                    
+    for(int k=1; k<=nodeCount; k++) {                    
+      if(j==k) continue;
     	  Solution* solution = new Solution();        
     	  dijkstraSolution.getPath(k, instance->graph, solution->path, solution->totalOmega1, solution->totalOmega2);          
-        // si no hay ninun path entre los nodos j y k entonces, cargo NULL en la matrix        
-        pathMatrix[k-1 + (j-1) * nodeCount] = solution->path.size() > 0 ? solution : NULL;                                  
+        // si no hay ninun path entre los nodos j y k entonces, cargo NULL en la matrix             
+        pathMatrix[j-1 + (k-1) * nodeCount] = solution->path.size() > 0 ? solution : NULL;                                  
     }
 	}
-
-  // copio los punteros
-  for(int j=1; j<=nodeCount; j++) {
-    for(int k=1; k<j; k++) {
-      pathMatrix[k-1 + (j-1) * nodeCount] = pathMatrix[j-1 + (k-1) * nodeCount];
+  
+  /*for(int j=1; j<=nodeCount; j++) {
+    for(int k=1; k<j; k++) {      
+      Solution* invSolution = pathMatrix[j-1 + (k-1) * nodeCount];
+      if(invSolution) {
+        Solution* solution = new Solution();
+        for(int i = 0; i<invSolution->path.size(); i++) {
+          Edge* invEdge = invSolution->path[i];
+          solution->path.push_back(new Edge(invEdge->fromNode, invEdge->toNode, invEdge->omega1, invEdge->omega2));
+          //cout << "meto" << invSolution->path[i] << endl;
+        }
+        solution->totalOmega1 = invSolution->totalOmega1;
+        solution->totalOmega2 = invSolution->totalOmega2;         
+        pathMatrix[k-1 + (j-1) * nodeCount] = solution;        
+      } else {        
+        pathMatrix[k-1 + (j-1) * nodeCount] = NULL;        
+      }            
     }
-  }
+  }*/
 }
 
 Solution* NeighbourhoodSelector::getSolvedPathBetween(int node1, int node2) {  

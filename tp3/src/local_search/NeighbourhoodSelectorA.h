@@ -4,6 +4,7 @@
 
 class NeighbourhoodSelectorA : public NeighbourhoodSelector
 {
+	Solution* removeCycles(Solution* solution);
 public:
 	Solution* getBestNeighbour(const Solution* solution);
 };

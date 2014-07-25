@@ -17,5 +17,6 @@ public:
   	vector<Edge*> path;  	
 
     Solution* createSubSolutionBetween(int node1, int node2) const;
-    void print();
+    Edge* getEdgeBetween(int node1, int node2);
+    void print() const;
 };

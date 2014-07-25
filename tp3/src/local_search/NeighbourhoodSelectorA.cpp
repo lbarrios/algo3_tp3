@@ -1,5 +1,42 @@
 #include "NeighbourhoodSelectorA.h"
 
+Solution* NeighbourhoodSelectorA::removeCycles(Solution* solution) 
+{
+  int* nextNodes = new int[nodeCount];
+  for(int i=0; i<nodeCount; i++) {
+    nextNodes[i] = 0;
+  }  
+  for(unsigned int i=0; i<solution->path.size(); i++) {
+    Edge* edge = solution->path[i];    
+    nextNodes[edge->fromNode] = edge->toNode;        
+  }        
+
+  vector<int> newPath;
+  int firstNode = solution->path[0]->fromNode;
+  int lastNode = solution->path[solution->path.size()-1]->toNode;  
+  int next = firstNode;
+  newPath.push_back(firstNode);     
+  int a = 0;
+  while(nextNodes[next] != lastNode)
+  {    
+    next = nextNodes[next];        
+    newPath.push_back(next);    
+  }
+
+  newPath.push_back(lastNode);
+  //cout << lastNode << endl;
+  
+  Solution* newSolution = new Solution();
+  for(int i=0; i<newPath.size()-1; i++){    
+    Edge* edge = solution->getEdgeBetween(newPath[i], newPath[i+1]);    
+    Edge* newEdge = new Edge(edge->fromNode, edge->toNode, edge->omega1, edge->omega2);
+    newSolution->path.push_back(newEdge);
+    newSolution->totalOmega1 += newEdge->omega1;
+    newSolution->totalOmega2 += newEdge->omega2;
+  }
+
+  return newSolution;
+}
 
 Solution* createNewSolutionReplacingPath(const Solution* orig, const Solution* sub) {
   int node1 = sub->path[0]->fromNode;
@@ -62,7 +99,7 @@ Solution* NeighbourhoodSelectorA::getBestNeighbour(const Solution* origSolution)
   
   // El path de una solution es un vector de ejes   
   // En cada iteracion que encuentro una solucion mejor, voy a cambiar algunos de los nodos, 
-  // por lo que tengo que recalcular los nodos de la mejor solucion           
+  // por lo que tengo que recalcular los nodos de la mejor solucion             
   int edgesCount = origSolution->path.size();
   int nodesCount = edgesCount+1;
   vector<int> nodes(nodesCount); 
@@ -73,11 +110,10 @@ Solution* NeighbourhoodSelectorA::getBestNeighbour(const Solution* origSolution)
   nodes[nodesCount-1] = origSolution->path[edgesCount-1]->toNode; // ultimo nodo del path
   //cout << endl;
       
-  Solution* bestSolution = NULL;
+  Solution* bestSolution = NULL;  
   for(int i=0; i<nodes.size() - 1; i++) {    
     for(int j=i+1; j<nodes.size(); j++) {           
-      Solution* subSolution = origSolution->createSubSolutionBetween(nodes[i], nodes[j]); // solution con sub path entre los nodos
-      if(subSolution == NULL) continue; // puede fallar o esto esta demas?      
+      Solution* subSolution = origSolution->createSubSolutionBetween(nodes[i], nodes[j]); // solution con sub path entre los nodos            
       Solution* solution_ij = getSolvedPathBetween(nodes[i], nodes[j]); // dijkstra por omega2 entre los nodos
       if(solution_ij == NULL) {
         continue;
@@ -94,13 +130,24 @@ Solution* NeighbourhoodSelectorA::getBestNeighbour(const Solution* origSolution)
       // Ademas chequeo que se cumpla con el K requerido.                          
       double bestSolutionOmega2 = bestSolution == NULL ? origSolution->totalOmega2 : bestSolution->totalOmega2;
       double newSolutionOmega2 = origSolution->totalOmega2 - subSolution->totalOmega2 + solution_ij->totalOmega2;
-      double newSolutionOmega1 = origSolution->totalOmega1 - subSolution->totalOmega1 + solution_ij->totalOmega1;      
-      if(newSolutionOmega2 < bestSolutionOmega2 && newSolutionOmega1 <= K) {             
+      double newSolutionOmega1 = origSolution->totalOmega1 - subSolution->totalOmega1 + solution_ij->totalOmega1;            
+      if(newSolutionOmega2 < bestSolutionOmega2 && newSolutionOmega1 <= K) {                     
         if(bestSolution != NULL) {
           delete bestSolution;   
         }       
-        // creo la nueva mejor solucion
-        bestSolution = createNewSolutionReplacingPath(origSolution, solution_ij);            
+        /*cout << "origSolution ";
+        origSolution->print();
+        cout << "subSolution ";
+        subSolution->print();
+        cout << "solution_ij ";
+        solution_ij->print();*/
+        // creo la nueva mejor solucion        
+        bestSolution = createNewSolutionReplacingPath(origSolution, solution_ij);           
+        /*cout << "bestSolution ";
+        bestSolution->print();*/
+        Solution* bestSolutionWithoutCycles = removeCycles(bestSolution);                         
+        delete bestSolution;
+        bestSolution = bestSolutionWithoutCycles;        
         //cout << "hubo mejora!" << endl;
         //cout << "bestSolution: ";
         //bestSolution->print();
