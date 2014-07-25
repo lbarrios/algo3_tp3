@@ -8,7 +8,7 @@ Sea $S$ el conjunto de soluciones iniciales, el algoritmo que se usa es el sigui
 %Solucion inicial
 \subsubsection{Solución inicial}
 
-Primeramente utilizamos Dijkstra como nuestra heurística golosa, pero modificado para agregarle aleatoriedad. El factor aleatorio consistía en que en cada iteración de Dijkstra, en vez de tomar el nodo no visitado que minimiza la función objetivo, tomábamos uno de entre los $beta$\footnote{\label{$beta$}: Luego de experimentar con distintos valores, encontramos que $beta$=10 era un valor que presentaba suficiente aleatoriedad.} menores, al azar.
+Primeramente utilizamos Dijkstra como nuestra heurística golosa, pero modificado para agregarle aleatoriedad. El factor aleatorio consistía en que en cada iteración de Dijkstra, en vez de tomar el nodo no visitado que minimiza la función objetivo, tomábamos uno de entre los $beta$\footnote{\label{$beta$}: Encontramos que $beta$=10 es un valor que presentaba suficiente aleatoriedad y resultados esperables para GRASP según mostramos en las experimentaciones.} menores, al azar.
 
 Nuestra intención era utilizar Dijkstra con la función de peso $\omega_1$. De esta forma se intentó dar variedad a las soluciones iniciales, pero al mismo tiempo que éstas sean factibles - es decir, que cumplan con la restricción de $\omega_1 < K$ - en su mayoría.
 
