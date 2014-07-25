@@ -8,11 +8,15 @@ Sea $S$ el conjunto de soluciones iniciales, el algoritmo que se usa es el sigui
 %Solucion inicial
 \subsubsection{Solución inicial}
 
-Usamos Dijkstra como nuestra heurística golosa, pero modificado para agregarle aleatoriedad. El factor aleatorio consiste en que en cada iteración de Dijkstra, en vez de tomar el nodo no visitado que minimiza la función objetivo, tomamos uno de entre los $beta$\footnote{\label{$beta$}: Luego de experimentar con distintos valores, encontramos que $beta$=10 era un valor que presentaba suficiente aleatoriedad.} menores, al azar.
+Primeramente utilizamos Dijkstra como nuestra heurística golosa, pero modificado para agregarle aleatoriedad. El factor aleatorio consistía en que en cada iteración de Dijkstra, en vez de tomar el nodo no visitado que minimiza la función objetivo, tomábamos uno de entre los $beta$\footnote{\label{$beta$}: Luego de experimentar con distintos valores, encontramos que $beta$=10 era un valor que presentaba suficiente aleatoriedad.} menores, al azar.
 
-Dada la aleatoriedad de la solución inicial, es posible que ésta no sea factible. En caso de obtener una solución de ese tipo, no ejecutamos búsqueda local.
+Nuestra intención era utilizar Dijkstra con la función de peso $\omega_1$. De esta forma se intentó dar variedad a las soluciones iniciales, pero al mismo tiempo que éstas sean factibles - es decir, que cumplan con la restricción de $\omega_1 < K$ - en su mayoría.
 
-Utilizamos Dijkstra con la función de peso $\omega_1$. De esta forma se intenta dar variedad a las soluciones iniciales, pero al mismo tiempo que éstas sean factibles - es decir, que cumplan con la restricción de $\omega_1 < K$ - en su mayoría.
+Luego de diversas experimentaciones, nos dimos cuenta que realizar un Dijkstra con componente aleatorio no nos iba a servir a propósitos de nuestro algoritmo, ya que en cada se agregaba un vértice desde un conjunto reducido de candidatos, pero luego en los pasos subsiguientes los pesos de las aristas que conectaban a este vértice eran relajados por sus vértices aledaños. Tarde o temprano, finalmente, debido a que al elegir las \textbf{``buenas aristas''} se relajaban las \textbf{``malas aristas''} que habían sido elegido en pasos anteriores, se terminaban formando caminos comunes, es decir, un conjunto muy reducido de caminos que, pese a ser diferentes, se repetían constantemente y terminaban conformando un limitado \textbf{``conjunto de soluciones iniciales posibles''}.
+
+Frente a esta problemática, decidimos continuar con nuestra idea, pero evitando relajar los pesos de las aristas en cuanto se encontraran caminos con menos peso. De esta forma, evitamos esta suerte de \textbf{``reducción de caminos iniciales posibles a un conjunto extremadamente limitado''}. Como curiosidad: este nuevo enfoque era más bien digno de apodarse, por su forma de construir el camino inicial, \textbf{``Prim Randomizado''}.
+
+Dada la aleatoriedad de la solución inicial, es posible que esta no sea factible. En caso de obtener una solución de este tipo, no ejecutamos el ciclo de búsqueda local, y pasamos a la siguiente iteración de GRASP.
 
 \subsubsection{Criterio de terminación}
 
