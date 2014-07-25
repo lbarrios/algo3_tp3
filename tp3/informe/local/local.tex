@@ -217,10 +217,11 @@ resultado, y el resultado promedio para cada tamaño de entrada. Al ser instanci
 
 En los tres gráficos se puede notar, a medida que aumenta el tamaño de la entrada, una mayor amplitud de resultados. Ésto tiene cierta intuición. 
 Se generan muchas instancias para cada tamaño. A medida que aumenta la cantidad de aristas y vértices, aumenta la variedad entre las instancias
-generadas. Por eso se puede ver una gran diferencia de resultado entre instancias del mismo tamaño.
-La solución media, no obstante, parece preservar cierta distancia relativa a la solución óptima.
+generadas. Esto permite ver una gran diferencia de resultado entre instancias del mismo tamaño.
+La solución media, no obstante, parece preservar cierta distancia relativa, cierta escala con respecto a la solución óptima.
+
 La mejor solución encontrada siempre está muy cerca de la solución óptima. Ésto se evidencia particularmente en el tercer gráfico, lo que
-atribuímos a la mayor densidad que le permite al algoritmo tener una vecindad amplia para recorrer.
+atribuímos a la mayor densidad que le permite al algoritmo tener una vecindad amplia para recorrer. Sin embargo pareciera que la densidad también aumenta la amplitud y por lo tanto empeora la solución máxima. Puede tener sentido si se considera que al aumentar la cantidad de aristas que se deben generar cada una con su par de nodos y pesos, la diferencia entre dos instancias es combinatoria teniendo en cuenta todas las elecciones posbibles para cada arista.
 
 A continuación se procede a estudiar la cantidad de iteraciones efectuadas por la búsqueda local, en relación a la cantidad de nodos del grafo.
 
