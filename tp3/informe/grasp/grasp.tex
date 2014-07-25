@@ -25,7 +25,47 @@ Los criterios que usamos son:
 \item Cantidad máxima de iteraciones sin haber encontrado una solución inicial factible.
 \end{itemize}
 
-Parametrizamos estos valores usando $n$. Elegimos usar $n$ para la cantidad máxima de iteraciones sin haber encontrado mejores y sin haber encontrado una solución factible y $n*log(n)$ para la cantidad máxima de iteraciones. Esta elección para las constantes fue a partir de experimentar con distintos valores basados en $n$, que nos pareció un buen parámetro para definirlos, ya que generalmente mientras más nodos tenga el grafo, más chance tiene de fallar en encontrar una solución inicial factible o de no encontrar una solución que mejore a la actual y al mismo tiempo nos interesa ejecutar por más iteraciones, para aumentar la chance de dar con una buena solución. 
+Parametrizamos estos criterios usando $n$. Para elegir valores adecuados realizamos distintas experimentaciones sobre grafos de tipo \textit{mágico} con baja, media y alta densidad. Los resultados obtenidos se pueden ver en los siguientes gráficos:
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[angle=0, scale=.5]{imagenes/iteraciones-GRASP-A.png}
+\label{Resultados experimentales A}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[angle=0, scale=.5]{imagenes/iteraciones-GRASP-B.png}
+\label{Resultados experimentales A}
+\end{center}
+\end{figure}
+
+\begin{figure}[H]
+\begin{center}
+\includegraphics[angle=0, scale=.5]{imagenes/iteraciones-GRASP-C.png}
+\label{Resultados experimentales C}
+\end{center}
+\end{figure}
+
+Las experimentaciones A, B y C corren GRASP usando grafos de 200 nodos y 400, 4000 y 10000 ejes respectivamente. Cada una ejecuta 40000 iteraciones.
+
+Usamos escala logarítmica para facilitar la visualización de los resultados.
+
+Cada figura muestra como evoluciona el valor de $\omega_2$ a medida que aumentan las iteraciones. Además graficamos el camino óptimo con $\omega_2$ igual a la cantidad de nodos del grafo, o sea 200, para poder comparar con los valores obtenidos.
+
+Nuestro razonamiento para tomar valores óptimos para los criterios fue elegirlos de manera que se adecúen a grafos de variada densidad. Analizando los gráficos obtuvimos que el algoritmo puede tardar hasta aproximadamente 10000 iteraciones sin encontrar mejoras. Ese valor lo obtuvimos del anteúltimo salto de la experimentación C y corresponde a $n^2 / 4$.
+
+La máxima cantidad de iteraciones necesarias para encontrar un valor cercano al óptimo fue máxima en la experimentación C también. De alrededor de 20000 iteraciones, o $n^2 / 2$.
+
+Para elegir un valor para la cantidad máxima de iteraciones sin haber encontrado una solución inicial factible, tomamos el mismo valor que para la cantidad máxima de iteraciones sin haber encontrado mejoras, o sea $n^2 / 4$. Nuestro razonamiento es que si no se encontró una solución inicial factible, tampoco se mejoró la última solución encontrada y por ende nos sirve para acotar el valor para ese criterio.
+
+Además de encontrar valores adecuados para esos criterios, encontramos interesante como influye la densidad de los grafos en el comportamiento del algoritmo. A baja densidad le cuesta más encontrar una buena solución inicial y aun más mejorar la última solución encontrada. Razonamos que en la experimentación A hay pocos caminos, dada la baja densidad, y hay menos chances de encontrar los mejores caminos, ya que son pocos. Y creemos que por eso sucede que no se llega al óptimo luego de 40000 iteraciones, ya que posiblemente no exista ningún camino óptimo o las chances de encontrarlo son muy bajas.
+
+El experimento que muestra el mejor comportamiento del algoritmo es el B, o sea usando densidad media. Logra encontrar el camino óptimo mucho antes de llegar a nuestra cota para la cantidad de iteraciones: tarda alrededor de 1000 iteraciones, muy por debajo de las 20000($n^2 / 2$) iteraciones que usamos como cota. Además logra encontrar un camino inicial bastante mejor que las otras dos experimentaciones($\omega_2$ = 250 frente a $\omega_2$=300+ de A y C). 
+
+Por último, creemos que la experimentación C muestra un caso característico de GRASP, ya que se que mejora la solución escalonadamente hasta dar con la óptima luego de varias mejoras parciales.
+
 
 \subsubsection{Búsqueda local}
 
