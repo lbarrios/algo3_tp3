@@ -100,12 +100,12 @@ Para obtener la solución inicial, usamos obtenerSolucionInicial. Esta función 
 
 Para mejorar la solución usamos un ciclo y en cada iteración obtenemos el mejor vecino del camino actual usando dameMejorVecino. Ejecutamos el ciclo mientras en la última iteración hayamos encontrado una mejora al camino actual. 
 Dado que un vecino consiste en reemplazar la porción del camino actual que une 2 nodos $n_1$ y $n_2$ por el camino mínimo según $\omega_2$ entre ellos, y que cada vez que se hace el reemplazo se disminuye $\omega_2$ del camino actual, se pueden hacer a lo sumo tantos reemplazos como caminos mínimos entre todo par de nodos del grafo existan. 
-La cantidad de caminos mínimos entre todo par de nodos de un grafo es $n * (n-1) / 2$, ya que cada nodo tiene un camino mínimo hacia todos los demás y no a sí mismo. Esto es, si hay n nodos, el nodo $n_1$, tiene un camino mínimo hacia los nodos $n_2$, ..., $n_n$, el nodo $n_2$ tiene un camino hacia $n_3$, ..., $n_n$ ya que no se vuelve a contar el camino entre $n_1$ y $n_2$ y así hasta $n_{n-1}$ que tiene un camino hasta $n_n$.
-Luego, la cantidad máxima de iteraciones es $n * (n-1) / 2$.
+La cantidad de caminos mínimos entre todo par de nodos de un grafo es $n \times (n-1) / 2$, ya que cada nodo tiene un camino mínimo hacia todos los demás y no a sí mismo. Esto es, si hay n nodos, el nodo $n_1$, tiene un camino mínimo hacia los nodos $n_2$, ..., $n_n$, el nodo $n_2$ tiene un camino hacia $n_3$, ..., $n_n$ ya que no se vuelve a contar el camino entre $n_1$ y $n_2$ y así hasta $n_{n-1}$ que tiene un camino hasta $n_n$.
+Luego, la cantidad máxima de iteraciones es $n \times (n-1) / 2$.
 
 Para analizar la complejidad de cada iteración hay que analizar la complejidad de dameMejorVecino. 
 Lo primero que hace la función es obtener el arreglo de nodos de la solución pasada por parámetro, que llamamos solucionOriginal. Cómo el camino de solucionOriginal está representado como una lista de ejes, lo que hace es iterar por todos los ejes y tomar el nodo1 del eje y al final adicionar el nodo2 del último eje. Por ende, tomando $t$ como la cantidad de nodos en el camino, en cada iteración, por cada eje del camino, se toma un nodo y esto se hace $t$-1 veces y luego se añade el nodo final. Como $t$ puede ser a lo sumo $n$, entonces la complejidad de esto resulta $O(n^2)$.
-Luego de ejecuta un doble $for$ de $t * (t-1) / 2$ iteraciones, que en cada iteración intenta mejorar el mejor camino encontrado hasta el momento, que llamamos mejorSolucion. Inicialmente mejorSolucion es igual a solucionOriginal. 
+Luego de ejecuta un doble $for$ de $t \times (t-1) / 2$ iteraciones, que en cada iteración intenta mejorar el mejor camino encontrado hasta el momento, que llamamos mejorSolucion. Inicialmente mejorSolucion es igual a solucionOriginal. 
 Para encontrar una mejor solución en cada iteración hacemos lo siguiente:
 
 \begin{itemize}
@@ -117,16 +117,16 @@ Para encontrar una mejor solución en cada iteración hacemos lo siguiente:
 Para crear el subcamino de solucionOriginal entre $n_1$ y $n_2$ usamos crearSubSolucionEntre. Esta función recibe un par de nodos y un camino y devuelve el subcamino que une a los nodos. Para esto tiene que recorrer a lo sumo todos los nodos del camino, o sea $t$, que puede ser a lo sumo $n$.
 
 Para obtener el camino mínimo entre los nodos $n_1$ y $n_2$ usamos una optimización que es que en la función $main$, al comienzo, ejecutamos crearMatrizCaminosMinimos que crea una matriz de caminos mínimos entre todo par de nodos del grafo. Generamos esta matriz ejecutando Dijkstra para todos los nodos usando como función objetivo $\omega_2$. Usamos esta matriz para obtener en $O(1)$ el camino mínimo entre los nodos $n_1$ y $n_2$.
-Como crearMatrizCaminosMinimos ejecuta un Dijkstra por cada nodo, su complejidad es $O(n * (m log n))$.
+Como crearMatrizCaminosMinimos ejecuta un Dijkstra por cada nodo, su complejidad es $O(n \times (m log n))$.
 
 Para obtener el nuevo camino reemplazando el subcamino entre $n_1$ y $n_2$ por el camino mínimo entre ellos, usamos crearSolucionReemplazandoCamino.
 Lo que hacemos es generar una nueva solución que es la concatenación de 3 caminos: el camino mínimo entre $n_1$ y $n_2$ y los dos pedazos del camino original sin el subcamino que unía $n_1$ y $n_2$. Para crear el camino, hay que recorrer el solucionOriginal y añadir todos los nodos hasta $n_1$ y luego añadir todos los nodos del camino mínimo y al final añadir todos los nodos desde $n_2$ hasta el final de solucionOriginal. Por ende es como iterar sobre el nuevo camino que a lo sumo puede tener $n$ nodos y por ende la complejidad resulta $O(n)$.
 
-Entonces, resulta ser que encontrar el mejor vecino, consiste en ejecutar el doble $for$ de algo que tiene complejidad $O(n + 1 + n)$, o sea $O(n)$, entonces en total es $O(n^2 * n) = O(n^3)$.
+Entonces, resulta ser que encontrar el mejor vecino, consiste en ejecutar el doble $for$ de algo que tiene complejidad $O(n + 1 + n)$, o sea $O(n)$, entonces en total es $O(n^2 \times n) = O(n^3)$.
 
-Como habíamos explicado que dameMejorVecino se ejecuta en un ciclo de hasta $n * (n-1) / 2$ iteraciones, o sea $O(n^2)$, y entonces resulta que la complejidad de encontrar el mejor vecino es $O(n^2 * n^3) = O(n^5)$. 
+Como habíamos explicado que dameMejorVecino se ejecuta en un ciclo de hasta $n \times (n-1) / 2$ iteraciones, o sea $O(n^2)$, y entonces resulta que la complejidad de encontrar el mejor vecino es $O(n^2 \times n^3) = O(n^5)$. 
 
-Finalmente la complejidad total resulta ser la suma de las complejidades de crearMatrizCaminosMinimos, 2 veces obtenerSolucionInicial y $n^2$ veces dameMejorVecino. Es decir, $O(n * (m log n) + 2 * (m log n) + n^5) = O(n^5)$.
+Finalmente la complejidad total resulta ser la suma de las complejidades de crearMatrizCaminosMinimos, 2 veces obtenerSolucionInicial y $n^2$ veces dameMejorVecino. Es decir, $O(n \times (m log n) + 2 \times (m log n) + n^5) = O(n^5)$.
 
 % Familias malas
 \subsubsection{Familias malas}
@@ -179,7 +179,7 @@ previamente. Puede ser necesario un tamaño mayor para poder apreciar esa comple
 Probablemente haya un factor que se amortice, habiendo escapado de nuestro escrutinio.
 
 Experimentamos con distintas densidades de grafos. Primero con grafos densos, es decir con una cantidad de aristas del orden de $n^2$. Luego con
-grafos de densidad media, con una cantidad de aristas del orden de $\sqrt{n}*n$. Finalmente probamos con grafos ralos, con una cantidad de aristas
+grafos de densidad media, con una cantidad de aristas del orden de $\sqrt{n} \times n$. Finalmente probamos con grafos ralos, con una cantidad de aristas
 del orden de la cantidad de nodos. Para cada grupo de grafos, analizamos diferentes rangos de tamaños de entrada, con el objetivo de demostrar
 que el algoritmo mantiene ciertas propiedades, más allá del tamaño.
 
@@ -188,14 +188,14 @@ resultado, y el resultado promedio para cada tamaño de entrada.
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[angle=0, scale=.75]{imagenes/calidad_local_search_2014-06-27_16-02-57.pdf}
+\includegraphics[angle=0, scale=.70]{imagenes/calidad_local_search_2014-06-27_16-02-57.pdf}
 \label{grafico local}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[angle=0, scale=.75]{imagenes/calidad_local_search_2014-06-27_08-58-52.pdf}
+\includegraphics[angle=0, scale=.70]{imagenes/calidad_local_search_2014-06-27_08-58-52.pdf}
 \label{grafico local}
 \end{center}
 \end{figure}
@@ -216,14 +216,14 @@ atribuímos a la mayor densidad que le permite al algoritmo tener una vecindad a
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[angle=0, scale=.75]{imagenes/local-iteraciones.pdf}
+\includegraphics[angle=0, scale=.70]{imagenes/local-iteraciones.pdf}
 \label{grafico local}
 \end{center}
 \end{figure}
 
 \begin{figure}[H]
 \begin{center}
-\includegraphics[angle=0, scale=.75]{imagenes/local_search-mejora.pdf}
+\includegraphics[angle=0, scale=.70]{imagenes/local_search-mejora.pdf}
 \label{grafico local}
 \end{center}
 \end{figure}

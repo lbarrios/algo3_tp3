@@ -85,7 +85,7 @@ El algoritmo está implementado en la función \texttt{main}:
   \State int $n = |nodes(g)|$
   \State int iteracionesSinMejorarCount = 0
   \State int iteracionesSinMejorarMax = n
-  \State int iteracionesMax = $n * log(n)$
+  \State int iteracionesMax = $n \times log(n)$
   \State int iteracionesSinInitialPathCount = 0
   \State int iteracionesSinInitialPathMax = n
   \State mejorSolucion = NULL
@@ -142,11 +142,11 @@ Las demás funciones tienen el mismo pseudocódigo que en Búsqueda local.
 El algoritmo se ejecuta en un ciclo hasta cumplir con alguno de los criterios de terminación. Dado que el criterio de mayor valor es la cantidad de iteraciones totales($iteracionesMax$), tomamos ese valor como cota para calcular la complejidad.
 Cada iteración del ciclo es casi idéntica a la ejecución de búsqueda local. La única diferencia es cómo se obtiene la solución inicial. Para encontrar la solución inicial se usa resolverConDijkstraAleatorio. Esta función, en vez de tomar el nodo no visitado con $\omega_2$ mínimo, toma uno entre los $beta$ menores. Pero resulta que la complejidad no se altera con este cambio, ya que Dijkstra itera sobre todos los nodos de cualquier manera y lo único que cambia es el orden en que se toma el nodo no visitado. 
 
-Vale hacer una aclaración que es que como se usa una cola con prioridad para los nodos no visitados en Dijkstra, para sacar uno entre los $beta$ menores, hay que remover los primeros $beta$ nodos de la cola y luego volver a agregar todos menos uno que es con el que nos quedamos. Como remover y agregar de la cola con prioridad toma $O(log(n))$, entonces para remover y agregar los $beta$ nodos se toma $O((beta + beta-1) * log(n))$, pero como $beta$ es constante entonces la complejidad resulta $O(log(n))$. 
+Vale hacer una aclaración que es que como se usa una cola con prioridad para los nodos no visitados en Dijkstra, para sacar uno entre los $beta$ menores, hay que remover los primeros $beta$ nodos de la cola y luego volver a agregar todos menos uno que es con el que nos quedamos. Como remover y agregar de la cola con prioridad toma $O(log(n))$, entonces para remover y agregar los $beta$ nodos se toma $O((beta + beta-1) \times log(n))$, pero como $beta$ es constante entonces la complejidad resulta $O(log(n))$. 
 
 Por lo tanto la complejidad de resolverConDijkstraAleatorio no resulta diferente resolverConDijkstra, usada en busqueda local y por ende la complejidad de cada iteración resulta igual a la complejidad de una ejecución de búsqueda local, o sea tiene complejidad $O(n^5)$.
 
-Luego la complejidad total es $O(n^5 * iteracionesMax)$ = $O(n^5 * n*log(n))$ = $O(n^6 * log(n))$.
+Luego la complejidad total es $O(n^5  \times  iteracionesMax)$ = $O(n^5  \times  n \times log(n))$ = $O(n^6  \times  log(n))$.
 
 \subsubsection{Experimentación}
 
@@ -160,7 +160,7 @@ A continuación presentamos los resultados de la experimentación del tiempo de 
 \end{figure}
 
 No se pareciera estar frente a una polinomio de grado 6, sin embargo, es evidente que tiene mucha más concavidad que la gráfica de la búsqueda
-local. Ésto proviene trivialmente del hecho de repetir una cantidad que puede llegar a ser n * log(n) veces la búsqueda local.
+local. Ésto proviene trivialmente del hecho de repetir una cantidad que puede llegar a ser $n \times log(n)$ veces la búsqueda local.
 
 Pasamos a experimentar con la calidad de la solución.
 

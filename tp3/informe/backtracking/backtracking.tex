@@ -52,7 +52,7 @@ A continuaci\'on, el pseudoc\'odigo de la funci\'on \texttt{backtrack}.
 
 \subsubsection{Complejidad}
 
-Utilizamos una implementación de Dijkstra sobre heap, cuya complejidad es $O(m * log(n))$. Como lo corremos 2 = $O(1)$ veces, la complejidad es $O(m * log(n))$. La complejidad principal del algoritmo está dada por la función \texttt{backtrack}, que procedemos a analizar.
+Utilizamos una implementación de Dijkstra sobre heap, cuya complejidad es $O(m \times log(n))$. Como lo corremos 2 = $O(1)$ veces, la complejidad es $O(m \times log(n))$. La complejidad principal del algoritmo está dada por la función \texttt{backtrack}, que procedemos a analizar.
 
 Sea $x$ la cantidad de nodos no visitados, es decir la cantidad de nodos que no están en el camino parcial de $u$ a $v$. Sea $T(x)$ la cantidad de operaciones que realiza la función \texttt{backtrack} cuando la cantidad de nodos no visitados es $x$. Sea $N$ la cantidad de nodos del grafo. Se propone la siguiente relación:
 \[
@@ -71,20 +71,20 @@ para una constante $c$ y para todo $x \geq x_0$. Por inducción en $x$:
     \item Caso base: $x=1$
         Si se llama a \texttt{backtrack} con un solo nodo no visitado, este es $n$, y no quedan nodos para llamar recursivamente. Luego la cantidad de operaciones es $N$.
         \[
-            N \leq c*2! \Leftrightarrow N \leq N*2!
+            N \leq c \times 2! \Leftrightarrow N \leq N \times 2!
         \]
         que es verdadero, tomando $c = N$ y $x_0 = 1$.
     \item Paso inductivo: Supongo $T(x-1) \leq cx!$, quiero ver que $T(x) \leq c(x+1)!$
         \[
-            T(x) \leq x T(x-1) + O(N) \leq_{paso inductivo} x*c*x! + N
+            T(x) \leq x T(x-1) + O(N) \leq_{paso inductivo} x \times c \times x! + N
         \]
         \[
-            c*x*x! + N \leq c*(x+1)! \Leftrightarrow N \leq c*(x+1)*x! - c*x*x! \Leftrightarrow N \leq c*x!
+            c \times x \times x! + N \leq c \times (x+1)! \Leftrightarrow N \leq c \times (x+1) \times x! - c \times x \times x! \Leftrightarrow N \leq c \times x!
         \]
         que es válido para los valores que elegimos de $c$ y $x_0$.
 \end{itemize}
 
-El valor que nos interesa es $T(N)$, que es $O((N+1)!)$. La complejidad final es $O(m*log(N)) + O((N+1)!) = O((N+1)!)$.
+El valor que nos interesa es $T(N)$, que es $O((N+1)!)$. La complejidad final es $O(m \times log(N)) + O((N+1)!) = O((N+1)!)$.
 
 \newpage
 \subsubsection{Experimentación}
