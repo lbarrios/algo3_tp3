@@ -52,19 +52,39 @@ A continuaci\'on, el pseudoc\'odigo de la funci\'on \texttt{backtrack}.
 
 \subsubsection{Complejidad}
 
-\fixme{hacer, te tiene que dar (n+1)!}
-%Analicemos cuantas llamadas se hacen a $backtrack$. Se exploran caminos de a los sumo $n$ nodos. El primer nodo está fijo en $u$. El segundo nodo
-%pertenece a la adyacencia del primero, que en peor caso tiene tamaño $n - 1$. El tercero pertenece a la adyacencia del segundo, que no hayan sido
-%visitados, cuyo tamaño es a lo sumo $n - 2$. Y asi sucesivamente. En peor caso se llama a $backtrack$ $n!$ veces.
-%
-%Analicemos el cómputo que se realiza en cada llamada a $backtrack$. Preguntar si un nodo está visitado es acceder a un arreglo en forma constante.
-%El costo de una función de peso asociada a un camino se va acumulando a medida que se agregan nodos. El costo se guarda y se puede acceder en
-%forma constante. Lo queda por estudiar es la complejidad del ciclo $for$ que recorre la adyacencia del nodo visitado. Guardamos una lista de
-%adyacencia por lo que podemos recorrer la adyacencia de cualquier nodo con complejidad lineal en relación a su tamaño. El tamaño de la adyacencia
-%es a lo sumo $m$. Para cada nodo adyacente se efectúan operaciones constantes, a excepción de las llamadas a $backtrack$. El costo de estas
-%llamadas lo estamos calculando por separado.
-%
-%En definitiva hacemos $O(n!)$ llamadas a una función que de por si toma $O(m)$ operaciones. La complejidad del algoritmo es $O(m*n!)$.
+Utilizamos una implementación de Dijkstra sobre heap, cuya complejidad es $O(m * log(n))$. Como lo corremos 2 = $O(1)$ veces, la complejidad es $O(m * log(n))$. La complejidad principal del algoritmo está dada por la función \texttt{backtrack}, que procedemos a analizar.
+
+Sea $x$ la cantidad de nodos no visitados, es decir la cantidad de nodos que no están en el camino parcial de $u$ a $v$. Sea $T(x)$ la cantidad de operaciones que realiza la función \texttt{backtrack} cuando la cantidad de nodos no visitados es $x$. Sea $N$ la cantidad de nodos del grafo. Se propone la siguiente relación:
+\[
+    T(x) \leq x T(x-1) + O(N)
+\]
+La cantidad de llamadas a \texttt{backtrack} que se hacen es a lo sumo $x$, que son los nodos no marcados como visitados, y en esas llamadas la cantidad de nodos marcados no visitados disminuye en uno ya que se marca como visitado al nodo $n$. $n$ no estaba marcado previamente pues entonces no se hubiése llamado a la función con la arista incidente a él.
+
+Además de las llamadas recursivas se ejecuta un ciclo con una cantidad de iteraciones igual al tamaño de la adyacencia de $n$. La adyacencia es a lo sumo $N$, la cantidad de nodos del grafo. Todas las operaciones que restan: accesos aleatorios a arreglos, sumas, son $O(1)$.
+
+Veamos que $T(x) \in O((x+1)!)$, es decir
+\[
+    T(x) \leq c(x+1)!
+\]
+para una constante $c$ y para todo $x \geq x_0$. Por inducción en $x$:
+\begin{itemize}
+    \item Caso base: $x=1$
+        Si se llama a \texttt{backtrack} con un solo nodo no visitado, este es $n$, y no quedan nodos para llamar recursivamente. Luego la cantidad de operaciones es $N$.
+        \[
+            N \leq c*2! \Leftrightarrow N \leq N*2!
+        \]
+        que es verdadero, tomando $c = N$ y $x_0 = 1$.
+    \item Paso inductivo: Supongo $T(x-1) \leq cx!$, quiero ver que $T(x) \leq c(x+1)!$
+        \[
+            T(x) \leq x T(x-1) + O(N) \leq_{paso inductivo} x*c*x! + N
+        \]
+        \[
+            c*x*x! + N \leq c*(x+1)! \Leftrightarrow N \leq c*(x+1)*x! - c*x*x! \Leftrightarrow N \leq c*x!
+        \]
+        que es válido para los valores que elegimos de $c$ y $x_0$.
+\end{itemize}
+
+El valor que nos interesa es $T(N)$, que es $O((N+1)!)$. La complejidad final es $O(m*log(N)) + O((N+1)!) = O((N+1)!)$.
 
 \newpage
 \subsubsection{Experimentación}
